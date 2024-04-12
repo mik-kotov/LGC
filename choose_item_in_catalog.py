@@ -56,3 +56,4 @@ def add_item_in_cart():
                                               data='{ "size_id": ' + str(choosen_size) + '}')
     print("Товар добавлен")
 
+add_item_in_cart()
