@@ -27,7 +27,5 @@ def add_item_and_order_submit():
                                  data=json.dumps(body_for_order_submit))
     ##возвращаем номер оформленного заказа
     get_order_number = order_submit.json()['response']['id']
-    print(order_submit.json())
-    print(order_submit.json()['response'])
     return get_order_number
     print("Готово")
