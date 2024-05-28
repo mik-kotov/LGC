@@ -1,33 +1,27 @@
 import random
-from API import configuration
-import requests
-from API import data
-import json
+from API import locators_api
 from API import authorization
 
 
-catalog_gender = random.choice(["/men", "/women"])
 
+api_client = authorization.api_client
 def get_products_list_sorted_by_gender():
+    catalog_gender = random.choice(["/men", "/women"])
     current_gender = catalog_gender
     print(f"Открываем каталог с сортировкой по полу: {current_gender}")
-    clothes_list = api_client.get(configuration.URL_API_SERVICE + configuration.CATEGORY + current_gender + configuration.LIST)
-    print(clothes_list.json())
+    clothes_list = api_client.get(locators_api.URL_API_SERVICE + locators_api.CATEGORY + current_gender + locators_api.LIST)
     return clothes_list.json()
 
 
-def get_item_card_from_product_list():
-    list = get_products_list_sorted_by_gender()
+def get_item_card_from_product_list(clothes_list):
     print('Открываем карточку товара')
-    product_id = list['response']['products'][random.randint(1,10)]['id']
-    item_card = api_client.get(configuration.URL_API_SERVICE + configuration.PRODUCT +"/" + str(product_id))
-    print(item_card.json())
+    product_id = clothes_list['response']['products'][random.randint(1,5)]['id']
+    item_card = api_client.get(locators_api.URL_API_SERVICE + locators_api.PRODUCT +"/" + str(product_id))
     return item_card.json()
 
-def check_available_item_sizes():
+def check_available_item_sizes(item_card):
     available_item_sizes = []
     while available_item_sizes == []:
-        item_card = get_item_card_from_product_list()
         print("Проверяем доступные размеры товара")
         # считаем количество предлагаемых цветоразмеров
         current_item_size_value_count = len(item_card['response']['sizes'])
@@ -38,23 +32,19 @@ def check_available_item_sizes():
             elif item_card['response']['sizes'][i]['out_of_stock'] == True:
                 continue
             i +=1
-    #если нет ни одного доступного цветоразмера, всё жестко взрывается и мир захватывают роботы. Пофиксить
+    #если нет ни одного доступного цветоразмера, всё ломается. Пофиксить
     print("Товар найден")
     #возвращаем список доступных цветоразмеров
     return available_item_sizes
 
-def add_item_in_cart():
+def add_item_in_cart(item_sizes_options):
     #смотрим размеры выбранного товара
-    item_sizes_options = check_available_item_sizes()
     print("Добавляем товар в корзину")
     count_of_items_sizes_option = len(item_sizes_options)
     #случайным образом выбираем один из них
     choosen_size = item_sizes_options[random.randint(0,  (count_of_items_sizes_option -1))]
     #добавляем его в корзину
-    api_client.get(configuration.URL_API_SERVICE + configuration.CART,
+    api_client.get(locators_api.URL_API_SERVICE + locators_api.CART,
                                               data='{ "size_id": ' + str(choosen_size) + '}')
     print("Товар добавлен")
 
-
-api_client = authorization.APIClient(input("Введите номер телефона в формате +7хххххххххх"))
-add_item_in_cart()

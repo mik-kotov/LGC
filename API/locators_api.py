@@ -7,6 +7,8 @@ LIST = "/list"
 PRODUCT = "/product"
 CART = "/cart"
 ORDER_SUBMIT = "/order/submit"
+CART_ORDER = "/cart/order"
+POST_BONUSES = "/order/bonuses"
 
 ########### USER SERVICE #############
 
