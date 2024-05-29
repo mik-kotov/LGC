@@ -14,10 +14,12 @@ def get_products_list_sorted_by_gender():
 
 
 def get_item_card_from_product_list(clothes_list):
+
     print('Открываем карточку товара')
     product_id = clothes_list['response']['products'][random.randint(1,5)]['id']
     item_card = api_client.get(locators_api.URL_API_SERVICE + locators_api.PRODUCT +"/" + str(product_id))
     return item_card.json()
+
 
 def check_available_item_sizes(item_card):
     available_item_sizes = []
@@ -42,9 +44,8 @@ def add_item_in_cart(item_sizes_options):
     print("Добавляем товар в корзину")
     count_of_items_sizes_option = len(item_sizes_options)
     #случайным образом выбираем один из них
-    choosen_size = item_sizes_options[random.randint(0,  (count_of_items_sizes_option -1))]
+    chosen_size = item_sizes_options[random.randint(0,  (count_of_items_sizes_option -1))]
     #добавляем его в корзину
-    api_client.get(locators_api.URL_API_SERVICE + locators_api.CART,
-                                              data='{ "size_id": ' + str(choosen_size) + '}')
+    api_client.post(locators_api.URL_API_SERVICE + locators_api.CART, data='{ "size_id": ' + str(chosen_size) + '}')
     print("Товар добавлен")
 

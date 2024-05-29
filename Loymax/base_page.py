@@ -26,7 +26,6 @@ class BasePage:
     def find_element(self, how, what):
         return self.browser.find_element(how, what)
 
-
     def is_not_element_present(self, how, what, timeout=4):
         try:
             WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
@@ -50,8 +49,6 @@ class BasePage:
     def go_to_login_page(self):
         self.url = "https://lgcity-stg.loymax.tech/#/login"
         self.open(self.url)
-    def should_be_login_link(self):
-        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
 
 
 
