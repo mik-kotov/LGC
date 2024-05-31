@@ -49,3 +49,4 @@ def add_item_in_cart(item_sizes_options):
     api_client.post(locators_api.URL_API_SERVICE + locators_api.CART, data='{ "size_id": ' + str(chosen_size) + '}')
     print("Товар добавлен")
 
+ return post_bonuses

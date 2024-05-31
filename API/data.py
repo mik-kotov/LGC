@@ -20,4 +20,5 @@ print(user_phone)
 loymax_login = "m.kotov"
 loymax_password = "QLEp38z5_6)7"
 
+return post_bonuses
 

@@ -68,5 +68,5 @@ def change_buyout_status_to_yes(browser):
     print('Товар выкуплен')
 
 
-
+ return post_bonuses
 

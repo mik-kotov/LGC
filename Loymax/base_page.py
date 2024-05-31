@@ -51,7 +51,7 @@ class BasePage:
         self.open(self.url)
 
 
-
+ return post_bonuses
 
 
 

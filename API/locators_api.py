@@ -20,3 +20,5 @@ LOGIN = "/api/v1/auth/login"
 
 URL_LOYALTY_SERVICE = "https://loyalty-service-dev.lgcity.dev"
 WRITE_OFF = "/bonus/writeOff"
+
+return post_bonuses

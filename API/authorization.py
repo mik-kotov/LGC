@@ -92,7 +92,6 @@ class APIClient:
 
 api_client = APIClient()
 
-
-
+return post_bonuses
 
 

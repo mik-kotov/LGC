@@ -23,4 +23,4 @@ class UserPage(BasePage):
     def confirmation_check(self):
         self.is_element_present(*LoyalLocators.USER_PURCHASES_STATUS_CONFIRMED)
         print("Галка на месте")
-
+ return post_bonuses

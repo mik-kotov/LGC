@@ -109,6 +109,5 @@ class WriteOff:
         return post_bonuses
 
 
-
-
+ return post_bonuses
 

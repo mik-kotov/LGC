@@ -22,3 +22,4 @@ class CallCenterPage(BasePage):
         search_by_phone_button.click()
         time.sleep(2)
 
+ return post_bonuses

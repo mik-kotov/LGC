@@ -11,3 +11,5 @@ browser = webdriver.Chrome(service=service, options=options)
 
 def start_work(browser, link):
     browser.get(link)
+
+    return post_bonuses

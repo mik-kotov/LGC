@@ -48,3 +48,4 @@ order_id = order_submit.get_order_number(order_response)
 bonuses_write_off(order_response)
 status_change_and_purchase(order_id, "NI")
 check_loymax(order_id)
+return post_bonuses

@@ -34,3 +34,5 @@ class LoyalLocators:
     USER_PURCHASES_TABLE = (By.XPATH, "//purchases//tbody")
     USER_PURCHASES_ORDER_NUMBER = (By.XPATH, "//purchases//tbody/tr[1]/td[3]")
     USER_PURCHASES_STATUS_CONFIRMED = (By.XPATH, "//purchases//tbody/tr[1]/td/div[@title='Подтверждена']")
+
+ return post_bonuses
