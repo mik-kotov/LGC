@@ -18,11 +18,13 @@ def load_tokens():
     return {}
 
 
+
 class APIClient:
-    def __init__(self):
+
+    def __init__(self, user_phone):
         self.headers = data.headers
         self.base_url = locators_api.URL_USER_SERVICE
-        self.phone_number = f"+{data.user_phone}"
+        self.phone_number = f"+{user_phone}"
         self.tokens = self.load_or_get_tokens()
 
     def get_anonim_auth_token(self):
@@ -89,9 +91,4 @@ class APIClient:
 
     def post(self, url, **kwargs):
         return self.request_with_token('POST', url, **kwargs)
-
-api_client = APIClient()
-
-return post_bonuses
-
 

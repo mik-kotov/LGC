@@ -33,6 +33,5 @@ class LoyalLocators:
     USER_PERSONAL_INFO_BUTTON = (By.CSS_SELECTOR,"#personalInfo")
     USER_PURCHASES_TABLE = (By.XPATH, "//purchases//tbody")
     USER_PURCHASES_ORDER_NUMBER = (By.XPATH, "//purchases//tbody/tr[1]/td[3]")
-    USER_PURCHASES_STATUS_CONFIRMED = (By.XPATH, "//purchases//tbody/tr[1]/td/div[@title='Подтверждена']")
+    USER_PURCHASES_STATUS_CONFIRMED = (By.XPATH, '//purchases//tbody/tr[1]/td/div[@class="b-icon-progress b-icon-state--confirmed"]')
 
- return post_bonuses

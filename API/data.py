@@ -11,14 +11,14 @@ headers = {
 items_that_can_use_bonuses = []
 
 users_who_have_bonuses = (["79636635097", "7780004785406095572"],[])
-user_phone = users_who_have_bonuses[0][0]
+users_who_have_not_bonuses = (["79163354447"], [])
+user_with_card_phone = users_who_have_bonuses[0][0]
+user_no_card_phone = users_who_have_not_bonuses[0][0]
 user_card = users_who_have_bonuses[0][1]
 
-print(user_card)
-print(user_phone)
 
 loymax_login = "m.kotov"
 loymax_password = "QLEp38z5_6)7"
 
-return post_bonuses
+
 

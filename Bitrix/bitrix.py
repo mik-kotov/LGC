@@ -6,6 +6,7 @@ import time
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 
+class Bitrix:
 
 def check_authorization(browser):
     browser.implicitly_wait(10)
@@ -68,5 +69,4 @@ def change_buyout_status_to_yes(browser):
     print('Товар выкуплен')
 
 
- return post_bonuses
 

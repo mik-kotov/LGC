@@ -3,40 +3,45 @@ from random import randint
 import json
 import requests
 
+class OrderSubmit:
 
-api_client = authorization.api_client
-def open_cart():
-    print('Открываем корзину')
-    get_cart = api_client.get(locators_api.URL_API_SERVICE + locators_api.CART)
-    return get_cart
-def cart_order_data():
-    print('Просматриваем данные заказа для корзины')
-    cart_data = api_client.get(locators_api.URL_API_SERVICE + locators_api.CART_ORDER)
-    return cart_data
-def use_bonuses():
-    card_number = data.user_card
-    bonuses_to_spend = randint(1,20)
-    body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": bonuses_to_spend}
-    post_bonuses = api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
-                                   data=json.dumps(body_for_use_bonuses))
-    print("Применены бонусы")
-    print(f"Списано баллов: {bonuses_to_spend}")
-    return post_bonuses
-def add_item_and_order_submit():
+    def __init__(self, api_client):
+        self.api_client = api_client
 
-    body_for_order_submit = {'need_bonus_card_issue': True}
-    order_submit = api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
-                                   data=json.dumps(body_for_order_submit))
-    order_submit_response = order_submit.json()
-    print("Заказ оформлен")
+    def open_cart(self):
+        print('Открываем корзину')
+        get_cart = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART)
+        self.get_cart = get_cart
 
-    return order_submit_response
+    def cart_order_data(self):
+        print('Просматриваем данные заказа для корзины')
+        cart_data = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART_ORDER)
+        self.cart_data = cart_data
 
-def get_order_number(order_submit_response):
+    # def use_bonuses():
+    #     card_number = data.user_card # cделать умнее
+    #     bonuses_to_spend = randint(1,20)
+    #     body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": bonuses_to_spend}
+    #     post_bonuses = api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
+    #                                    data=json.dumps(body_for_use_bonuses))
+    #     print("Применены бонусы")
+    #     print(f"Списано баллов: {bonuses_to_spend}")
+    #     return post_bonuses
 
-    order_number = order_submit_response['response']['id']
-    print(f"Номер заказа: {order_number}")
-    return order_number
+    def add_item_and_order_submit(self):
+
+        body_for_order_submit = {'need_bonus_card_issue': True}
+        order_submit = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
+                                       data=json.dumps(body_for_order_submit))
+        order_submit_response = order_submit.json()
+        print("Заказ оформлен")
+        self.order_submit_response = order_submit_response
+
+    def get_order_number(self):
+
+        order_number = self.order_submit_response['response']['id']
+        print(f"Номер заказа: {order_number}")
+        self.order_number = order_number
 
 class WriteOff:
 
@@ -108,6 +113,4 @@ class WriteOff:
         print(f"Списано баллов: {self.bonuses}")
         return post_bonuses
 
-
- return post_bonuses
 

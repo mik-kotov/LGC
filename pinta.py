@@ -11,6 +11,10 @@ def choose_item_and_submit():
     item_card = choose_item_in_catalog.get_item_card_from_product_list(clothes_list)
     available_item_sizes = choose_item_in_catalog.check_available_item_sizes(item_card)
     choose_item_in_catalog.add_item_in_cart(available_item_sizes)
+    clothes_list = choose_item_in_catalog.get_products_list_sorted_by_gender()
+    item_card = choose_item_in_catalog.get_item_card_from_product_list(clothes_list)
+    available_item_sizes = choose_item_in_catalog.check_available_item_sizes(item_card)
+    choose_item_in_catalog.add_item_in_cart(available_item_sizes)
     order_submit.open_cart()
     order_submit.cart_order_data()
     submit_response = order_submit.add_item_and_order_submit()
@@ -43,9 +47,9 @@ def check_loymax(order_id):
     user_Page.confirmation_check()
 
 
+
 order_response = choose_item_and_submit()
 order_id = order_submit.get_order_number(order_response)
 bonuses_write_off(order_response)
 status_change_and_purchase(order_id, "NI")
 check_loymax(order_id)
-return post_bonuses

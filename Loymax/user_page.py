@@ -21,6 +21,6 @@ class UserPage(BasePage):
         print("Заказ есть в истории")
 
     def confirmation_check(self):
-        self.is_element_present(*LoyalLocators.USER_PURCHASES_STATUS_CONFIRMED)
+        assert self.is_element_present(*LoyalLocators.USER_PURCHASES_STATUS_CONFIRMED)
         print("Галка на месте")
- return post_bonuses
+

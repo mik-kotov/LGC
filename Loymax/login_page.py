@@ -17,7 +17,6 @@ class LoginPage(BasePage):
         authorization_button.click()
         time.sleep(10)
 
- return post_bonuses
 
 
 
