@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-BASIC_LOGIN_AND_PASSWORD_IN_LINK = "devel:lgdevpass@"
+
 
 
 class BasePageLocators:
@@ -9,15 +9,35 @@ class BasePageLocators:
     PROFILE_ICON_LINK_FROM_HEADER = (By.XPATH, "(//html/body/div[@id='barba-wrapper']/div/header[1]/div[2]/div/div[@class='header__right-side']/a])")
     GO_TO_ADMIN_BITRIX = (By.CSS_SELECTOR,"#bx-panel-admin-tab")
 
+
 class LoginPageLocators:
 
     LOGIN_BY_PASSWORD_LINK = (By.CSS_SELECTOR, ".phone_login > .js-toggle-pass-login")
     LOGIN_BY_PASSWORD_EMAIL_INPUT_FIELD = (By.CSS_SELECTOR, "[name = 'log_email']")
     LOGIN_BY_PASSWORD_PASSWORD_INPUT_FIELD = (By.CSS_SELECTOR, "[name = 'log_pass']")
 
-BITRIX_MAIN_PAGE = f"https://{BASIC_LOGIN_AND_PASSWORD_IN_LINK}app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru"
-BITRIX_ORDER_CARD_LINK = f"https://{BASIC_LOGIN_AND_PASSWORD_IN_LINK}app-monolith.mylgc.ru/bitrix/admin/sale_order_view.php?amp%3Bfilter=Y&%3Bset_filter=Y&lang=ru&ID=" ## + order_id
-BITRIX_ORDER_EDIT_LINK = f"https://{BASIC_LOGIN_AND_PASSWORD_IN_LINK}app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=" ## + order_id
+
+class BitrixLocators:
+
+    BASIC_LOGIN_AND_PASSWORD_IN_LINK = "devel:lgdevpass@"
+    AUTHORIZATION_PAGE = f"https://{BASIC_LOGIN_AND_PASSWORD_IN_LINK}app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru#authorize"
+    LOGIN_FIELD = (By.XPATH, '//input[@name="USER_LOGIN"][@tabindex="1"]')
+    PASSWORD_FIELD = (By.XPATH, '//input[@tabindex="2"]')
+    CONFIRM_BUTTON = (By.CSS_SELECTOR, '.login-btn-green[tabindex = "4"]')
+    LOGIN = "lgcity\\Mikhail.Kotov"
+    PASSWORD = "QLEp38z5_6)7"
+    STATUS_SELECTOR = (By.CSS_SELECTOR, "#STATUS_ID")
+    SAVE_STATUS_BUTTON = (By.CSS_SELECTOR, "#save_status_button")
+    CHANGE_ITEM_POPUP_LOGO = (By.XPATH, "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")
+    CHANGE_ITEM_POPUP = (By.XPATH, "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")
+    CHANGE_ITEM_BUTTON = (By.CSS_SELECTOR, ".bx-core-popup-menu-item-text")
+    CHANGE_ITEM_SAVE_BUTTON = (By.CSS_SELECTOR, "#save_custom_product")
+    SAVE_ORDER_CHANGES_BUTTON = (By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
+
+    MAIN_PAGE = "https://app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru"
+    ORDER_CARD_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_view.php?amp%3Bfilter=Y&%3Bset_filter=Y&lang=ru&ID=" ## + order_id
+    ORDER_EDIT_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=" ## + order_id
+
 
 
 class LoyalLocators:

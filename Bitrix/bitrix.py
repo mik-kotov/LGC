@@ -1,72 +1,68 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from Front_base import locators_front, browser_works
-import API.order_submit
+from Front_base.locators_front import BitrixLocators
+
+from Front_base.browser_works import Browser
 import time
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 
-class Bitrix:
 
-def check_authorization(browser):
-    browser.implicitly_wait(10)
-    if len(browser.find_elements(By.CSS_SELECTOR, ".bx-admin-auth-form")) > 0:
-        login_input_field = browser.find_element(By.XPATH, '//input[@name="USER_LOGIN"][@tabindex="1"]')
-        password_input_field = browser.find_element(By.XPATH, '//input[@tabindex="2"]')
-        confirm_button = browser.find_element(By.CSS_SELECTOR, '.login-btn-green[tabindex = "4"]')
+class Bitrix(Browser):
+
+    def authorization(self):
+        self.open(BitrixLocators.AUTHORIZATION_PAGE)
+        login_input_field = self.find_element(*BitrixLocators.LOGIN_FIELD)
+        password_input_field = self.find_element(*BitrixLocators.PASSWORD_FIELD)
+        confirm_button = self.find_element(*BitrixLocators.CONFIRM_BUTTON)
         login_input_field.clear()
-        login_input_field.send_keys("lgcity\Mikhail.Kotov")
-        password_input_field.send_keys("QLEp38z5_6)7")
+        login_input_field.send_keys(BitrixLocators.LOGIN)
+        password_input_field.send_keys(BitrixLocators.PASSWORD)
         confirm_button.click()
-        return browser
+        time.sleep(1)
+
+    @staticmethod
+    def order_link(order_id):
+
+        return BitrixLocators.ORDER_CARD_LINK + str(order_id)
+
+    @staticmethod
+    def order_edit_link(order_id):
+
+        return BitrixLocators.ORDER_EDIT_LINK + str(order_id)
+
+    def order_status_change(self, order_status):
+
+        select_element = self.find_element(*BitrixLocators.STATUS_SELECTOR)
+        select = Select(select_element)
+        select.select_by_value(order_status)
+        save_status_button = self.find_element(*BitrixLocators.SAVE_STATUS_BUTTON)
+        save_status_button.click()
+        print(f"Статус товара изменен на {order_status}")
+
+    def change_buyout_status_to_yes(self):
+
+        change_item_popup_logo = self.find_element(*BitrixLocators.CHANGE_ITEM_POPUP_LOGO)
+        self.browser.execute_script("arguments[0].scrollIntoView(true);", change_item_popup_logo)
+        change_item_popup = WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable(BitrixLocators.CHANGE_ITEM_POPUP))
+        self.browser.execute_script("arguments[0].click();", change_item_popup)
+        change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
+        change_item_button.click()
+        self.find_element(By.XPATH,
+                             "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']").clear()
+        self.find_element(By.XPATH,
+                             "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']").send_keys("Да")
+        change_item_save_button = self.find_element(*BitrixLocators.CHANGE_ITEM_SAVE_BUTTON)
+        change_item_save_button.click()
+        save_order_changes_button = self.find_element(*BitrixLocators.SAVE_ORDER_CHANGES_BUTTON)
+        save_order_changes_button.click()
+        print('Товар выкуплен')
 
 
-def bitrix_ops(current_link):
-
-    browser = browser_works.browser
-    browser.implicitly_wait(10)
-    browser_works.start_work(browser, current_link)
-    check_authorization(browser)
-    return browser
-
-
-def order_link(order_id):
-
-    return locators_front.BITRIX_ORDER_CARD_LINK + str(order_id)
-
-
-def order_edit_link(order_id):
-
-    return locators_front.BITRIX_ORDER_EDIT_LINK + str(order_id)
-
-
-def order_status_change(browser, order_status):
-    browser.implicitly_wait(10)
-    select = Select(browser.find_element(By.CSS_SELECTOR, "#STATUS_ID"))
-    select.select_by_value(order_status)
-    save_status_button = browser.find_element(By.CSS_SELECTOR, "#save_status_button")
-    save_status_button.click()
-    print(f"Статус товара изменен на {order_status}")
-
-
-def change_buyout_status_to_yes(browser):
-    change_item_popup_logo = browser.find_element(By.XPATH,
-                                                  "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")
-    browser.execute_script("arguments[0].scrollIntoView(true);", change_item_popup_logo)
-    change_item_popup = WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.XPATH,
-                                                                                           "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")))
-    browser.execute_script("arguments[0].click();", change_item_popup)
-    change_item_button = browser.find_element(By.CSS_SELECTOR, ".bx-core-popup-menu-item-text")
-    change_item_button.click()
-    browser.find_element(By.XPATH,
-                         "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']").clear()
-    browser.find_element(By.XPATH,
-                         "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']").send_keys("Да")
-    change_item_save_button = browser.find_element(By.CSS_SELECTOR, "#save_custom_product")
-    change_item_save_button.click()
-    save_order_changes_button = browser.find_element(By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
-    save_order_changes_button.click()
-    print('Товар выкуплен')
-
-
+# b = Bitrix()
+# b.authorization()
+# time.sleep(2)
+# b.open(Bitrix.order_edit_link(1176796))
+# b.change_buyout_status_to_yes()
+# time.sleep(2)
 
