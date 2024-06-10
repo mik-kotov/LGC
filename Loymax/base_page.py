@@ -10,11 +10,11 @@ from Front_base.locators_front import BasePageLocators
 class LoymaxBasePage(Browser):
 
     def go_to_call_center_page(self):
-        link = "https://lgcity-stg.loymax.tech/#/lmx/callcenter"
+        link = "https://lgcity-pstg.loymax.tech/#/lmx/callcenter"
         self.open(link)
 
     def go_to_login_page(self):
-        link = "https://lgcity-stg.loymax.tech/#/login"
+        link = "https://lgcity-pstg.loymax.tech/#/login"
         self.open(link)
 
 

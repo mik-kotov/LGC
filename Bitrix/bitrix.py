@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 class Bitrix(Browser):
 
     def authorization(self):
+
         self.open(BitrixLocators.AUTHORIZATION_PAGE)
         login_input_field = self.find_element(*BitrixLocators.LOGIN_FIELD)
         password_input_field = self.find_element(*BitrixLocators.PASSWORD_FIELD)

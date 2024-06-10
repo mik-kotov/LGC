@@ -1,6 +1,6 @@
 from Front_base.locators_front import LoyalLocators
 from Loymax.base_page import LoymaxBasePage
-from Loymax.login_page import LoginPage
+from Loymax.login_page import LoymaxLoginPage
 from API import data
 import time
 

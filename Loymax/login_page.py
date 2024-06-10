@@ -1,10 +1,10 @@
 from API.data import loymax_password, loymax_login
 from Front_base.locators_front import LoyalLocators
-from Loymax.base_page import BasePage
+from Loymax.base_page import LoymaxBasePage
 import time
 
 
-class LoginPage(BasePage):
+class LoymaxLoginPage(LoymaxBasePage):
 
     def authorization(self):
 

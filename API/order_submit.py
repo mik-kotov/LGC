@@ -8,6 +8,7 @@ class OrderSubmit:
     def __init__(self, api_client):
         self.api_client = api_client
 
+
     def open_cart(self):
         print('Открываем корзину')
         get_cart = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART)
@@ -45,8 +46,7 @@ class OrderSubmit:
 
 class WriteOff:
 
-
-    def __init__(self, submit):
+    def __init__(self, submit, card):
 
         self.bonuses = str(randint(1, 25))
         self.write_off_request_headers = self.write_off_headers_formation()
@@ -58,9 +58,6 @@ class WriteOff:
         write_off_request_body = {
 
             # начало формирования тела: добавляем переменные, которые не берутся из ответа метода order/submit
-
-            "mobilePhone": data.user_phone,
-            "bonusCard": data.user_card,
             "coupon": "",
             "paymentAmount": self.bonuses
         }
@@ -69,16 +66,25 @@ class WriteOff:
         product_info = response_core["products"][0]
         price_info = response_core["price"]
         write_off_request_body.update({
-
+            "mobilePhone": response_core["customer"]["phone"][1:],
+            "bonusCard": data.user_card,
             "purchaseId": response_core["id"],
-            "orderDatetime": response_core["status_date"]
+            "orderDatetime": response_core["creation_date"]
 
         })  # тут совпадают id и order_number. А если два товара? Глянуть
 
+        def extract_goods(input):
+            parts = input.split('-')
+            if len(parts) > 1:
+                return int(parts[0])
+            else:
+                return int(input)
+
+        goods_id = extract_goods(product_info["product_code"])
         write_off_request_body.update({"products":
             [{
                 "basketId": product_info["basket_id"],
-                "productId": product_info["product_id"],
+                "productId": goods_id,
                 "price": price_info["total"],
                 "count": product_info["count"],
                 "name": product_info["name"],
@@ -114,3 +120,20 @@ class WriteOff:
         return post_bonuses
 
 
+def extract_number(input_str):
+    parts = input_str.split('-')
+    if len(parts) > 1:
+        return int(parts[0])
+    else:
+        return int(input_str)
+
+
+# Пример использования
+input_str_1 = "4355342"
+input_str_2 = "345345-45345"
+
+result_1 = extract_number(input_str_1)
+result_2 = extract_number(input_str_2)
+
+print("Результат 1:", result_1)
+print("Результат 2:", result_2)

@@ -10,17 +10,20 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from Front_base import locators_front
 import time
+
+# chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
+# options = webdriver.ChromeOptions()
+# options.add_argument("--start-maximized")
+# #options.add_argument("--headless")
+# service = Service(chrome_driver_path)
+# browser = webdriver.Chrome(service=service, options=options)
+# browser.implicitly_wait(10)
+
 class Browser:
 
-    def __init__(self):
+    def __init__(self, browser):
 
-        chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
-        options = webdriver.ChromeOptions()
-        options.add_argument("--start-maximized")
-        #options.add_argument("--headless")
-        service = Service(chrome_driver_path)
-        self.browser = webdriver.Chrome(service=service, options=options)
-
+        self.browser = browser
         self.browser.implicitly_wait(10)
 
 

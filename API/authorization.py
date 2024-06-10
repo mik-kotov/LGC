@@ -21,11 +21,12 @@ def load_tokens():
 
 class APIClient:
 
-    def __init__(self, user_phone):
+    def __init__(self, user_phone, user_card=None):
         self.headers = data.headers
         self.base_url = locators_api.URL_USER_SERVICE
         self.phone_number = f"+{user_phone}"
         self.tokens = self.load_or_get_tokens()
+        self.user_card = user_card
 
     def get_anonim_auth_token(self):
         print("Запрашиваем анонимный токен")
