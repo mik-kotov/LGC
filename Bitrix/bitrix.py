@@ -10,17 +10,18 @@ from selenium.webdriver.common.by import By
 
 class Bitrix(Browser):
 
-    def authorization(self):
 
+    def authorization(self):
         self.open(BitrixLocators.AUTHORIZATION_PAGE)
-        login_input_field = self.find_element(*BitrixLocators.LOGIN_FIELD)
-        password_input_field = self.find_element(*BitrixLocators.PASSWORD_FIELD)
-        confirm_button = self.find_element(*BitrixLocators.CONFIRM_BUTTON)
-        login_input_field.clear()
-        login_input_field.send_keys(BitrixLocators.LOGIN)
-        password_input_field.send_keys(BitrixLocators.PASSWORD)
-        confirm_button.click()
-        time.sleep(1)
+        if self.is_element_present(*BitrixLocators.AUTHORIZATION_WINDOW):
+            login_input_field = self.find_element(*BitrixLocators.LOGIN_FIELD)
+            password_input_field = self.find_element(*BitrixLocators.PASSWORD_FIELD)
+            confirm_button = self.find_element(*BitrixLocators.CONFIRM_BUTTON)
+            login_input_field.clear()
+            login_input_field.send_keys(BitrixLocators.LOGIN)
+            password_input_field.send_keys(BitrixLocators.PASSWORD)
+            confirm_button.click()
+            time.sleep(1)
 
     @staticmethod
     def order_link(order_id):

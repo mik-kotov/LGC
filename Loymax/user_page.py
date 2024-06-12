@@ -24,6 +24,10 @@ class UserPage(LoymaxBasePage):
         assert self.is_element_present(*LoyalLocators.USER_PURCHASES_STATUS_CONFIRMED)
         print("Галка на месте")
 
+    def cancellation_check(self):
+        assert self.is_element_present(*LoyalLocators.USER_PURCHASES_STATUS_CANCELLED)
+        print("Крестик на месте")
+
     def open_loupe(self):
         loupe_button = self.find_element(*LoyalLocators.USER_PURCHASE_LOUPE)
         loupe_button.click()
@@ -32,8 +36,15 @@ class UserPage(LoymaxBasePage):
         self.browser.execute_script("window.scrollBy(0, 500);")
         assert self.is_element_present(*LoyalLocators.TEXT_BONUS)
 
-    def check_bonus_confirm(self):
+    def partial_cancel_two_statuses_check(self):
+        self.browser.execute_script("window.scrollBy(0, 500);")
+        assert ((self.find_element(*LoyalLocators.FIRST_FROM_TOP_PURCHASE_NUMBER).text) ==
+                (self.find_element(*LoyalLocators.SECOND_FROM_TOP_PURCHASE_NUMBER).text))
 
+    def partial_cancel_cancellation_check(self):
+        assert self.is_element_present(*LoyalLocators.SECOND_FROM_TOP_PURCHASE_CANCELLED)
+
+    def check_bonus_confirm(self):
         assert self.is_element_present(*LoyalLocators.BONUS_CONFIRMED)
 
     def check_added_bonuses_count_larger_than_null(self):
@@ -42,3 +53,9 @@ class UserPage(LoymaxBasePage):
         text = bonus_rec.get_attribute('innerText').strip()
         count = float(text.replace('бнс.', '').strip())
         assert count > 0
+
+    def check_paid_bonuses_count_less_than_null(self):
+        bonus_rec = self.find_element(*LoyalLocators.PAID_BONUSES_COUNT)
+        text = bonus_rec.get_attribute('innerText').strip()
+        count = float(text.replace('бнс.', '').strip())
+        assert count < 0

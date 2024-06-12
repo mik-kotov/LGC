@@ -19,6 +19,7 @@ class LoginPageLocators:
 
 class BitrixLocators:
 
+    AUTHORIZATION_WINDOW = (By.CSS_SELECTOR, "#popup_alignment")
     BASIC_LOGIN_AND_PASSWORD_IN_LINK = "devel:lgdevpass@"
     AUTHORIZATION_PAGE = f"https://{BASIC_LOGIN_AND_PASSWORD_IN_LINK}app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru#authorize"
     LOGIN_FIELD = (By.XPATH, '//input[@name="USER_LOGIN"][@tabindex="1"]')
@@ -42,9 +43,11 @@ class BitrixLocators:
 
 class LoyalLocators:
 
+    IS_AUTHORIZED_SIGN = (By.CSS_SELECTOR, ".menu-link.active")
     LOGIN_INPUT = (By.CSS_SELECTOR, "#LoginForm_login")
     PASSWORD_INPUT = (By.CSS_SELECTOR, "#LoginForm_password")
     AUTHORIZATION_BUTTON = (By.XPATH, "//button[@tabindex='0']")
+    CONTACT_CENTER_BUTTON = (By.XPATH, "//a[.='Контакт-центр'][@class='menu-link']")
     SEARCH_USER_BUTTON = (By.CSS_SELECTOR, "#searchByAttributesButton")
     SEARCH_USER_FRAME = (By.CSS_SELECTOR, "#armIframe")
     SEARCH_USER_PHONE_INPUT = (By.CSS_SELECTOR, "#Phone")
@@ -53,8 +56,13 @@ class LoyalLocators:
     USER_PERSONAL_INFO_BUTTON = (By.CSS_SELECTOR,"#personalInfo")
     USER_PURCHASES_TABLE = (By.XPATH, "//purchases//tbody")
     USER_PURCHASES_ORDER_NUMBER = (By.XPATH, "//purchases//tbody/tr[1]/td[3]/span[@class='b-table--responsive__value']")
-    USER_PURCHASES_STATUS_CONFIRMED = (By.XPATH, '//purchases//tbody/tr[1]/td[3]/following-sibling::td[2]/span[2]/div[@class="state-icon confirmed"]') # //purchases//tbody/tr[1]/td/div[@class="b-icon-progress b-icon-state--confirmed"])
+    USER_PURCHASES_STATUS_CONFIRMED = (By.XPATH, '//purchases//tbody/tr[1]//div[@class="state-icon confirmed"]')
+    USER_PURCHASES_STATUS_CANCELLED = (By.XPATH, '//purchases//tbody/tr[1]//div[@class="state-icon canceled"]')
+    FIRST_FROM_TOP_PURCHASE_NUMBER = (By.XPATH, "//purchases//tbody/tr[1]/td[3]/span[@class='b-table--responsive__value']")
+    SECOND_FROM_TOP_PURCHASE_NUMBER = (By.XPATH, "//purchases//tbody/tr[2]/td[3]/span[@class='b-table--responsive__value']")
+    SECOND_FROM_TOP_PURCHASE_CANCELLED = (By.XPATH, "//purchases//tbody/tr[2]//div[@class='state-icon canceled']")
     USER_PURCHASE_LOUPE = (By.XPATH, "//purchases//tbody/tr[1]/td[3]/following-sibling::td[3]/div/button")
     TEXT_BONUS = (By.XPATH, "//*[.='Бонус']")
     ADDED_BONUSES_COUNT = (By.XPATH, "//*[.='Бонус']/following-sibling::td[1]/div/span")
+    PAID_BONUSES_COUNT = (By.XPATH, "//*[.='Оплата']/following-sibling::td[1]/div/span")
     BONUS_CONFIRMED = (By.XPATH, "//*[.='Бонус']/following-sibling::td[2]/div[@class='state-icon confirmed']")

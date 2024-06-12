@@ -8,7 +8,7 @@ import time
 class CallCenterPage(LoymaxBasePage):
 
     def go_to_search(self):
-        self.go_to_call_center_page()
+        self.go_to_call_center_page_from_main_page()
         search_frame = self.find_element(*LoyalLocators.SEARCH_USER_FRAME)
         self.browser.switch_to.frame(search_frame)
         search_button = self.find_element(*LoyalLocators.SEARCH_USER_BUTTON)

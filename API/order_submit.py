@@ -48,50 +48,50 @@ class WriteOff:
 
     def __init__(self, submit, card):
 
-        self.bonuses = str(randint(1, 25))
+        self.bonuses = str(randint(1, 10))
         self.write_off_request_headers = self.write_off_headers_formation()
         self.get_submit = submit
         self.write_off_request_body = self.write_off_body_formation()
 
     def write_off_body_formation(self):
-
         write_off_request_body = {
-
-            # начало формирования тела: добавляем переменные, которые не берутся из ответа метода order/submit
             "coupon": "",
             "paymentAmount": self.bonuses
         }
 
         response_core = self.get_submit['response']
-        product_info = response_core["products"][0]
+        products_info = response_core["products"]
         price_info = response_core["price"]
+
         write_off_request_body.update({
             "mobilePhone": response_core["customer"]["phone"][1:],
             "bonusCard": data.user_card,
             "purchaseId": response_core["id"],
             "orderDatetime": response_core["creation_date"]
+        })
 
-        })  # тут совпадают id и order_number. А если два товара? Глянуть
-
-        def extract_goods(input):
-            parts = input.split('-')
+        def extract_goods(inp):
+            parts = inp.split('-')
             if len(parts) > 1:
                 return int(parts[0])
             else:
-                return int(input)
+                return int(inp)
 
-        goods_id = extract_goods(product_info["product_code"])
-        write_off_request_body.update({"products":
-            [{
+        products = []
+        for product_info in products_info:
+            goods_id = extract_goods(product_info["product_code"])
+            products.append({
                 "basketId": product_info["basket_id"],
                 "productId": goods_id,
-                "price": price_info["total"],
+                "price": product_info["price"],
                 "count": product_info["count"],
                 "name": product_info["name"],
-                "amount": price_info["final"],
-                "discount": (price_info["total"] - price_info["final"])
-            }]
-        })
+                "amount": product_info["price"] * product_info["count"],
+                "discount": product_info["old_price"] - product_info["price"]
+            })
+
+        write_off_request_body["products"] = products
+
         return json.dumps(write_off_request_body)
 
 
@@ -129,11 +129,5 @@ def extract_number(input_str):
 
 
 # Пример использования
-input_str_1 = "4355342"
-input_str_2 = "345345-45345"
 
-result_1 = extract_number(input_str_1)
-result_2 = extract_number(input_str_2)
 
-print("Результат 1:", result_1)
-print("Результат 2:", result_2)

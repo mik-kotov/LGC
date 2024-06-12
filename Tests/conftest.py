@@ -35,6 +35,7 @@ def browser():
 def user_no_card():
     user = data.user_no_card_phone
     user_no_card = APIClient(user)
+    print(user)
     return user_no_card
 
 @pytest.fixture(scope="function")

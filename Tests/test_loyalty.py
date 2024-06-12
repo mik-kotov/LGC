@@ -1,7 +1,7 @@
 import pytest
 from API import authorization, choose_item_in_catalog, order_submit
 from Bitrix.bitrix import Bitrix
-
+import  time
 from Front_base.browser_works import Browser
 from Loymax import login_page, user_page, call_center
 from Loymax.base_page import LoymaxBasePage
@@ -32,50 +32,52 @@ from Loymax.login_page import LoymaxLoginPage
 #     submit.add_item_and_order_submit()                                  # Шаг 17: тап по кнопке "Оформить заказ" POST/order/submit
 #     submit.get_order_number()
 #     order_number = submit.order_number
-#     print(f"Номер заказа: {order_number}")
-#     bitrix_ops = Bitrix(browser)                                               # Шаг 18: Перейти в битрикс администрирование
-#     bitrix_ops.authorization()
-#     bitrix_ops.open(Bitrix.order_edit_link(order_number))
-#     bitrix_ops.change_buyout_status_to_yes()
-#     bitrix_ops.open(Bitrix.order_link(order_number))
-#     bitrix_ops.order_status_change("NI")
-
-
-# def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, browser):
-#
-#     search_item = choose_item_in_catalog.ChooseItem(user_with_card)
-#     search_item.get_catalog()
-#     search_item.get_products_list_sorted_by_gender()
-#     search_item.get_item_card_from_product_list()
-#     search_item.check_available_item_sizes()
-#     search_item.add_item_in_cart()
-#     submit = order_submit.OrderSubmit(user_with_card)
-#     submit.open_cart()
-#     submit.cart_order_data()
-#     submit.add_item_and_order_submit()
-#     submit.get_order_number()
-#     order_number = submit.order_number
-#
 #     bitrix_ops = Bitrix(browser)
+#     time.sleep(10)# Шаг 18: Перейти в битрикс администрирование
 #     bitrix_ops.authorization()
 #     bitrix_ops.open(Bitrix.order_edit_link(order_number))
 #     bitrix_ops.change_buyout_status_to_yes()
 #     bitrix_ops.open(Bitrix.order_link(order_number))
 #     bitrix_ops.order_status_change("NI")
-#
-#     login_Page = login_page.LoymaxLoginPage(browser)
-#     login_Page.authorization()
-#     call_center_page = call_center.CallCenterPage(browser)
-#     call_center_page.go_to_search()
-#     call_center_page.search_user()
-#     user_Page = user_page.UserPage(browser)
-#     user_Page.open_purchase_history()
-#     user_Page.order_number_is_instance(order_number)
-#     user_Page.confirmation_check()
-#     user_Page.open_loupe()
-#     user_Page.check_text_bonus()
-#     user_Page.check_bonus_confirm()
-#     user_Page.check_added_bonuses_count_larger_than_null()
+
+
+def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, browser):
+
+    search_item = choose_item_in_catalog.ChooseItem(user_with_card)
+    search_item.get_catalog()
+    search_item.get_products_list_sorted_by_gender()
+    search_item.get_item_card_from_product_list()
+    search_item.check_available_item_sizes()
+    search_item.add_item_in_cart()
+    submit = order_submit.OrderSubmit(user_with_card)
+    submit.open_cart()
+    submit.cart_order_data()
+    submit.add_item_and_order_submit()
+    submit.get_order_number()
+    order_number = submit.order_number
+
+    bitrix_ops = Bitrix(browser)
+    time.sleep(10)
+    bitrix_ops.authorization()
+    bitrix_ops.open(Bitrix.order_edit_link(order_number))
+    bitrix_ops.change_buyout_status_to_yes()
+    bitrix_ops.open(Bitrix.order_link(order_number))
+    bitrix_ops.order_status_change("NI")
+
+    login_Page = login_page.LoymaxLoginPage(browser)
+    login_Page.authorization()
+    call_center_page = call_center.CallCenterPage(browser)
+
+    call_center_page.go_to_search()
+    call_center_page.search_user()
+    user_Page = user_page.UserPage(browser)
+    user_Page.open_purchase_history()
+    user_Page.order_number_is_instance(order_number)
+    user_Page.confirmation_check()
+    user_Page.open_loupe()
+    user_Page.check_text_bonus()
+    user_Page.check_bonus_confirm()
+    user_Page.check_added_bonuses_count_larger_than_null()
 
 def test_delivered_with_bonus_pay_cash(user_with_card, browser):
 
@@ -96,24 +98,66 @@ def test_delivered_with_bonus_pay_cash(user_with_card, browser):
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
 
-
     bitrix_ops = Bitrix(browser)
     bitrix_ops.authorization()
     bitrix_ops.open(Bitrix.order_edit_link(order_number))
     bitrix_ops.change_buyout_status_to_yes()
     bitrix_ops.open(Bitrix.order_link(order_number))
     bitrix_ops.order_status_change("NI")
-    #
-    # login_Page = login_page.LoymaxLoginPage(browser)
-    # login_Page.authorization()
-    # call_center_page = call_center.CallCenterPage(browser)
-    # call_center_page.go_to_search()
-    # call_center_page.search_user()
-    # user_Page = user_page.UserPage(browser)
-    # user_Page.open_purchase_history()
-    # user_Page.order_number_is_instance(order_number)
-    # user_Page.confirmation_check()
-    # user_Page.open_loupe()
-    # user_Page.check_text_bonus()
-    # user_Page.check_bonus_confirm()
-    # user_Page.check_added_bonuses_count_larger_than_null()
+
+    login_Page = login_page.LoymaxLoginPage(browser)
+    login_Page.authorization()
+    call_center_page = call_center.CallCenterPage(browser)
+
+    call_center_page.go_to_search()
+    call_center_page.search_user()
+    user_Page = user_page.UserPage(browser)
+    user_Page.open_purchase_history()
+    user_Page.order_number_is_instance(order_number)
+    user_Page.confirmation_check()
+    user_Page.open_loupe()
+    user_Page.check_text_bonus()
+    user_Page.check_bonus_confirm()
+    user_Page.check_added_bonuses_count_larger_than_null()
+
+
+def test_delivered_with_bonus_pay_cash_partial_cancelled(user_with_card, browser):
+
+    search_item = choose_item_in_catalog.ChooseItem(user_with_card)
+    search_item.get_catalog()
+    search_item.get_products_list_sorted_by_gender()
+    search_item.get_item_card_from_product_list()
+    search_item.check_available_item_sizes()
+    search_item.add_item_in_cart()
+    search_item.get_catalog()
+    search_item.get_products_list_sorted_by_gender()
+    search_item.get_item_card_from_product_list()
+    search_item.check_available_item_sizes()
+    search_item.add_item_in_cart()
+    submit = order_submit.OrderSubmit(user_with_card)
+    submit.open_cart()
+    submit.cart_order_data()
+    submit.add_item_and_order_submit()
+    submit.get_order_number()
+    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, user_with_card.user_card)
+    pay_bonuses.send_bonuses()
+    order_number = submit.order_number
+
+    bitrix_ops = Bitrix(browser)
+    bitrix_ops.authorization()
+    bitrix_ops.open(Bitrix.order_edit_link(order_number))
+    bitrix_ops.change_buyout_status_to_yes()
+    bitrix_ops.open(Bitrix.order_link(order_number))
+    bitrix_ops.order_status_change("OI")
+
+    login_Page = login_page.LoymaxLoginPage(browser)
+    login_Page.authorization()
+    call_center_page = call_center.CallCenterPage(browser)
+    call_center_page.go_to_search()
+    call_center_page.search_user()
+    user_Page = user_page.UserPage(browser)
+    user_Page.open_purchase_history()
+    user_Page.order_number_is_instance(order_number)
+    user_Page.partial_cancel_two_statuses_check()
+    user_Page.confirmation_check()
+    user_Page.partial_cancel_cancellation_check()

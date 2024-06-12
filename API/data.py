@@ -11,7 +11,7 @@ headers = {
 items_that_can_use_bonuses = []
 
 users_who_have_bonuses = (["79636635097", "7780004785406095572"],[])
-users_who_have_not_bonuses = (["9163354447"], [])
+users_who_have_not_bonuses = (["79163354447"], [])
 user_with_card_phone = users_who_have_bonuses[0][0]
 user_no_card_phone = users_who_have_not_bonuses[0][0]
 user_card = users_who_have_bonuses[0][1]
