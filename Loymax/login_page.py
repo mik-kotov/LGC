@@ -7,7 +7,10 @@ import time
 class LoymaxLoginPage(LoymaxBasePage):
 
     def authorization(self):
-        if not self.is_element_present(*LoyalLocators.IS_AUTHORIZED_SIGN):
+
+        link = "https://lgcity-pstg.loymax.tech/#/login"
+        self.open(link)
+        if self.is_element_present(*LoyalLocators.LOGIN_INPUT):
             self.go_to_login_page()
             login_input = self.find_element(*LoyalLocators.LOGIN_INPUT)
             login_input.send_keys(loymax_login)
