@@ -10,7 +10,6 @@ from selenium.webdriver.common.by import By
 
 class Bitrix(Browser):
 
-
     def authorization(self):
         self.open(BitrixLocators.AUTHORIZATION_PAGE)
         if self.is_element_present(*BitrixLocators.AUTHORIZATION_WINDOW):
@@ -45,7 +44,7 @@ class Bitrix(Browser):
     def change_buyout_status_to_yes(self):
 
         change_item_popup_logo = self.find_element(*BitrixLocators.CHANGE_ITEM_POPUP_LOGO)
-        self.browser.execute_script("arguments[0].scrollIntoView(true);", change_item_popup_logo)
+        self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});', change_item_popup_logo)
         change_item_popup = WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable(BitrixLocators.CHANGE_ITEM_POPUP))
         self.browser.execute_script("arguments[0].click();", change_item_popup)
         change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
@@ -56,15 +55,16 @@ class Bitrix(Browser):
                              "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']").send_keys("Да")
         change_item_save_button = self.find_element(*BitrixLocators.CHANGE_ITEM_SAVE_BUTTON)
         change_item_save_button.click()
+        self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
         save_order_changes_button = self.find_element(*BitrixLocators.SAVE_ORDER_CHANGES_BUTTON)
         save_order_changes_button.click()
         print('Товар выкуплен')
 
-
-# b = Bitrix()
-# b.authorization()
-# time.sleep(2)
-# b.open(Bitrix.order_edit_link(1176796))
-# b.change_buyout_status_to_yes()
-# time.sleep(2)
-
+    def change_pay_status_to_yes(self):
+        change_pay_popup = self.find_element(*BitrixLocators.CHANGE_PAY_POPUP)
+        self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});', change_pay_popup)
+        change_pay_popup.click()
+        change_pay_to_yes_button = self.find_element(*BitrixLocators.CHANGE_PAY_TO_YES_BUTTON)
+        self.browser.execute_script("arguments[0].click();", change_pay_to_yes_button)
+        save_button = self.find_element(*BitrixLocators.CHANGE_PAY_SAVE_BUTTON)
+        save_button.click()

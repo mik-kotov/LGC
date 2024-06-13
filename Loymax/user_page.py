@@ -28,6 +28,10 @@ class UserPage(LoymaxBasePage):
         assert self.is_element_present(*LoyalLocators.USER_PURCHASES_STATUS_CANCELLED)
         print("Крестик на месте")
 
+    def creation_check(self):
+        assert self.is_element_present(*LoyalLocators.USER_PURCHASES_STATUS_CREATED)
+
+
     def open_loupe(self):
         loupe_button = self.find_element(*LoyalLocators.USER_PURCHASE_LOUPE)
         loupe_button.click()
@@ -46,6 +50,8 @@ class UserPage(LoymaxBasePage):
 
     def check_bonus_confirm(self):
         assert self.is_element_present(*LoyalLocators.BONUS_CONFIRMED)
+
+
 
     def check_added_bonuses_count_larger_than_null(self):
 

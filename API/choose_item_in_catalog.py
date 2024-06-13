@@ -1,6 +1,6 @@
 import random
 from API import locators_api
-from API import authorization
+
 
 class ChooseItem:
 

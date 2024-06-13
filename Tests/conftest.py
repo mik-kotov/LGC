@@ -1,15 +1,9 @@
-import pytest
 from API import data
 from API.authorization import APIClient
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
+from Tests import test_loyalty
 import pytest
-from API import authorization, choose_item_in_catalog, order_submit
-from Bitrix.bitrix import Bitrix
-from Front_base.browser_works import Browser
-from Loymax import login_page, user_page, call_center
-from Loymax.base_page import LoymaxBasePage
-from Loymax.login_page import LoymaxLoginPage
 
 chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
 options = webdriver.ChromeOptions()
@@ -25,7 +19,7 @@ def browser():
     chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
-    #options.add_argument("--headless")
+    options.add_argument("--headless")
     service = Service(chrome_driver_path)
     driver = webdriver.Chrome(service=service, options=options)
     yield driver
@@ -45,4 +39,3 @@ def user_with_card():
     user_with_card = APIClient(user, card)
     print(user)
     return user_with_card
-

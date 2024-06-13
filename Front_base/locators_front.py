@@ -32,6 +32,9 @@ class BitrixLocators:
     CHANGE_ITEM_POPUP_LOGO = (By.XPATH, "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")
     CHANGE_ITEM_POPUP = (By.XPATH, "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")
     CHANGE_ITEM_BUTTON = (By.CSS_SELECTOR, ".bx-core-popup-menu-item-text")
+    CHANGE_PAY_POPUP = (By.CSS_SELECTOR, "#BUTTON_PAID_0_SHORT")
+    CHANGE_PAY_TO_YES_BUTTON = (By.CSS_SELECTOR, '.bx-core-popup-menu-item')
+    CHANGE_PAY_SAVE_BUTTON = (By.CSS_SELECTOR, '[name="undefined"]#undefined') #кринж
     CHANGE_ITEM_SAVE_BUTTON = (By.CSS_SELECTOR, "#save_custom_product")
     SAVE_ORDER_CHANGES_BUTTON = (By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
 
@@ -58,6 +61,7 @@ class LoyalLocators:
     USER_PURCHASES_ORDER_NUMBER = (By.XPATH, "//purchases//tbody/tr[1]/td[3]/span[@class='b-table--responsive__value']")
     USER_PURCHASES_STATUS_CONFIRMED = (By.XPATH, '//purchases//tbody/tr[1]//div[@class="state-icon confirmed"]')
     USER_PURCHASES_STATUS_CANCELLED = (By.XPATH, '//purchases//tbody/tr[1]//div[@class="state-icon canceled"]')
+    USER_PURCHASES_STATUS_CREATED = (By.XPATH, '//purchases//tbody/tr[1]//div[@class="state-icon created"]')
     FIRST_FROM_TOP_PURCHASE_NUMBER = (By.XPATH, "//purchases//tbody/tr[1]/td[3]/span[@class='b-table--responsive__value']")
     SECOND_FROM_TOP_PURCHASE_NUMBER = (By.XPATH, "//purchases//tbody/tr[2]/td[3]/span[@class='b-table--responsive__value']")
     SECOND_FROM_TOP_PURCHASE_CANCELLED = (By.XPATH, "//purchases//tbody/tr[2]//div[@class='state-icon canceled']")
@@ -66,3 +70,5 @@ class LoyalLocators:
     ADDED_BONUSES_COUNT = (By.XPATH, "//*[.='Бонус']/following-sibling::td[1]/div/span")
     PAID_BONUSES_COUNT = (By.XPATH, "//*[.='Оплата']/following-sibling::td[1]/div/span")
     BONUS_CONFIRMED = (By.XPATH, "//*[.='Бонус']/following-sibling::td[2]/div[@class='state-icon confirmed']")
+
+

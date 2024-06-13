@@ -3,6 +3,11 @@ import json
 import requests
 from API import locators_api
 from API import data
+import os
+import json
+import requests
+from API import locators_api
+from API import data
 
 TOKEN_FILE = 'auth_tokens.json'
 

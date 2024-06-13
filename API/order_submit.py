@@ -1,4 +1,4 @@
-from API import locators_api, data, authorization
+from API import locators_api, data
 from random import randint
 import json
 import requests
@@ -44,11 +44,12 @@ class OrderSubmit:
         print(f"Номер заказа: {order_number}")
         self.order_number = order_number
 
+
 class WriteOff:
 
     def __init__(self, submit, card):
 
-        self.bonuses = str(randint(1, 10))
+        self.bonuses = str(randint(1, 3))
         self.write_off_request_headers = self.write_off_headers_formation()
         self.get_submit = submit
         self.write_off_request_body = self.write_off_body_formation()
