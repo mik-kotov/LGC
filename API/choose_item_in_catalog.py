@@ -9,24 +9,59 @@ class ChooseItem:
         self.api_client = api_client
 
     def get_catalog(self):
+
         print("Открываем каталог")
-        catalog = self.api_client.get(locators_api.URL_API_SERVICE + "/catalog")
+        catalog = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CATALOG)
         assert catalog.status_code == 200
 
+    def get_category(self):
 
-    def get_products_list_sorted_by_gender(self):
-        catalog_gender = random.choice(["/men", "/women"])
-        current_gender = catalog_gender
-        print(f"Открываем каталог с сортировкой по полу: {current_gender}")
-        clothes_list = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CATEGORY + current_gender + locators_api.LIST)
-        assert clothes_list.status_code == 200
-        self.clothes_list = clothes_list.json()
+        def make_request(url):
+            return self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CATALOG + "/" + url).json()
 
+        new_url = random.choice(["men", "women"])
+        has_subcategories = True
+        while has_subcategories:
+            try:
+                current_response = make_request(new_url)
+                current_page = current_response['response']['categories']
+                selected_category = random.choice(current_page)
+                new_url = selected_category['url']
+                has_subcategories = selected_category['has_subcategories']
+            except (KeyError, TypeError):
+                break
+        self.category_url = new_url
+
+    def get_list(self):
+        def make_request(url):
+            return (self.api_client.get(locators_api.URL_API_SERVICE +
+                                        locators_api.CATEGORY + "/" +
+                                        url +
+                                        locators_api.LIST)).json()
+        new_url = self.category_url
+        clothes_list = []
+        has_subcategories = True
+        while has_subcategories:
+            try:
+                current_response = make_request(new_url)['response']
+                current_tags = current_response['category_tags']
+                if current_tags != []:
+                    selected_category = random.choice(current_tags)
+                    new_url = selected_category['url']
+                else:
+                    clothes_list = current_response['products']
+                    has_subcategories = False
+            except (KeyError, TypeError):
+                break
+        self.clothes_list = clothes_list
 
     def get_item_card_from_product_list(self):
         print('Открываем карточку товара')
-        product_id = self.clothes_list['response']['products'][random.randint(1,5)]['id']
-        item_card = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.PRODUCT +"/" + str(product_id))
+        product_id = random.choice(
+            [product['id'] for product in self.clothes_list if product['price'] > 2000]
+        )
+
+        item_card = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.PRODUCT + "/" + str(product_id))
         assert item_card.status_code == 200
         self.item_card = item_card.json()
 
@@ -34,28 +69,21 @@ class ChooseItem:
         available_item_sizes = []
         while available_item_sizes == []:
             print("Проверяем доступные размеры товара")
-            # считаем количество предлагаемых цветоразмеров
             current_item_size_value_count = len(self.item_card['response']['sizes'])
-            #Проверяем доступность каждого цветоразмера
             for i in range(current_item_size_value_count):
-                if self.item_card['response']['sizes'][i]['out_of_stock'] == False:
+                if not self.item_card['response']['sizes'][i]['out_of_stock']:
                     available_item_sizes = [self.item_card['response']['sizes'][i]['id']] + available_item_sizes
-                elif self.item_card['response']['sizes'][i]['out_of_stock'] == True:
+                elif self.item_card['response']['sizes'][i]['out_of_stock']:
                     continue
-                i +=1
-        #если нет ни одного доступного цветоразмера, всё ломается. Пофиксить
+                i += 1
         print("Товар найден")
-        #возвращаем список доступных цветоразмеров
         self.available_item_sizes = available_item_sizes
 
     def add_item_in_cart(self):
-        #смотрим размеры выбранного товара
         print("Добавляем товар в корзину")
         count_of_items_sizes_option = len(self.available_item_sizes)
-        #случайным образом выбираем один из них
-        chosen_size = self.available_item_sizes[random.randint(0,  (count_of_items_sizes_option -1))]
-        #добавляем его в корзину
-        add = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.CART, data='{ "size_id": ' + str(chosen_size) + '}')
+        chosen_size = self.available_item_sizes[random.randint(0, (count_of_items_sizes_option - 1))]
+        add = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.CART,
+                                   data='{ "size_id": ' + str(chosen_size) + '}')
         assert add.status_code == 200
         print("Товар добавлен")
-

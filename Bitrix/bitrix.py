@@ -38,6 +38,7 @@ class Bitrix(Browser):
         select = Select(select_element)
         select.select_by_value(order_status)
         save_status_button = self.find_element(*BitrixLocators.SAVE_STATUS_BUTTON)
+        self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});',  save_status_button)
         save_status_button.click()
         print(f"Статус товара изменен на {order_status}")
 

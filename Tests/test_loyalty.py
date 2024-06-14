@@ -4,6 +4,7 @@ from Bitrix.bitrix import Bitrix
 from Loymax import login_page, user_page, call_center
 import time
 
+
 # LGC-T2332 "Доставлен" без баллов Оплата "Наличными при получении" Пользователь без бонусной карты
 def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, browser):
     #                                                                     # Шаг 1: Заходим в приложение
@@ -255,7 +256,7 @@ def test_cancelled_with_bonus_pay_cash(user_with_card, browser):
 
 
 # LGC-T2347 "Оформлен" Оплата "Наличными при получении" Пользователь без бонусной карты
-def test_processed_pay_cash_no_bonus_card(user_no_card): # в черновом варианте - просто оформление заказа
+def test_processed_pay_cash_no_bonus_card(user_no_card, browser): # в черновом варианте - просто оформление заказа
     search_item = choose_item_in_catalog.ChooseItem(user_no_card)
     search_item.get_catalog()
     search_item.get_products_list_sorted_by_gender()
@@ -267,11 +268,16 @@ def test_processed_pay_cash_no_bonus_card(user_no_card): # в черновом �
     submit.cart_order_data()
     submit.add_item_and_order_submit()
     submit.get_order_number()
+    order_number = submit.order_number
+    bitrix_ops = Bitrix(browser)
+    bitrix_ops.authorization()
+    bitrix_ops.open(Bitrix.order_link(order_number))
+    bitrix_ops.order_status_change("AB")
 
+# LGC-T2341 "Оформлен"без баллов Оплата "Наличными при получении" Пользователь с бонусной картой
 
-# LGC-T2341 "Оформлен" Оплата "Наличными при получении" Пользователь с бонусной картой
+def test_processed_pay_cash_with_bonus_card(user_with_card, browser): # в черновом варианте - просто оформление заказа
 
-def test_processed_pay_cash_with_bonus_card(user_with_card): # в черновом варианте - просто оформление заказа
     search_item = choose_item_in_catalog.ChooseItem(user_with_card)
     search_item.get_catalog()
     search_item.get_products_list_sorted_by_gender()
@@ -283,7 +289,22 @@ def test_processed_pay_cash_with_bonus_card(user_with_card): # в черново
     submit.cart_order_data()
     submit.add_item_and_order_submit()
     submit.get_order_number()
+    order_number = submit.order_number
+    bitrix_ops = Bitrix(browser)
+    bitrix_ops.authorization()
+    bitrix_ops.open(Bitrix.order_link(order_number))
+    bitrix_ops.order_status_change("AB")
 
+    login_Page = login_page.LoymaxLoginPage(browser)
+    login_Page.authorization()
+    call_center_page = call_center.CallCenterPage(browser)
+
+    # call_center_page.go_to_search()
+    # call_center_page.search_user()
+    # user_Page = user_page.UserPage(browser)
+    # user_Page.open_purchase_history()
+    # user_Page.order_number_is_instance(order_number)
+    # user_Page.creation_check()
 
 # LGC-T2342 "Оформлен" с баллами Оплата "Наличными при получении" Пользователь с бонусной картой
 def test_processed_with_bonus_pay_cash(user_with_card, browser):
@@ -304,6 +325,8 @@ def test_processed_with_bonus_pay_cash(user_with_card, browser):
 
     bitrix_ops = Bitrix(browser)
     bitrix_ops.authorization()
+    bitrix_ops.open(Bitrix.order_link(order_number))
+    bitrix_ops.order_status_change("AB")
     bitrix_ops.open(Bitrix.order_edit_link(order_number))
     bitrix_ops.change_buyout_status_to_yes()
 

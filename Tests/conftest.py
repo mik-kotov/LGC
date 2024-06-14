@@ -19,7 +19,7 @@ def browser():
     chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     service = Service(chrome_driver_path)
     driver = webdriver.Chrome(service=service, options=options)
     yield driver

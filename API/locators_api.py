@@ -3,6 +3,7 @@
 URL_API_SERVICE = "https://api-service-dev.lgcity.dev"
 AUTH = "/auth"
 CATEGORY = "/category"
+CATALOG = "/catalog"
 LIST = "/list"
 PRODUCT = "/product"
 CART = "/cart"

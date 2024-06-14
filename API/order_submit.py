@@ -6,6 +6,10 @@ import requests
 class OrderSubmit:
 
     def __init__(self, api_client):
+        self.order_number = None
+        self.cart_data = None
+        self.get_cart = None
+        self.order_submit_response = None
         self.api_client = api_client
 
 
@@ -95,7 +99,6 @@ class WriteOff:
 
         return json.dumps(write_off_request_body)
 
-
     def write_off_headers_formation(self):
 
         get_ip = requests.get('http://jsonip.com')
@@ -107,7 +110,6 @@ class WriteOff:
 
             }
         return write_off_request_headers
-
 
     def send_bonuses(self):
 
@@ -128,7 +130,5 @@ def extract_number(input_str):
     else:
         return int(input_str)
 
-
-# Пример использования
 
 
