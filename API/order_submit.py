@@ -11,6 +11,7 @@ class OrderSubmit:
         self.get_cart = None
         self.order_submit_response = None
         self.api_client = api_client
+        self.bonuses = randint(1, 4)
 
 
     def open_cart(self):
@@ -23,15 +24,14 @@ class OrderSubmit:
         cart_data = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART_ORDER)
         self.cart_data = cart_data
 
-    # def use_bonuses():
-    #     card_number = data.user_card # cделать умнее
-    #     bonuses_to_spend = randint(1,20)
-    #     body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": bonuses_to_spend}
-    #     post_bonuses = api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
-    #                                    data=json.dumps(body_for_use_bonuses))
-    #     print("Применены бонусы")
-    #     print(f"Списано баллов: {bonuses_to_spend}")
-    #     return post_bonuses
+    def use_bonuses(self):
+        card_number = data.user_card
+        body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": self.bonuses}
+        post_bonuses = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_BONUSES,
+                                       data=json.dumps(body_for_use_bonuses))
+        print("Применены бонусы")
+        print(f"Списано баллов: {self.bonuses}")
+        return post_bonuses
 
     def add_item_and_order_submit(self):
 
@@ -40,6 +40,7 @@ class OrderSubmit:
                                        data=json.dumps(body_for_order_submit))
         order_submit_response = order_submit.json()
         print("Заказ оформлен")
+        print(order_submit_response)
         self.order_submit_response = order_submit_response
 
     def get_order_number(self):
@@ -51,9 +52,9 @@ class OrderSubmit:
 
 class WriteOff:
 
-    def __init__(self, submit, card):
+    def __init__(self, submit, bonuses):
 
-        self.bonuses = str(randint(1, 3))
+        self.bonuses = str(bonuses)
         self.write_off_request_headers = self.write_off_headers_formation()
         self.get_submit = submit
         self.write_off_request_body = self.write_off_body_formation()
@@ -123,12 +124,6 @@ class WriteOff:
         return post_bonuses
 
 
-def extract_number(input_str):
-    parts = input_str.split('-')
-    if len(parts) > 1:
-        return int(parts[0])
-    else:
-        return int(input_str)
 
 
 

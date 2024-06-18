@@ -79,16 +79,16 @@ def test_delivered_with_bonus_pay_cash(user_with_card, browser):
     search_item = choose_item_in_catalog.ChooseItem(user_with_card)
     search_item.get_catalog()
     search_item.get_category()
-    search_item.get_list()
     search_item.get_item_card_from_product_list()
     search_item.check_available_item_sizes()
     search_item.add_item_in_cart()
     submit = order_submit.OrderSubmit(user_with_card)
     submit.open_cart()
     submit.cart_order_data()
+    submit.use_bonuses()
     submit.add_item_and_order_submit()
     submit.get_order_number()
-    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, user_with_card.user_card)
+    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
 
@@ -164,9 +164,10 @@ def test_refused_with_bonus_pay_cash(user_with_card, browser):
     submit = order_submit.OrderSubmit(user_with_card)
     submit.open_cart()
     submit.cart_order_data()
+    submit.use_bonuses()
     submit.add_item_and_order_submit()
     submit.get_order_number()
-    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, user_with_card.user_card)
+    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
 
@@ -234,10 +235,10 @@ def test_cancelled_with_bonus_pay_cash(user_with_card, browser):
     submit = order_submit.OrderSubmit(user_with_card)
     submit.open_cart()
     submit.cart_order_data()
+    submit.use_bonuses()
     submit.add_item_and_order_submit()
     submit.get_order_number()
-    order_number = submit.order_number
-    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, user_with_card.user_card)
+    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
     pay_bonuses.send_bonuses()
 
     bitrix_ops = Bitrix(browser)
@@ -322,9 +323,10 @@ def test_processed_with_bonus_pay_cash(user_with_card, browser):
     submit = order_submit.OrderSubmit(user_with_card)
     submit.open_cart()
     submit.cart_order_data()
+    submit.use_bonuses()
     submit.add_item_and_order_submit()
     submit.get_order_number()
-    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, user_with_card.user_card)
+    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
 
@@ -443,9 +445,10 @@ def test_partial_cancelled_with_bonus_pay_cash(user_with_card, browser):
     submit = order_submit.OrderSubmit(user_with_card)
     submit.open_cart()
     submit.cart_order_data()
+    submit.use_bonuses()
     submit.add_item_and_order_submit()
     submit.get_order_number()
-    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, user_with_card.user_card)
+    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
 
