@@ -28,6 +28,7 @@ class Browser:
 
 
     def open(self, link):
+
         self.browser.get(link)
 
     def find_element(self, how, what):
@@ -36,7 +37,12 @@ class Browser:
 
     def find_elements(self, how, what):
 
-        return self.browser.find_element(how, what)
+        return self.browser.find_elements(how, what)
+
+    def scroll_into_view(self, how, what):
+
+        return self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});',
+                                           self.browser.find_element(how, what))
 
     def is_element_present(self, how, what):
         try:

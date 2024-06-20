@@ -30,13 +30,16 @@ class BitrixLocators:
     STATUS_SELECTOR = (By.CSS_SELECTOR, "#STATUS_ID")
     SAVE_STATUS_BUTTON = (By.CSS_SELECTOR, "#save_status_button")
     CHANGE_ITEM_POPUP_LOGO = (By.XPATH, "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")
-    CHANGE_ITEM_POPUP = (By.XPATH, "//table[@id='sale_order_basketsale_order_edit_product_table']/tbody[3]/descendant::span[@class='adm-s-order-item-title-icon']")
+    CHANGE_ITEM_POPUP = (By.CSS_SELECTOR, ".adm-s-order-item-title-icon")
     CHANGE_ITEM_BUTTON = (By.CSS_SELECTOR, ".bx-core-popup-menu-item-text")
     CHANGE_PAY_POPUP = (By.CSS_SELECTOR, "#BUTTON_PAID_0_SHORT")
     CHANGE_PAY_TO_YES_BUTTON = (By.CSS_SELECTOR, '.bx-core-popup-menu-item')
     CHANGE_PAY_SAVE_BUTTON = (By.CSS_SELECTOR, '[name="undefined"]#undefined') #кринж
     CHANGE_ITEM_SAVE_BUTTON = (By.CSS_SELECTOR, "#save_custom_product")
     SAVE_ORDER_CHANGES_BUTTON = (By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
+    PURCHASED_INPUT_A = (By.CSS_SELECTOR, "[id*=_VALUE_10]")
+    PURCHASED_INPUT_B = (By.XPATH, "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']")
+
 
     MAIN_PAGE = "https://app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru"
     ORDER_CARD_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_view.php?amp%3Bfilter=Y&%3Bset_filter=Y&lang=ru&ID=" ## + order_id

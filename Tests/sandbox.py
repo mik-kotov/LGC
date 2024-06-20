@@ -54,14 +54,14 @@ def cancelled_no_bonus_pay_cash():
     search_item.add_item_in_cart()
     print(search_item.available_item_sizes)
 
-for i in range(50):
-    cancelled_no_bonus_pay_cash()
-    # bitrix_ops = Bitrix(browser)
-    # bitrix_ops.authorization()
-    # bitrix_ops.open(Bitrix.order_link(order_number))
-    # bitrix_ops.order_status_change("MB")
-    # time.sleep(10)
-    #
+def change_to_yes():
+    bitrix_ops = Bitrix(browser)
+    bitrix_ops.authorization()
+    bitrix_ops.open(Bitrix.order_link(1246860))
+    bitrix_ops.change_buyout_status_to_yes()
+    time.sleep(10)
+
+change_to_yes()
     # login_Page = login_page.LoymaxLoginPage(browser)
     # login_Page.authorization()
     # call_center_page = call_center.CallCenterPage(browser)
