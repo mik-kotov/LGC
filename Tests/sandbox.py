@@ -41,10 +41,9 @@ def delivered_with_bonus_pay_cash():
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
     print(order_number)
-def cancelled_no_bonus_pay_cash():
-    user = data.user_with_card_phone
-    card = data.user_card
-    user_with_card = APIClient(user, card)
+def pay_cash():
+    user = data.user_no_card_phone
+    user_with_card = APIClient(user)
     search_item = choose_item_in_catalog.ChooseItem(user_with_card)
     search_item.get_catalog()
     search_item.get_category()
@@ -54,6 +53,7 @@ def cancelled_no_bonus_pay_cash():
     search_item.add_item_in_cart()
     print(search_item.available_item_sizes)
 
+pay_cash()
 def change_to_yes():
     bitrix_ops = Bitrix(browser)
     bitrix_ops.authorization()

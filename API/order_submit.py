@@ -40,7 +40,6 @@ class OrderSubmit:
                                        data=json.dumps(body_for_order_submit))
         order_submit_response = order_submit.json()
         print("Заказ оформлен")
-        print(order_submit_response)
         self.order_submit_response = order_submit_response
 
     def get_order_number(self):
@@ -61,7 +60,7 @@ class WriteOff:
 
     def write_off_body_formation(self):
         write_off_request_body = {
-            "coupon": "",
+            "coupon": "ОСЕНЬ10",
             "paymentAmount": self.bonuses
         }
 

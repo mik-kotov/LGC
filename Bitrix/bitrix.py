@@ -1,11 +1,11 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from Front_base.locators_front import BitrixLocators
-
 from Front_base.browser_works import Browser
 import time
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
+import pytest
 
 
 class Bitrix(Browser):
@@ -42,9 +42,10 @@ class Bitrix(Browser):
         save_status_button.click()
         print(f"Статус товара изменен на {order_status}")
 
+    @pytest.mark.flaky(reruns=2)
     def change_buyout_status_to_yes(self):
 
-        self.scroll_into_view(*BitrixLocators.CHANGE_ITEM_POPUP_LOGO)
+        self.scroll_into_view(*BitrixLocators.CHANGE_ITEM_POPUP)
         change_item_popup = WebDriverWait(self.browser, 10).until(
             EC.element_to_be_clickable(BitrixLocators.CHANGE_ITEM_POPUP))
         self.browser.execute_script("arguments[0].click();", change_item_popup)
