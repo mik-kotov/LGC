@@ -26,7 +26,6 @@ class Browser:
         self.browser = browser
         self.browser.implicitly_wait(10)
 
-
     def open(self, link):
 
         self.browser.get(link)

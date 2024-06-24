@@ -40,8 +40,8 @@ def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, browser):
         bitrix_ops = Bitrix(browser)
         bitrix_ops.authorization()
         bitrix_ops.open(Bitrix.order_edit_link(order_number))
-        bitrix_ops.open(Bitrix.order_link(order_number))
         bitrix_ops.change_buyout_status_to_yes()
+        bitrix_ops.open(Bitrix.order_link(order_number))
         bitrix_ops.order_status_change("NI")
 
     allure.attach(browser.get_screenshot_as_png(), name="Скриншот перед закрытием теста",
@@ -270,6 +270,7 @@ def test_cancelled_with_bonus_pay_cash(user_with_card, browser):
     submit.use_bonuses()
     submit.add_item_and_order_submit()
     submit.get_order_number()
+    order_number = submit.order_number
     pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
@@ -497,7 +498,6 @@ def test_partial_cancelled_with_bonus_pay_cash(user_with_card, browser):
     bitrix_ops = Bitrix(browser)
     bitrix_ops.authorization()
     bitrix_ops.open(Bitrix.order_edit_link(order_number))
-    time.sleep(60)
     bitrix_ops.change_buyout_status_to_yes()
     time.sleep(60)
     bitrix_ops.open(Bitrix.order_link(order_number))

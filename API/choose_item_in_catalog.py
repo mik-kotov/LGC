@@ -93,6 +93,8 @@ class ChooseItem:
 
             if add.status_code == 400:
                 print("Нет доступных размеров, выбираем снова")
+                self.get_category()
+                self.get_list()
                 self.get_item_card_from_product_list()
                 self.check_available_item_sizes()
             else:
