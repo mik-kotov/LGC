@@ -41,6 +41,9 @@ def delivered_with_bonus_pay_cash():
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
     print(order_number)
+
+
+
 def pay_cash():
     user = data.user_no_card_phone
     user_with_card = APIClient(user)
@@ -53,15 +56,48 @@ def pay_cash():
     search_item.add_item_in_cart()
     print(search_item.available_item_sizes)
 
-pay_cash()
-def change_to_yes():
+
+def test_change_to_yes(browser):
+    user = data.user_with_card_phone
+    card = data.user_card
+    user_with_card = APIClient(user, card)
+    search_item = choose_item_in_catalog.ChooseItem(user_with_card)
+    search_item.get_catalog()
+    search_item.get_category()
+    search_item.get_list()
+    search_item.get_item_card_from_product_list()
+    search_item.check_available_item_sizes()
+    search_item.add_item_in_cart()
+    submit = order_submit.OrderSubmit(user_with_card)
+    submit.open_cart()
+    submit.cart_order_data()
+    submit.use_bonuses()
+    submit.add_item_and_order_submit()
+    submit.get_order_number()
+    pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
+    pay_bonuses.send_bonuses()
+    order_number = submit.order_number
     bitrix_ops = Bitrix(browser)
     bitrix_ops.authorization()
-    bitrix_ops.open(Bitrix.order_link(1246860))
+    bitrix_ops.open(Bitrix.order_edit_link(order_number))
     bitrix_ops.change_buyout_status_to_yes()
     time.sleep(10)
 
-change_to_yes()
+def adelivered_with_bonus_pay_cash():
+    user = data.user_with_card_phone
+    card = data.user_card
+    user_with_card = APIClient(user, card)
+    search_item = choose_item_in_catalog.ChooseItem(user_with_card)
+    search_item.get_catalog()
+    search_item.get_category()
+    search_item.get_list()
+    search_item.get_item_card_from_product_list()
+    search_item.check_available_item_sizes()
+    search_item.add_item_in_cart()
+
+for a in range(50):
+    adelivered_with_bonus_pay_cash()
+
     # login_Page = login_page.LoymaxLoginPage(browser)
     # login_Page.authorization()
     # call_center_page = call_center.CallCenterPage(browser)

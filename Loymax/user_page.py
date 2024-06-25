@@ -8,9 +8,9 @@ class UserPage(LoymaxBasePage):
 
     def open_purchase_history(self):
         user_info_button = self.find_element(*LoyalLocators.USER_PERSONAL_INFO_BUTTON)
-        user_info_button.click()
+        self.click(user_info_button)
         user_purchases_button = self.find_element(*LoyalLocators.USER_PURCHASES_BUTTON)
-        user_purchases_button.click()
+        self.click(user_purchases_button)
         self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
     def order_number_is_instance(self, order_id):
@@ -34,7 +34,7 @@ class UserPage(LoymaxBasePage):
 
     def open_loupe(self):
         loupe_button = self.find_element(*LoyalLocators.USER_PURCHASE_LOUPE)
-        loupe_button.click()
+        self.click(loupe_button)
 
     def check_text_bonus(self):
         self.browser.execute_script("window.scrollBy(0, 500);")

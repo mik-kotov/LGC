@@ -16,7 +16,7 @@ class LoymaxLoginPage(LoymaxBasePage):
             password_input = self.find_element(*LoyalLocators.PASSWORD_INPUT)
             password_input.send_keys(loymax_password)
             authorization_button = self.find_element(*LoyalLocators.AUTHORIZATION_BUTTON)
-            authorization_button.click()
+            self.click(authorization_button)
 
 
 

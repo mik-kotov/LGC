@@ -3,13 +3,14 @@ import allure
 from API import choose_item_in_catalog, order_submit
 from Bitrix.bitrix import Bitrix
 from Loymax import login_page, user_page, call_center
+
 import time
 
 
 # LGC-T2332 "Доставлен" без баллов Оплата "Наличными при получении" Пользователь без бонусной карты
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2332", "LGC-T2332")
 @allure.feature("Доставлен")
-@allure.story("Тест: Доставлен без бонусной карты, оплата наличными при получении")
+@allure.story('Тест: "Доставлен" без бонусной карты, оплата наличными при получении')
 @pytest.mark.no_card
 @pytest.mark.delivered
 @pytest.mark.parametrize("user_no_card", ["user_no_card"], indirect=True)
@@ -44,14 +45,12 @@ def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, browser):
         bitrix_ops.open(Bitrix.order_link(order_number))
         bitrix_ops.order_status_change("NI")
 
-    allure.attach(browser.get_screenshot_as_png(), name="Скриншот перед закрытием теста",
-                  attachment_type=allure.attachment_type.PNG)
 
 
 # LGC-T2337 "Доставлен" без баллов Оплата "Наличными при получении" Пользователь с бонусной картой
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2337", "LGC-T2337")
 @allure.feature("Доставлен")
-@allure.story("Тест: Доставлен без бонусной карты, оплата наличными при получении")
+@allure.story('Тест: "Доставлен" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.delivered
 def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, browser):
@@ -75,6 +74,7 @@ def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, browser):
     with allure.step("Обработка заказа в CRM и проверка бонусов"):
         bitrix_ops = Bitrix(browser)
         bitrix_ops.authorization()
+
         bitrix_ops.open(Bitrix.order_edit_link(order_number))
         bitrix_ops.change_buyout_status_to_yes()
         bitrix_ops.open(Bitrix.order_link(order_number))
@@ -95,10 +95,12 @@ def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, browser):
         user_Page.check_added_bonuses_count_larger_than_null()
 
 
+
+
 # LGC-T2348 "Доставлен" с баллами Оплата "Наличными при получении" Пользователь с бонусной картой
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2348", "LGC-T2348")
 @allure.feature("Доставлен")
-@allure.story("Тест: Доставлен с бонусами, оплата наличными при получении")
+@allure.story('Тест: "Доставлен" со списанием бонусов, с картой, оплата наличными при получении')
 @pytest.mark.with_bonuses
 @pytest.mark.delivered
 def test_delivered_with_bonus_pay_cash(user_with_card, browser):
@@ -142,7 +144,11 @@ def test_delivered_with_bonus_pay_cash(user_with_card, browser):
         user_Page.check_added_bonuses_count_larger_than_null()
 
 
+
 # LGC-T2346 "Отказ" без баллов Оплата "Наличными при получении" Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2346", "LGC-T2346")
+@allure.feature("Отказ")
+@allure.story('Тест: "Отказ" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.refused
 def test_refused_no_bonus_pay_cash_have_bonus_card(user_with_card, browser):
@@ -180,6 +186,9 @@ def test_refused_no_bonus_pay_cash_have_bonus_card(user_with_card, browser):
 
 
 # LGC-T2345 "Отказ" с баллами Оплата "Наличными при получении" Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2345", "LGC-T2345")
+@allure.feature("Отказ")
+@allure.story('Тест: "Отказ" со списанием бонусов, с картой, оплата наличными при получении')
 @pytest.mark.with_bonuses
 @pytest.mark.refused
 def test_refused_with_bonus_pay_cash(user_with_card, browser):
@@ -220,6 +229,9 @@ def test_refused_with_bonus_pay_cash(user_with_card, browser):
 
 
 # LGC-T2344 "Отмена" без баллов Оплата "Наличными при получении" Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2344", "LGC-T2344")
+@allure.feature("Отмена")
+@allure.story('Тест: "Отмена" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.cancelled
 def test_cancelled_no_bonus_pay_cash(user_with_card, browser):
@@ -254,6 +266,9 @@ def test_cancelled_no_bonus_pay_cash(user_with_card, browser):
 
 
 # LGC-T2335 "Отмена" с баллами Оплата "Наличными при получении" Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2335", "LGC-T2335")
+@allure.feature("Отмена")
+@allure.story('Тест: "Отмена" со списанием бонусов, с картой, оплата наличными при получении')
 @pytest.mark.with_bonuses
 @pytest.mark.cancelled
 def test_cancelled_with_bonus_pay_cash(user_with_card, browser):
@@ -292,6 +307,9 @@ def test_cancelled_with_bonus_pay_cash(user_with_card, browser):
 
 
 # LGC-T2347 "Оформлен" Оплата "Наличными при получении" Пользователь без бонусной карты
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2347", "LGC-T2347")
+@allure.feature("Оформлен")
+@allure.story('Тест: "Оформлен" без бонусной карты, оплата наличными при получении')
 @pytest.mark.no_card
 @pytest.mark.processed
 def test_processed_pay_cash_no_bonus_card(user_no_card, browser): # в черновом варианте - просто оформление заказа
@@ -315,6 +333,9 @@ def test_processed_pay_cash_no_bonus_card(user_no_card, browser): # в черн�
 
 
 # LGC-T2341 "Оформлен"без баллов Оплата "Наличными при получении" Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2341", "LGC-T2341")
+@allure.feature("Оформлен")
+@allure.story('Тест: "Оформлен" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.processed
 def test_processed_pay_cash_with_bonus_card(user_with_card, browser): # в черновом варианте - просто оформление заказа
@@ -350,6 +371,9 @@ def test_processed_pay_cash_with_bonus_card(user_with_card, browser): # в че�
 
 
 # LGC-T2342 "Оформлен" с баллами Оплата "Наличными при получении" Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2342", "LGC-T2342")
+@allure.feature("Оформлен")
+@allure.story('Тест: "Оформлен" со списанием бонусов, с картой, оплата наличными при получении')
 @pytest.mark.with_bonuses
 @pytest.mark.processed
 def test_processed_with_bonus_pay_cash(user_with_card, browser):
@@ -390,6 +414,9 @@ def test_processed_with_bonus_pay_cash(user_with_card, browser):
 
 
 # LGC-T2334 "Частичный отказ" без баллов Оплата "Наличными при получении" в корзине 2 товара Пользователь без бонусной карты
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2334", "LGC-T2334")
+@allure.feature("Частичный отказ")
+@allure.story('Тест: "Частичный отказ" без бонусной карты, оплата наличными при получении')
 @pytest.mark.no_card
 @pytest.mark.partial_cancelled
 def test_partial_cancelled_pay_cash_no_bonus_card(user_no_card, browser):
@@ -422,6 +449,9 @@ def test_partial_cancelled_pay_cash_no_bonus_card(user_no_card, browser):
 
 
 # LGC-T2339 "Частичный отказ" без баллов Оплата "Наличными при получении" в корзине 2 товара Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2339", "LGC-T2339")
+@allure.feature("Частичный отказ")
+@allure.story('Тест: "Частичный отказ" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.partial_cancelled
 def test_partial_cancelled_no_bonus_pay_cash_with_bonus_card(user_with_card, browser):
@@ -468,6 +498,9 @@ def test_partial_cancelled_no_bonus_pay_cash_with_bonus_card(user_with_card, bro
 
 
 # LGC-T2340 "Частичный отказ" с баллами Оплата "Наличными при получении" в корзине 2 товара Пользователь с бонусной картой
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2340", "LGC-T2340")
+@allure.feature("Частичный отказ")
+@allure.story('Тест: "Частичный отказ" со списанием бонусов, с картой, оплата наличными при получении')
 @pytest.mark.with_bonuses
 @pytest.mark.partial_cancelled
 def test_partial_cancelled_with_bonus_pay_cash(user_with_card, browser):

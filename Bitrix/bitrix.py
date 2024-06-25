@@ -19,7 +19,7 @@ class Bitrix(Browser):
             login_input_field.clear()
             login_input_field.send_keys(BitrixLocators.LOGIN)
             password_input_field.send_keys(BitrixLocators.PASSWORD)
-            confirm_button.click()
+            self.click(confirm_button)
             time.sleep(1)
 
     @staticmethod
@@ -39,36 +39,50 @@ class Bitrix(Browser):
         select.select_by_value(order_status)
         save_status_button = self.find_element(*BitrixLocators.SAVE_STATUS_BUTTON)
         self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});',  save_status_button)
-        save_status_button.click()
+        self.click(save_status_button)
         print(f"Статус товара изменен на {order_status}")
 
     @pytest.mark.flaky(reruns=2)
     def change_buyout_status_to_yes(self):
 
-        self.scroll_into_view(*BitrixLocators.CHANGE_ITEM_POPUP)
-        change_item_popup = WebDriverWait(self.browser, 10).until(
-            EC.element_to_be_clickable(BitrixLocators.CHANGE_ITEM_POPUP))
-        self.browser.execute_script("arguments[0].click();", change_item_popup)
-        change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
-        change_item_button.click()
+        # self.scroll_into_view(*BitrixLocators.CHANGE_ITEM_POPUP_B)
+        # change_item_popup = WebDriverWait(self.browser, 10).until(
+        #     EC.element_to_be_clickable(BitrixLocators.CHANGE_ITEM_POPUP_B))
+        # self.browser.execute_script("arguments[0].click();", change_item_popup)
+        # change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
+        # change_item_button.click()
+        def click_on_item_popup(locator):
+            try:
+                self.scroll_into_view(*locator)
+                WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable(locator))
+                self.click(self.find_element(*locator))
+                change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
+                self.click(change_item_button)
+            except Exception as e:
+                print(f"Не вышло кликнуть на попап товара. Пробуем снова")
 
-        def enter_text_in_element(locator, text):
+        change_item_popup_a = BitrixLocators.CHANGE_ITEM_POPUP
+        change_item_popup_b = BitrixLocators.CHANGE_ITEM_POPUP_B
+
+        click_on_item_popup(change_item_popup_a)
+        click_on_item_popup(change_item_popup_b)
+
+        def enter_text_in_element(locator):
             try:
                 self.scroll_into_view(*locator)
                 self.find_element(*locator).clear()
-                self.find_element(*locator).send_keys(text)
+                self.find_element(*locator).send_keys("Да")
             except Exception as e:
-                print(f"Не вышло. Пробуем план Б. Ошибка: {e}")
+                print(f"Не вышло. Ошибка: {e}")
 
-        # Использование функции для первого и второго случаев
         purchased_inp_a = BitrixLocators.PURCHASED_INPUT_A
         purchased_inp_b = BitrixLocators.PURCHASED_INPUT_B
 
-        enter_text_in_element(purchased_inp_a, text="Да")
-        enter_text_in_element(purchased_inp_b, text="Да")
+        enter_text_in_element(purchased_inp_a)
+        enter_text_in_element(purchased_inp_b)
 
         change_item_save_button = self.find_element(*BitrixLocators.CHANGE_ITEM_SAVE_BUTTON)
-        change_item_save_button.click()
+        self.click(change_item_save_button)
         self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
         save_order_changes_button = self.find_element(*BitrixLocators.SAVE_ORDER_CHANGES_BUTTON)
         self.browser.execute_script("arguments[0].click();", save_order_changes_button)
@@ -77,8 +91,8 @@ class Bitrix(Browser):
     def change_pay_status_to_yes(self):
         change_pay_popup = self.find_element(*BitrixLocators.CHANGE_PAY_POPUP)
         self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});', change_pay_popup)
-        change_pay_popup.click()
+        self.click(change_pay_popup)
         change_pay_to_yes_button = self.find_element(*BitrixLocators.CHANGE_PAY_TO_YES_BUTTON)
         self.browser.execute_script("arguments[0].click();", change_pay_to_yes_button)
         save_button = self.find_element(*BitrixLocators.CHANGE_PAY_SAVE_BUTTON)
-        save_button.click()
+        self.click(save_button)

@@ -15,7 +15,7 @@ class ChooseItem:
         assert catalog.status_code == 200
 
     def get_category(self):
-
+        print("Выбираем категорию")
         def make_request(url):
             return self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CATALOG + "/" + url).json()
 
@@ -33,6 +33,7 @@ class ChooseItem:
         self.category_url = new_url
 
     def get_list(self):
+        print("Открываем список товаров")
         def make_request(url):
             return (self.api_client.get(locators_api.URL_API_SERVICE +
                                         locators_api.CATEGORY + "/" +

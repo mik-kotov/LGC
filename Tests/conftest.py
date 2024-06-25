@@ -3,6 +3,7 @@ from API.authorization import APIClient
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 from Tests import test_loyalty
+import allure
 import pytest
 
 chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
@@ -23,6 +24,8 @@ def browser():
     service = Service(chrome_driver_path)
     driver = webdriver.Chrome(service=service, options=options)
     yield driver
+    allure.attach(driver.get_screenshot_as_png(), name="Скриншот перед закрытием теста",
+                  attachment_type=allure.attachment_type.PNG)
     driver.quit()
 
 @pytest.fixture(scope="function")

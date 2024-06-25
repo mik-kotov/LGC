@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import allure
 from selenium.webdriver.common.by import By
 from Front_base import locators_front
 import time
@@ -29,6 +30,13 @@ class Browser:
     def open(self, link):
 
         self.browser.get(link)
+
+    def click(self, locator):
+
+        locator.click()
+        allure.attach(self.browser.get_screenshot_as_png(),
+                      name='Click_Screenshot', attachment_type=allure.attachment_type.PNG)
+
 
     def find_element(self, how, what):
 
@@ -57,12 +65,3 @@ class Browser:
             return True
 
         return False
-
-    def is_disappeared(self, how, what, timeout=4):
-        try:
-            WebDriverWait(self.browser, timeout, 1, TimeoutException).until_not(
-                EC.presence_of_element_located((how, what)))
-        except TimeoutException:
-            return False
-
-        return True

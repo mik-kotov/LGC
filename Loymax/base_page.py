@@ -1,5 +1,6 @@
 import time
 import pytest
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,7 +14,7 @@ class LoymaxBasePage(Browser):
         link = "https://lgcity-pstg.loymax.tech/#/home"
         self.open(link)
         call_center_button = self.find_element(*LoyalLocators.CONTACT_CENTER_BUTTON)
-        call_center_button.click()
+        self.click(call_center_button)
 
     def go_to_login_page(self):
         link = "https://lgcity-pstg.loymax.tech/#/login"

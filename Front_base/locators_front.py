@@ -29,7 +29,8 @@ class BitrixLocators:
     PASSWORD = "QLEp38z5_6)7"
     STATUS_SELECTOR = (By.CSS_SELECTOR, "#STATUS_ID")
     SAVE_STATUS_BUTTON = (By.CSS_SELECTOR, "#save_status_button")
-    CHANGE_ITEM_POPUP = (By.CSS_SELECTOR, ".adm-s-order-item-title-icon")
+    CHANGE_ITEM_POPUP_B = (By.CSS_SELECTOR, ".adm-s-order-item-title-icon")
+    CHANGE_ITEM_POPUP = (By.XPATH, '//table//tbody[3]//span[@class="adm-s-order-item-title-icon"]')
     CHANGE_ITEM_BUTTON = (By.CSS_SELECTOR, ".bx-core-popup-menu-item-text")
     CHANGE_PAY_POPUP = (By.CSS_SELECTOR, "#BUTTON_PAID_0_SHORT")
     CHANGE_PAY_TO_YES_BUTTON = (By.CSS_SELECTOR, '.bx-core-popup-menu-item')

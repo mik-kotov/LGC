@@ -60,7 +60,7 @@ class WriteOff:
 
     def write_off_body_formation(self):
         write_off_request_body = {
-            "coupon": "ОСЕНЬ10",
+            "coupon": "",
             "paymentAmount": self.bonuses
         }
 

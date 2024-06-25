@@ -11,13 +11,13 @@ class CallCenterPage(LoymaxBasePage):
         search_frame = self.find_element(*LoyalLocators.SEARCH_USER_FRAME)
         self.browser.switch_to.frame(search_frame)
         search_button = self.find_element(*LoyalLocators.SEARCH_USER_BUTTON)
-        search_button.click()
+        self.click(search_button)
 
     def search_user(self):
         user_phone = data.user_with_card_phone
         phone_input = self.find_element(*LoyalLocators.SEARCH_USER_PHONE_INPUT)
         phone_input.send_keys(user_phone)
         search_by_phone_button = self.find_element(*LoyalLocators.SEARCH_USER_BY_PHONE_BUTTON)
-        search_by_phone_button.click()
+        self.click(search_by_phone_button)
         time.sleep(2)
 
