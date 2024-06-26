@@ -43,11 +43,16 @@ class OrderSubmit:
         self.order_submit_response = order_submit_response
 
     def get_order_number(self):
+        try:
+            order_number = self.order_submit_response['response']['id']
+            print(f"Номер заказа: {order_number}")
+            self.order_number = order_number
 
-        order_number = self.order_submit_response['response']['id']
-        print(f"Номер заказа: {order_number}")
-        self.order_number = order_number
-
+        except TypeError:
+            if self.order_submit_response is None:
+                print("Ошибка. Тело ответа отсутствует или пусто")
+            else:
+                print(f"Ошибка. Тело ответа: {self.order_submit_response}")
 
 class WriteOff:
 

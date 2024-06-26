@@ -17,8 +17,8 @@ import time
 # options.add_argument("--start-maximized")
 # #options.add_argument("--headless")
 # service = Service(chrome_driver_path)
-# browser = webdriver.Chrome(service=service, options=options)
-# browser.implicitly_wait(10)
+# driver = webdriver.Chrome(service=service, options=options)
+# driver.implicitly_wait(10)
 
 class Browser:
 

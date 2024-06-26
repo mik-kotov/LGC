@@ -32,6 +32,7 @@ class APIClient:
         self.phone_number = f"+{user_phone}"
         self.tokens = self.load_or_get_tokens()
         self.user_card = user_card
+        print(f"Телефон пользователя: {user_phone}")
 
     def get_anonim_auth_token(self):
         print("Запрашиваем анонимный токен")

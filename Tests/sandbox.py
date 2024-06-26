@@ -57,7 +57,7 @@ def pay_cash():
     print(search_item.available_item_sizes)
 
 
-def test_change_to_yes(browser):
+def test_change_to_yes(driver):
     user = data.user_with_card_phone
     card = data.user_card
     user_with_card = APIClient(user, card)
@@ -77,7 +77,7 @@ def test_change_to_yes(browser):
     pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses)
     pay_bonuses.send_bonuses()
     order_number = submit.order_number
-    bitrix_ops = Bitrix(browser)
+    bitrix_ops = Bitrix(driver)
     bitrix_ops.authorization()
     bitrix_ops.open(Bitrix.order_edit_link(order_number))
     bitrix_ops.change_buyout_status_to_yes()
@@ -98,13 +98,13 @@ def adelivered_with_bonus_pay_cash():
 for a in range(50):
     adelivered_with_bonus_pay_cash()
 
-    # login_Page = login_page.LoymaxLoginPage(browser)
+    # login_Page = login_page.LoymaxLoginPage(driver)
     # login_Page.authorization()
-    # call_center_page = call_center.CallCenterPage(browser)
+    # call_center_page = call_center.CallCenterPage(driver)
     #
     # call_center_page.go_to_search()
     # call_center_page.search_user()
-    # user_Page = user_page.UserPage(browser)
+    # user_Page = user_page.UserPage(driver)
     # user_Page.open_purchase_history()
     # user_Page.order_number_is_instance(order_number)
     # user_Page.cancellation_check()
