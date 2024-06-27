@@ -25,7 +25,7 @@ class OrderSubmit:
         self.cart_data = cart_data
 
     def use_bonuses(self):
-        card_number = data.user_card
+        card_number = self.api_client.user_card
         body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": self.bonuses}
         post_bonuses = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_BONUSES,
                                        data=json.dumps(body_for_use_bonuses))
@@ -56,8 +56,8 @@ class OrderSubmit:
 
 class WriteOff:
 
-    def __init__(self, submit, bonuses):
-
+    def __init__(self, submit, bonuses, card):
+        self.card = card
         self.bonuses = str(bonuses)
         self.write_off_request_headers = self.write_off_headers_formation()
         self.get_submit = submit
@@ -75,7 +75,7 @@ class WriteOff:
 
         write_off_request_body.update({
             "mobilePhone": response_core["customer"]["phone"][1:],
-            "bonusCard": data.user_card,
+            "bonusCard": self.card,
             "purchaseId": response_core["id"],
             "orderDatetime": response_core["creation_date"]
         })

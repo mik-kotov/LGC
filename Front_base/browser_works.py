@@ -37,10 +37,13 @@ class Browser:
         allure.attach(self.browser.get_screenshot_as_png(),
                       name='Click_Screenshot', attachment_type=allure.attachment_type.PNG)
 
+    def find_element(self, how, what, timeout=10):
 
-    def find_element(self, how, what):
+        element = WebDriverWait(self.browser, timeout).until(
+            EC.presence_of_element_located((how, what))
+        )
+        return element
 
-        return self.browser.find_element(how, what)
 
     def find_elements(self, how, what):
 

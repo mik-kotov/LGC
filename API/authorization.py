@@ -70,6 +70,7 @@ class APIClient:
 
     def request_with_token(self, method, url, **kwargs):
         headers = kwargs.pop('headers', {})
+        combined_headers = {}
         token = self.tokens.get(self.phone_number)
         if not token:
             print("Токен для номера телефона не найден. Получаем новый.")

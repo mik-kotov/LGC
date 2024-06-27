@@ -38,7 +38,7 @@ class Bitrix(Browser):
         select = Select(select_element)
         select.select_by_value(order_status)
         save_status_button = self.find_element(*BitrixLocators.SAVE_STATUS_BUTTON)
-        self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});',  save_status_button)
+        self.browser.scroll_into_view(save_status_button)
         self.click(save_status_button)
         print(f"Статус товара изменен на {order_status}")
 
@@ -90,7 +90,7 @@ class Bitrix(Browser):
 
     def change_pay_status_to_yes(self):
         change_pay_popup = self.find_element(*BitrixLocators.CHANGE_PAY_POPUP)
-        self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});', change_pay_popup)
+        self.browser.scroll_into_view(change_pay_popup)
         self.click(change_pay_popup)
         change_pay_to_yes_button = self.find_element(*BitrixLocators.CHANGE_PAY_TO_YES_BUTTON)
         self.browser.execute_script("arguments[0].click();", change_pay_to_yes_button)
