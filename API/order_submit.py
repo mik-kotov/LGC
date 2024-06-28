@@ -49,7 +49,7 @@ class OrderSubmit:
         print(f"Списано баллов: {self.bonuses}")
         return post_bonuses
 
-    @retry(3, 3)
+    @retry(3, 5)
     def add_item_and_order_submit(self):
         body_for_order_submit = {'need_bonus_card_issue': True}
         order_submit = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,

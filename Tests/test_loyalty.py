@@ -656,6 +656,9 @@ def test_processed_with_bonus_pay_cash(user_with_card, driver):
             submit.open_cart()
         with allure.step("Просматриваем данные заказа для корзины"):
             submit.cart_order_data()
+            with allure.step("Тело ответа"):
+                allure.attach(json.dumps(submit.cart_data, indent=2), "API Response",
+                              allure.attachment_type.JSON)
     with allure.step("Применяем бонусы: АПИ"):
         submit.use_bonuses()
         with allure.step("Оформляем заказ"):
