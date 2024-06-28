@@ -2,10 +2,13 @@ import random
 from API import locators_api
 
 
+
 class ChooseItem:
 
     def __init__(self, api_client):
 
+        self.category_url = None
+        self.clothes_list = []
         self.api_client = api_client
 
     def get_catalog(self):
@@ -54,14 +57,18 @@ class ChooseItem:
                     has_subcategories = False
             except (KeyError, TypeError):
                 break
-        return clothes_list
+        self.clothes_list = clothes_list
 
     def get_item_card_from_product_list(self):
-        expensive_products = []
-        while not expensive_products:
-            clothes_list = self.get_list()
-            expensive_products = [product['id'] for product in clothes_list if product['price'] > 2000]
+        def get_expensive_products():
+            return [product['id'] for product in self.clothes_list if product['price'] > 2000]
 
+        expensive_products = get_expensive_products()
+        while not expensive_products:
+            print("Нет товаров дороже 2000 рублей: выбираем снова")
+            self.get_category()
+            self.get_list()
+            expensive_products = get_expensive_products()
         product_id = random.choice(expensive_products)
         print('Открываем карточку товара')
         item_card = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.PRODUCT + "/" + str(product_id))

@@ -11,19 +11,25 @@ import allure
 from selenium.webdriver.common.by import By
 from Front_base import locators_front
 import time
-
-# chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
-# options = webdriver.ChromeOptions()
-# options.add_argument("--start-maximized")
-# #options.add_argument("--headless")
-# service = Service(chrome_driver_path)
-# driver = webdriver.Chrome(service=service, options=options)
-# driver.implicitly_wait(10)
+def retry(max_attempts, delay=1):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    attempts += 1
+                    print(f"Attempt {attempts} failed: {e}")
+                    time.sleep(delay)
+            raise RuntimeError(f"Function {func.__name__} failed after {max_attempts} attempts")
+        return wrapper
+    return decorator
 
 class Browser:
 
-    def __init__(self, browser):
-
+    def __init__(self, browser, order_number=None):
+        self.order_number = order_number
         self.browser = browser
         self.browser.implicitly_wait(10)
 
@@ -32,10 +38,10 @@ class Browser:
         self.browser.get(link)
 
     def click(self, locator):
-
-        locator.click()
         allure.attach(self.browser.get_screenshot_as_png(),
-                      name='Click_Screenshot', attachment_type=allure.attachment_type.PNG)
+                      name='Скриншот перед кликом', attachment_type=allure.attachment_type.PNG)
+        locator.click()
+
 
     def find_element(self, how, what, timeout=10):
 
@@ -49,10 +55,10 @@ class Browser:
 
         return self.browser.find_elements(how, what)
 
-    def scroll_into_view(self, how, what):
+    def scroll_into_view(self, element):
 
         return self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});',
-                                           self.browser.find_element(how, what))
+                                           element)
 
     def is_element_present(self, how, what):
         try:

@@ -2,6 +2,22 @@ from API import locators_api, data
 from random import randint
 import json
 import requests
+import time
+
+def retry(max_attempts, delay=1):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    attempts += 1
+                    print(f"Attempt {attempts} failed: {e}")
+                    time.sleep(delay)
+            raise RuntimeError(f"Function {func.__name__} failed after {max_attempts} attempts")
+        return wrapper
+    return decorator
 
 class OrderSubmit:
 
@@ -33,14 +49,15 @@ class OrderSubmit:
         print(f"Списано баллов: {self.bonuses}")
         return post_bonuses
 
+    @retry(3, 3)
     def add_item_and_order_submit(self):
-
         body_for_order_submit = {'need_bonus_card_issue': True}
         order_submit = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
                                        data=json.dumps(body_for_order_submit))
-        order_submit_response = order_submit.json()
+        order_submit.raise_for_status()
+        self.order_submit_response = order_submit.json()
         print("Заказ оформлен")
-        self.order_submit_response = order_submit_response
+
 
     def get_order_number(self):
         try:
@@ -57,6 +74,7 @@ class OrderSubmit:
 class WriteOff:
 
     def __init__(self, submit, bonuses, card):
+        self.write_off_response = None
         self.card = card
         self.bonuses = str(bonuses)
         self.write_off_request_headers = self.write_off_headers_formation()
@@ -125,6 +143,7 @@ class WriteOff:
                                        data=body)
         print("Применены бонусы")
         print(f"Списано баллов: {self.bonuses}")
+        self.write_off_response = post_bonuses.json()
         return post_bonuses
 
 

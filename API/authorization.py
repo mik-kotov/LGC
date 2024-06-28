@@ -8,6 +8,7 @@ import json
 import requests
 from API import locators_api
 from API import data
+import time
 
 TOKEN_FILE = 'auth_tokens.json'
 
@@ -44,16 +45,24 @@ class APIClient:
         current_phone_request_body = {'phone': self.phone_number}
         headers_with_anon_auth_token = {**self.headers, 'X-Auth-Token': self.get_anonim_auth_token()}
         print("Запрашиваем код подтверждения")
-        response = requests.post(self.base_url + locators_api.CONFIRM_CODE,
-                                 headers=headers_with_anon_auth_token,
-                                 data=json.dumps(current_phone_request_body))
-        response.raise_for_status()
-        return response.json()
+        max_tries = 3
+        for _ in range(max_tries):
+            response = requests.post(self.base_url + locators_api.CONFIRM_CODE,
+                                     headers=headers_with_anon_auth_token,
+                                     data=json.dumps(current_phone_request_body))
+            try:
+                response.raise_for_status()
+                self.confirm_code_responce = response.json()
+                break
 
+            except requests.exceptions.HTTPError as e:
+                    print(f"Ошибка: {e}")
+
+            time.sleep(5)
     def get_user_auth_token(self):
-        response = self.request_confirm_token()
+        self.request_confirm_token()
         print("Запрашиваем токен авторизации")
-        confirm_phone_code = response['debug']['trace']['phone_code']
+        confirm_phone_code = self.confirm_code_responce['debug']['trace']['phone_code']
         current_request_body = {'phone': self.phone_number, 'code': confirm_phone_code}
         response_user_auth_token = requests.post(self.base_url + locators_api.LOGIN,
                                                  headers=self.headers,

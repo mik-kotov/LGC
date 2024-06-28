@@ -34,11 +34,15 @@ def driver():
 def user_no_card():
     user = data.get_random_user_with_no_card()
     user_no_card = APIClient(user)
-    return user_no_card
+    with allure.step(f"Пользователь {user}"):
+        return user_no_card
+
 
 @pytest.fixture(scope="function")
 def user_with_card():
     user_and_card = data.get_random_user_with_card()
-    user_with_card = APIClient(user_and_card[0], user_and_card[1])
+    card = user_and_card[1]
+    user = user_and_card[0]
+    user_with_card = APIClient(user, card)
     return user_with_card
 
