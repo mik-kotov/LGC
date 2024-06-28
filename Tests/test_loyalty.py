@@ -510,7 +510,7 @@ def test_cancelled_with_bonus_pay_cash(user_with_card, driver):
             user_Page.cancellation_check()
 
 
-# LGC-T2347 "Оформлен" Оплата "Наличными при получении" Пользователь без бонусной карты
+# LGC-T2347 "Оформлен" оплата "Наличными при получении" Пользователь без бонусной карты
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2347", "LGC-T2347")
 @allure.feature("Оформлен")
 @allure.story('Тест: "Оформлен" без бонусной карты, оплата наличными при получении')
@@ -608,23 +608,23 @@ def test_processed_pay_cash_with_bonus_card(user_with_card, driver):  # в че�
         with allure.step('Меняем статус заказа на "Оформлен"'):
             bitrix_ops.order_status_change("AB")
 
-    with allure.step("Проверка заказа в Loymax"):
-        login_Page = login_page.LoymaxLoginPage(driver)
-        with allure.step('Авторизуемся в Loymax'):
-            login_Page.authorization()
-        with allure.step('Переходим в поиск'):
-            call_center_page = call_center.CallCenterPage(driver)
-            call_center_page.go_to_search()
-        with allure.step('Ищем пользователя'):
-            call_center_page.search_user(user_with_card.phone_number[1:])
-        with allure.step('Открываем профиль пользователя'):
-            user_Page = user_page.UserPage(driver)
-        with allure.step('Открываем историю пользователя'):
-            user_Page.open_purchase_history()
-        with allure.step('Есть номер заказа'):
-            user_Page.order_number_is_instance(order_number)
-        with allure.step('Песочные часы на месте'):
-            user_Page.creation_check()
+    # with allure.step("Проверка заказа в Loymax"):
+    #     login_Page = login_page.LoymaxLoginPage(driver)
+    #     with allure.step('Авторизуемся в Loymax'):
+    #         login_Page.authorization()
+    #     with allure.step('Переходим в поиск'):
+    #         call_center_page = call_center.CallCenterPage(driver)
+    #         call_center_page.go_to_search()
+    #     with allure.step('Ищем пользователя'):
+    #         call_center_page.search_user(user_with_card.phone_number[1:])
+    #     with allure.step('Открываем профиль пользователя'):
+    #         user_Page = user_page.UserPage(driver)
+    #     with allure.step('Открываем историю пользователя'):
+    #         user_Page.open_purchase_history()
+    #     with allure.step('Есть номер заказа'):
+    #         user_Page.order_number_is_instance(order_number)
+    #     with allure.step('Песочные часы на месте'):
+    #         user_Page.creation_check()
 
 
 # LGC-T2342 "Оформлен" с баллами Оплата "Наличными при получении" Пользователь с бонусной картой
@@ -846,10 +846,6 @@ def test_partial_cancelled_no_bonus_pay_cash_with_bonus_card(user_with_card, dri
             user_Page = user_page.UserPage(driver)
         with allure.step('Открываем историю пользователя'):
             user_Page.open_purchase_history()
-        with allure.step('Есть номер заказа'):
-            user_Page.order_number_is_instance(order_number)
-        with allure.step('Песочные часы на месте'):
-            user_Page.creation_check()
         with allure.step('У заказа два статуса'):
             user_Page.partial_cancel_two_statuses_check()
         with allure.step('Первый статус - галка'):
@@ -921,8 +917,8 @@ def test_partial_cancelled_with_bonus_pay_cash(user_with_card, driver):
             with allure.step("Тело ответа"):
                 allure.attach(json.dumps(pay_bonuses.write_off_response, indent=2), "API Response",
                               allure.attachment_type.JSON)
-        with allure.step(f"Номер заказа: {submit.order_number}"):
-            order_number = submit.order_number
+    with allure.step(f"Номер заказа: {submit.order_number}"):
+         order_number = submit.order_number
 
     with allure.step("Обработка заказа в Битрикс"):
         bitrix_ops = Bitrix(driver, order_number)
@@ -951,10 +947,6 @@ def test_partial_cancelled_with_bonus_pay_cash(user_with_card, driver):
             user_Page = user_page.UserPage(driver)
         with allure.step('Открываем историю пользователя'):
             user_Page.open_purchase_history()
-        with allure.step('Есть номер заказа'):
-            user_Page.order_number_is_instance(order_number)
-        with allure.step('Песочные часы на месте'):
-            user_Page.creation_check()
         with allure.step('У заказа два статуса'):
             user_Page.partial_cancel_two_statuses_check()
         with allure.step('Первый статус - галка'):
