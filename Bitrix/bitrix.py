@@ -5,8 +5,6 @@ from Front_base.browser_works import Browser
 import time
 from selenium.webdriver.support.ui import Select
 from Front_base.browser_works import retry
-from selenium.webdriver.common.by import By
-import pytest
 
 
 class Bitrix(Browser):
@@ -40,7 +38,7 @@ class Bitrix(Browser):
         self.click(save_status_button)
         print(f"Статус товара изменен на {order_status}")
 
-    @retry(3,2)
+    @retry(3, 5)
     def change_buyout_status_to_yes(self):
 
         # self.scroll_into_view(*BitrixLocators.CHANGE_ITEM_POPUP_B)
@@ -49,9 +47,10 @@ class Bitrix(Browser):
         # self.driver.execute_script("arguments[0].click();", change_item_popup)
         # change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
         # change_item_button.click()
-        if "sale_order_edit" not in self.browser.current_url:
+        if self.is_element_present(*BitrixLocators.GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON):
             print("Переоткрываем страницу 'Изменить заказ'")
             self.open(self.order_edit_link())
+
         def click_on_item_popup(locator):
             try:
                 element = self.find_element(*locator)
@@ -68,7 +67,7 @@ class Bitrix(Browser):
 
         try:
             click_on_item_popup(change_item_popup_a)
-        except Exception as e:
+        except Exception:
             try:
                 click_on_item_popup(change_item_popup_b)
             except Exception as e:

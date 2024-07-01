@@ -1,16 +1,11 @@
-from selenium.webdriver.chrome.service import Service
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-import pytest
-from selenium.webdriver import Remote as RemoteWebDriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import allure
-from selenium.webdriver.common.by import By
-from Front_base import locators_front
 import time
+
+
 def retry(max_attempts, delay=1):
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -25,6 +20,7 @@ def retry(max_attempts, delay=1):
             raise RuntimeError(f"Function {func.__name__} failed after {max_attempts} attempts")
         return wrapper
     return decorator
+
 
 class Browser:
 

@@ -2,11 +2,12 @@ import random
 from API import locators_api
 
 
-
 class ChooseItem:
 
     def __init__(self, api_client):
 
+        self.available_item_sizes = None
+        self.item_card = None
         self.category_url = None
         self.clothes_list = []
         self.api_client = api_client
@@ -19,6 +20,7 @@ class ChooseItem:
 
     def get_category(self):
         print("Выбираем категорию")
+        
         def make_request(url):
             return self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CATALOG + "/" + url).json()
 
@@ -37,6 +39,7 @@ class ChooseItem:
 
     def get_list(self):
         print("Открываем список товаров")
+        
         def make_request(url):
             return (self.api_client.get(locators_api.URL_API_SERVICE +
                                         locators_api.CATEGORY + "/" +
@@ -77,7 +80,7 @@ class ChooseItem:
 
     def check_available_item_sizes(self):
         available_item_sizes = []
-        while available_item_sizes == []:
+        while not available_item_sizes:
             print("Проверяем доступные размеры товара")
             current_item_size_value_count = len(self.item_card['response']['sizes'])
             for i in range(current_item_size_value_count):

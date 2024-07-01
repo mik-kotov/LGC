@@ -3,14 +3,10 @@ import json
 import requests
 from API import locators_api
 from API import data
-import os
-import json
-import requests
-from API import locators_api
-from API import data
 import time
 
 TOKEN_FILE = 'auth_tokens.json'
+
 
 def save_token(token_data):
     with open(TOKEN_FILE, 'w') as file:
@@ -22,7 +18,6 @@ def load_tokens():
         with open(TOKEN_FILE, 'r') as file:
             return json.load(file)
     return {}
-
 
 
 class APIClient:
@@ -59,6 +54,7 @@ class APIClient:
                     print(f"Ошибка: {e}")
 
             time.sleep(5)
+
     def get_user_auth_token(self):
         self.request_confirm_token()
         print("Запрашиваем токен авторизации")

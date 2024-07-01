@@ -1,8 +1,6 @@
 from selenium.webdriver.common.by import By
 
 
-
-
 class BasePageLocators:
 
     LOGIN_LINK_FROM_HEADER = (By.XPATH, "(//a[contains(@class, 'header__login-link')])[1]")
@@ -27,6 +25,7 @@ class BitrixLocators:
     CONFIRM_BUTTON = (By.CSS_SELECTOR, '.login-btn-green[tabindex = "4"]')
     LOGIN = "lgcity\\Mikhail.Kotov"
     PASSWORD = "QLEp38z5_6)7"
+    GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON = (By.CSS_SELECTOR, '[title="Перейти к просмотру заказа"]')
     STATUS_SELECTOR = (By.CSS_SELECTOR, "#STATUS_ID")
     SAVE_STATUS_BUTTON = (By.CSS_SELECTOR, "#save_status_button")
     CHANGE_ITEM_POPUP_B = (By.CSS_SELECTOR, ".adm-s-order-item-title-icon")
@@ -39,12 +38,9 @@ class BitrixLocators:
     SAVE_ORDER_CHANGES_BUTTON = (By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
     PURCHASED_INPUT_A = (By.CSS_SELECTOR, "[id*=_VALUE_10]")
     PURCHASED_INPUT_B = (By.XPATH, "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']")
-
-
     MAIN_PAGE = "https://app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru"
     ORDER_CARD_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_view.php?amp%3Bfilter=Y&%3Bset_filter=Y&lang=ru&ID=" ## + order_id
     ORDER_EDIT_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=" ## + order_id
-
 
 
 class LoyalLocators:
@@ -69,9 +65,11 @@ class LoyalLocators:
     SECOND_FROM_TOP_PURCHASE_NUMBER = (By.XPATH, "//purchases//tbody/tr[2]/td[3]/span[@class='b-table--responsive__value']")
     SECOND_FROM_TOP_PURCHASE_CANCELLED = (By.XPATH, "//purchases//tbody/tr[2]//div[@class='state-icon canceled']")
     USER_PURCHASE_LOUPE = (By.XPATH, "//purchases//tbody/tr[1]/td[3]/following-sibling::td[3]/div/button")
-    TEXT_BONUS = (By.XPATH, "//*[.='Бонус']")
+    TEXT_ADDED_BONUS = (By.XPATH, "//*[.='Бонус']")
     ADDED_BONUSES_COUNT = (By.XPATH, "//*[.='Бонус']/following-sibling::td[1]/div/span")
+    ADDED_BONUS_CONFIRMED = (By.XPATH, "//*[.='Бонус']/following-sibling::td[2]/div[@class='state-icon confirmed']")
+    PAID_BONUS_CONFIRMED = (By.XPATH, "//*[.='Оплата']/following-sibling::td[2]/div[@class='state-icon confirmed']")
     PAID_BONUSES_COUNT = (By.XPATH, "//*[.='Оплата']/following-sibling::td[1]/div/span")
-    BONUS_CONFIRMED = (By.XPATH, "//*[.='Бонус']/following-sibling::td[2]/div[@class='state-icon confirmed']")
+
 
 

@@ -4,6 +4,7 @@ import json
 import requests
 import time
 
+
 def retry(max_attempts, delay=1):
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -19,6 +20,7 @@ def retry(max_attempts, delay=1):
         return wrapper
     return decorator
 
+
 class OrderSubmit:
 
     def __init__(self, api_client):
@@ -28,7 +30,6 @@ class OrderSubmit:
         self.order_submit_response = None
         self.api_client = api_client
         self.bonuses = randint(1, 4)
-
 
     def open_cart(self):
         print('Открываем корзину')
@@ -49,7 +50,7 @@ class OrderSubmit:
         print(f"Списано баллов: {self.bonuses}")
         return post_bonuses
 
-    @retry(3, 5)
+    @retry(3, 20)
     def add_item_and_order_submit(self):
         body_for_order_submit = {'need_bonus_card_issue': True}
         order_submit = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
@@ -57,7 +58,6 @@ class OrderSubmit:
         order_submit.raise_for_status()
         self.order_submit_response = order_submit.json()
         print("Заказ оформлен")
-
 
     def get_order_number(self):
         try:
@@ -70,6 +70,7 @@ class OrderSubmit:
                 print("Ошибка. Тело ответа отсутствует или пусто")
             else:
                 print(f"Ошибка. Тело ответа: {self.order_submit_response}")
+
 
 class WriteOff:
 
