@@ -16,7 +16,7 @@ class UserPage(LoymaxBasePage):
 
     def get_history_screenshot(self):
         purchases_table = self.find_element(*LoyalLocators.USER_PURCHASES_TABLE)
-        WebDriverWait(self.browser, 10).until(EC.visibility_of_element_located(*LoyalLocators.USER_PURCHASES_TABLE))
+        WebDriverWait(self.browser, 10).until(EC.visibility_of_element_located(purchases_table))
         self.scroll_into_view(purchases_table)
         allure.attach(self.browser.get_screenshot_as_png(), name="Скриншот истории заказов",
                       attachment_type=allure.attachment_type.PNG)

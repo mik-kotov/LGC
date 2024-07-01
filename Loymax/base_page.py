@@ -1,10 +1,3 @@
-import time
-import pytest
-
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from Front_base.browser_works import Browser
 from Front_base.locators_front import LoyalLocators
 
