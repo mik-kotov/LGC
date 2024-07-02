@@ -2,7 +2,6 @@ from API import data
 from API.authorization import APIClient
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
-from Tests import test_loyalty
 import allure
 import pytest
 
@@ -37,12 +36,12 @@ def user_no_card():
     with allure.step(f"Пользователь {user}"):
         return user_no_card
 
-
 @pytest.fixture(scope="function")
 def user_with_card():
     user_and_card = data.get_random_user_with_card()
     card = user_and_card[1]
     user = user_and_card[0]
     user_with_card = APIClient(user, card)
-    return user_with_card
+    with allure.step(f"Пользователь: {user}, карта: {card}"):
+        return user_with_card
 

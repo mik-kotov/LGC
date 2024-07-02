@@ -8,9 +8,10 @@ import steps
 @allure.story('Тест: "Доставлен" без бонусной карты, оплата наличными при получении')
 @pytest.mark.no_card
 @pytest.mark.delivered
-def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver):
+#@pytest.mark.parametrize("promocode", [True, False])
+def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver):#, promocode):
     steps.choose_item(user_no_card)
-    order_number = steps.submit_and_pay(user_no_card)
+    order_number = steps.submit_and_pay(user_no_card)#, promocode=promocode)
     steps.buyout_and_status_change(driver, order_number, "NI")
 
 
@@ -19,9 +20,11 @@ def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver):
 @allure.story('Тест: "Доставлен" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.delivered
-def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver):
+@pytest.mark.parametrize("promocode", [True, False])
+def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver, promocode):
+
     steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=False)
+    order_number = steps.submit_and_pay(user_with_card, bonuses=False, promocode=promocode)
     steps.buyout_and_status_change(driver, order_number, "NI")
     history_page = steps.loymax_ops(driver, user_with_card)
     steps.asserts_delivered_no_bonus_have_card(history_page, order_number)
@@ -33,9 +36,11 @@ def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver):
 @pytest.mark.with_card
 @pytest.mark.with_bonuses
 @pytest.mark.delivered
-def test_delivered_with_bonus_pay_cash_have_card(user_with_card, driver): #добавить проверки на списание
+@pytest.mark.parametrize("promocode", [True, False])
+def test_delivered_with_bonus_pay_cash_have_card(user_with_card, driver, promocode):
+
     steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=True)
+    order_number = steps.submit_and_pay(user_with_card, bonuses=True, promocode=promocode)
     steps.buyout_and_status_change(driver, order_number, "NI")
     history_page = steps.loymax_ops(driver, user_with_card)
     steps.asserts_delivered_pay_bonus_have_card(history_page, order_number)

@@ -1,5 +1,7 @@
+import random
+
 from API import locators_api, data
-from random import randint
+from random import randint, choice
 import json
 import requests
 import time
@@ -20,17 +22,59 @@ def retry(max_attempts, delay=1):
         return wrapper
     return decorator
 
-
-class OrderSubmit:
+class Order:
 
     def __init__(self, api_client):
+        self.pickup_offers = None
+        self.city = None
+        self.use_promocode_response = None
         self.order_number = None
         self.cart_data = None
         self.get_cart = None
         self.order_submit_response = None
         self.api_client = api_client
         self.bonuses = randint(1, 4)
+        self.promocode = "осень10"
 
+    def reset_order(self):
+        reset = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.RESET_ORDER)
+        assert reset.status_code == 200
+        return reset
+
+    def reset_cart(self):
+        self.open_cart()
+        products = self.get_cart.json()['response']['products']
+        for product in products:
+            size_id = product['size']['id']
+            delete_url = f"{locators_api.URL_API_SERVICE}{locators_api.CART}/{size_id}"
+            response = self.api_client.delete(delete_url)
+            assert response.status_code == 200
+
+    def set_city(self):
+        self.city = data.get_random_city()
+        set_city = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.CITY, data=json.dumps(
+            {"id": self.city}))
+        return set_city
+
+    def set_pickup_point(self):
+        pickup_offers = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.PICKUP_OFFERS)
+        point = choice(pickup_offers.json()['response'])
+        point_id = point['store']['id'].split("-")
+        print(point_id)
+        set_request_body = {"delivery_service_id": point_id[0], "pickup_point_id": point_id[1]}
+        set_pickup_point = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.FIX_PICKUP_POINT,
+                                                data=json.dumps(set_request_body))
+        return set_pickup_point
+
+    def set_payment_by_cash(self):
+        set_payment = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.PAYMENT_TYPE,
+                                                data=json.dumps({"payment_type_id": "cash_upon_receipt"}))
+        return set_payment
+
+    def set_delivery_type_as_pickup(self):
+        set_delivery = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.DELIVERY_TYPE,
+                                           data=json.dumps({"delivery_type": "pickup"}))
+        return set_delivery
     def open_cart(self):
         print('Открываем корзину')
         get_cart = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART)
@@ -39,7 +83,16 @@ class OrderSubmit:
     def cart_order_data(self):
         print('Просматриваем данные заказа для корзины')
         cart_data = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART_ORDER)
+        print(cart_data.json())
         self.cart_data = cart_data
+
+    def use_promocode(self):
+        body_for_use_promo = {"promocode": self.promocode}
+        post_promo = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_PROMOCODE,
+                                       data=json.dumps(body_for_use_promo))
+        print(post_promo.json())
+        self.use_promocode_response = post_promo.json()
+        return post_promo
 
     def use_bonuses(self):
         card_number = self.api_client.user_card
@@ -50,7 +103,7 @@ class OrderSubmit:
         print(f"Списано баллов: {self.bonuses}")
         return post_bonuses
 
-    @retry(3, 20)
+    @retry(3, 3)
     def add_item_and_order_submit(self):
         body_for_order_submit = {'need_bonus_card_issue': True}
         order_submit = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,

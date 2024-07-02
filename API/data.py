@@ -23,16 +23,31 @@ users_who_have_bonuses = [
     ["79150104010", "7785419379900162934"],
     ["79601616888", "7785451494500125211"]
 ]
-users_who_have_not_bonuses = ["79163354447",
-                              "79026166502",
-                              "79609344999",
-                              "79211387112",
-                              "79673686932",
-                              "79276932325"]
+users_who_have_not_bonuses = ["79175518104"]
+                              # "79163354447",
+                              # "79026166502",
+                              # "79609344999",
+                              # "79211387112",
+                              # "79673686932",
+                              # "79276932325"]
+
+cities = [
+    "6100000100000",
+    "5500000100000",
+    "6300000100000",
+    "7400000100000",
+    "7400000100000",
+    "1600000100000",
+    "6600000100000",
+    "5400000100000",
+    "7700000000000"
+]
 
 users_with_card_cycle = cycle(users_who_have_bonuses)
 users_no_card_cycle = cycle(users_who_have_not_bonuses)
 
+def get_random_city():
+    return choice(cities)
 
 def get_random_user_with_card():
     return choice(users_who_have_bonuses)

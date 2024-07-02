@@ -1,5 +1,5 @@
 import allure
-from API import choose_item_in_catalog, order_submit
+from API import catalog, order
 from Bitrix.bitrix import Bitrix
 from Loymax import login_page, user_page, call_center
 from Front_base.locators_front import LoyalLocators
@@ -9,7 +9,10 @@ import time
 
 def choose_item(user):
     with allure.step("Выбор товара"):
-        search_item = choose_item_in_catalog.ChooseItem(user)
+        start_order = order.Order(user)
+        start_order.reset_order()
+        start_order.reset_cart()
+        search_item = catalog.ChooseItem(user)
         with allure.step("Открываем каталог"):
             search_item.get_catalog()
         with allure.step("Выбираем категорию"):
@@ -29,11 +32,21 @@ def choose_two_items(user):
     choose_item(user)
 
 
-def submit_and_pay(user, bonuses=False):
+def submit_and_pay(user, bonuses=False, promocode=False):
     with allure.step("Оформление заказа и выбор оплаты"):
-        submit = order_submit.OrderSubmit(user)
+        submit = order.Order(user)
         with allure.step("Открываем корзину"):
             submit.open_cart()
+        submit.set_city()
+        submit.set_delivery_type_as_pickup()
+        submit.set_pickup_point()
+        submit.set_payment_by_cash()
+        if promocode:
+            with allure.step("Применяем промокод"):
+                submit.use_promocode()
+                with allure.step("Тело ответа"):
+                    allure.attach(json.dumps(submit.use_promocode_response, indent=2), "API Response",
+                                  allure.attachment_type.JSON)
         with allure.step("Просматриваем данные заказа для корзины"):
             submit.cart_order_data()
         if bonuses:
@@ -46,7 +59,7 @@ def submit_and_pay(user, bonuses=False):
                               allure.attachment_type.JSON)
         if bonuses:
             with allure.step("Применяем бонусы: Лоялти"):
-                pay_bonuses = order_submit.WriteOff(submit.order_submit_response, submit.bonuses, user.user_card)
+                pay_bonuses = order.WriteOff(submit.order_submit_response, submit.bonuses, user.user_card)
                 pay_bonuses.send_bonuses()
     submit.get_order_number()
     with allure.step(f"Номер заказа: {submit.order_number}"):

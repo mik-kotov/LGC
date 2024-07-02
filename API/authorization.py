@@ -105,3 +105,5 @@ class APIClient:
     def post(self, url, **kwargs):
         return self.request_with_token('POST', url, **kwargs)
 
+    def delete(self, url, **kwargs):
+        return self.request_with_token('DELETE', url, **kwargs)
