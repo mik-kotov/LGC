@@ -1,10 +1,10 @@
-import random
-
 from API import locators_api, data
 from random import randint, choice
 import json
 import requests
 import time
+from faker import Faker
+fake = Faker('ru_RU')
 
 
 def retry(max_attempts, delay=1):
@@ -34,7 +34,7 @@ class Order:
         self.order_submit_response = None
         self.api_client = api_client
         self.bonuses = randint(1, 4)
-        self.promocode = "осень10"
+
 
     def reset_order(self):
         reset = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.RESET_ORDER)
@@ -60,7 +60,6 @@ class Order:
         pickup_offers = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.PICKUP_OFFERS)
         point = choice(pickup_offers.json()['response'])
         point_id = point['store']['id'].split("-")
-        print(point_id)
         set_request_body = {"delivery_service_id": point_id[0], "pickup_point_id": point_id[1]}
         set_pickup_point = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.FIX_PICKUP_POINT,
                                                 data=json.dumps(set_request_body))
@@ -75,6 +74,19 @@ class Order:
         set_delivery = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.DELIVERY_TYPE,
                                            data=json.dumps({"delivery_type": "pickup"}))
         return set_delivery
+
+    def set_order_customer(self):
+        name = fake.name().split(" ")
+        request_body = {
+            "email": fake.free_email(),
+            "name": name[0],
+            "patronymic": name[1],
+            "phone": self.api_client.phone_number,
+            "surname": name[2]
+        }
+        set_customer = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_CUSTOMER,
+                                            data=json.dumps(request_body))
+        return set_customer
     def open_cart(self):
         print('Открываем корзину')
         get_cart = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART)
@@ -83,15 +95,15 @@ class Order:
     def cart_order_data(self):
         print('Просматриваем данные заказа для корзины')
         cart_data = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART_ORDER)
-        print(cart_data.json())
         self.cart_data = cart_data
 
-    def use_promocode(self):
-        body_for_use_promo = {"promocode": self.promocode}
+    def use_promocode(self, promocode):
+        body_for_use_promo = {"promocode": promocode.name}
         post_promo = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_PROMOCODE,
-                                       data=json.dumps(body_for_use_promo))
-        print(post_promo.json())
-        self.use_promocode_response = post_promo.json()
+                                       data=json.dumps(body_for_use_promo)).json()
+        assert post_promo['response']['price']['promocode_discount'] > 0
+        self.use_promocode_response = post_promo
+        promocode.order_sum = post_promo['response']['price']['final']
         return post_promo
 
     def use_bonuses(self):
@@ -200,6 +212,11 @@ class WriteOff:
         self.write_off_response = post_bonuses.json()
         return post_bonuses
 
+
+class PromoCode:
+    def __init__(self):
+        self.name = "осень10"
+        self.order_sum = None
 
 
 

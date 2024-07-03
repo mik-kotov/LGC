@@ -17,6 +17,7 @@ PICKUP_OFFERS = "/cart/pickupOffers"
 FIX_PICKUP_POINT = "/order/pickup"
 PAYMENT_TYPE = "/order/payment"
 DELIVERY_TYPE = "/order/delivery"
+ORDER_CUSTOMER = "/order/customer"
 ########### USER SERVICE #############
 
 URL_USER_SERVICE ="https://user-service-dev.lgcity.dev"

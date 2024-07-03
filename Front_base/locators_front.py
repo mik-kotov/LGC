@@ -38,6 +38,10 @@ class BitrixLocators:
     SAVE_ORDER_CHANGES_BUTTON = (By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
     PURCHASED_INPUT_A = (By.CSS_SELECTOR, "[id*=_VALUE_10]")
     PURCHASED_INPUT_B = (By.XPATH, "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']")
+    PROMOCODE_FIELD = (By.XPATH, "//*[.='Купон:']")
+    PROMOCODE_NAME = (By.XPATH, "//*[.='Купон:']/following-sibling::td/div")
+    ORDER_PRICE = (By.CSS_SELECTOR, "#sale-order-financeinfo-price-view")
+
     MAIN_PAGE = "https://app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru"
     ORDER_CARD_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_view.php?amp%3Bfilter=Y&%3Bset_filter=Y&lang=ru&ID=" ## + order_id
     ORDER_EDIT_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=" ## + order_id
@@ -70,6 +74,8 @@ class LoyalLocators:
     ADDED_BONUS_CONFIRMED = (By.XPATH, "//*[.='Бонус']/following-sibling::td[2]/div[@class='state-icon confirmed']")
     PAID_BONUS_CONFIRMED = (By.XPATH, "//*[.='Оплата']/following-sibling::td[2]/div[@class='state-icon confirmed']")
     PAID_BONUSES_COUNT = (By.XPATH, "//*[.='Оплата']/following-sibling::td[1]/div/span")
+    USED_PROMOCODE = (By.CSS_SELECTOR, '[ng-repeat="number in purchase.couponNumbers"]')
+    LOYMAX_ORDER_SUM = (By.XPATH, '//td[.="По чеку:"]/following-sibling::td[4]/b')
 
 
 

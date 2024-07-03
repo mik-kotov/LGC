@@ -108,3 +108,15 @@ class Bitrix(Browser):
         self.browser.execute_script("arguments[0].click();", change_pay_to_yes_button)
         save_button = self.find_element(*BitrixLocators.CHANGE_PAY_SAVE_BUTTON)
         self.click(save_button)
+
+    def check_promocode_exists(self, promocode):
+        assert self.is_element_present(*BitrixLocators.PROMOCODE_FIELD)
+        assert self.is_element_present(*BitrixLocators.PROMOCODE_NAME)
+        promocode_name = self.browser.find_element(*BitrixLocators.PROMOCODE_NAME)
+        name = promocode_name.get_attribute('innerText').strip()
+        assert name.upper() == promocode.name.upper()
+
+    def check_order_sum_with_promo(self, promocode):
+        order_price = self.find_element(*BitrixLocators.ORDER_PRICE)
+        price = float(order_price.get_attribute('innerText').replace(' ', '')[:-4])
+        assert promocode.order_sum == price

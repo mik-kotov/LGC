@@ -8,10 +8,13 @@ import time
 
 
 def choose_item(user):
-    with allure.step("Выбор товара"):
+    with allure.step("Подготовка пользователя"):
         start_order = order.Order(user)
-        start_order.reset_order()
-        start_order.reset_cart()
+        with allure.step("Очищаем корзину"):
+            start_order.reset_order()
+        with allure.step("Очищаем заказ"):
+            start_order.reset_cart()
+    with allure.step("Выбор товара"):
         search_item = catalog.ChooseItem(user)
         with allure.step("Открываем каталог"):
             search_item.get_catalog()
@@ -32,26 +35,32 @@ def choose_two_items(user):
     choose_item(user)
 
 
-def submit_and_pay(user, bonuses=False, promocode=False):
+def submit_and_pay(user, bonuses=False, promocode=None):
     with allure.step("Оформление заказа и выбор оплаты"):
         submit = order.Order(user)
         with allure.step("Открываем корзину"):
             submit.open_cart()
-        submit.set_city()
-        submit.set_delivery_type_as_pickup()
-        submit.set_pickup_point()
-        submit.set_payment_by_cash()
-        if promocode:
-            with allure.step("Применяем промокод"):
-                submit.use_promocode()
-                with allure.step("Тело ответа"):
-                    allure.attach(json.dumps(submit.use_promocode_response, indent=2), "API Response",
-                                  allure.attachment_type.JSON)
+        with allure.step("Устанавливаем город"):
+            submit.set_city()
+        with allure.step("Заполняем данные пользователя"):
+            submit.set_order_customer()
+        with allure.step('Устанавливаем способ доставки: "Самовывоз"'):
+            submit.set_delivery_type_as_pickup()
+        with allure.step("Фиксируем ПВЗ"):
+            submit.set_pickup_point()
+        with allure.step('Устанавливаем способ оплаты: "Наличными при получении"'):
+            submit.set_payment_by_cash()
         with allure.step("Просматриваем данные заказа для корзины"):
             submit.cart_order_data()
         if bonuses:
             with allure.step("Применяем бонусы: АПИ"):
                 submit.use_bonuses()
+        if promocode:
+            with allure.step("Применяем промокод"):
+                submit.use_promocode(promocode)
+                with allure.step("Тело ответа"):
+                    allure.attach(json.dumps(submit.use_promocode_response, indent=2), "API Response",
+                                  allure.attachment_type.JSON)
         with allure.step("Оформляем заказ"):
             submit.add_item_and_order_submit()
             with allure.step("Тело ответа"):
@@ -66,7 +75,7 @@ def submit_and_pay(user, bonuses=False, promocode=False):
         return submit.order_number
 
 
-def buyout_and_status_change(driver, order_number, status):
+def buyout_and_status_change(driver, order_number, status, promocode=None):
     with allure.step("Обработка заказа в Битрикс"):
         bitrix_ops = Bitrix(driver, order_number)
         with allure.step("Авторизуемся в Битрикс"):
@@ -77,6 +86,11 @@ def buyout_and_status_change(driver, order_number, status):
             bitrix_ops.change_buyout_status_to_yes()
         with allure.step('Открываем страницу заказа'):
             bitrix_ops.open(bitrix_ops.order_link())
+        if promocode:
+            with allure.step('Проверяем, что промокод отображается"'):
+                bitrix_ops.check_promocode_exists(promocode)
+            with allure.step('Проверяем что сумма заказа совпадает с суммой после применения промокода'):
+                bitrix_ops.check_order_sum_with_promo(promocode)
         if status == "OI":
             time.sleep(60)
         with allure.step(f'Меняем статус заказа на {status}'):
@@ -100,11 +114,7 @@ def loymax_ops(driver, user_with_card):
             user_Page.get_history_screenshot()
         return user_Page
 
-
-
-
-
-def asserts_delivered_no_bonus_have_card(history_page, order_number):
+def asserts_delivered_no_bonus_have_card(history_page, order_number,promocode=None):
     with allure.step('Проверки в Loymax'):
         with allure.step('Есть номер заказа'):
             history_page.order_number_is_instance(order_number)
@@ -112,6 +122,11 @@ def asserts_delivered_no_bonus_have_card(history_page, order_number):
             history_page.confirmation_check()
         with allure.step('Открываем заказ'):
             history_page.open_loupe()
+        if promocode:
+            with allure.step('Промокод на месте'):
+                history_page.check_used_promocode_is_exist(promocode)
+            with allure.step('Сумма после применения купона совпадает с суммой в лоймаксе'):
+                history_page.check_order_sum_with_promo(promocode)
         with allure.step('Есть строка "Бонус"'):
             history_page.check_text_bonus()
         with allure.step('Зачисление бонусов подтверждено'):
@@ -120,7 +135,7 @@ def asserts_delivered_no_bonus_have_card(history_page, order_number):
             history_page.check_added_bonuses_count_larger_than_null()
 
 
-def asserts_delivered_pay_bonus_have_card(history_page, order_number):
+def asserts_delivered_pay_bonus_have_card(history_page, order_number, promocode=None):
     with allure.step('Проверки в Loymax'):
         with allure.step('Есть номер заказа'):
             history_page.order_number_is_instance(order_number)
@@ -128,6 +143,11 @@ def asserts_delivered_pay_bonus_have_card(history_page, order_number):
             history_page.confirmation_check()
         with allure.step('Открываем заказ'):
             history_page.open_loupe()
+        if promocode:
+            with allure.step('Промокод на месте'):
+                history_page.check_used_promocode_is_exist(promocode)
+            with allure.step('Сумма после применения купона совпадает с суммой в лоймаксе'):
+                history_page.check_order_sum_with_promo(promocode)
         with allure.step('Есть строка "Бонус"'):
             history_page.check_text_bonus()
         with allure.step('Зачисление бонусов подтверждено'):
@@ -141,20 +161,33 @@ def asserts_delivered_pay_bonus_have_card(history_page, order_number):
     # добавить проверки на списание
 
 
-def asserts_refused_no_bonus_have_card(history_page, order_number):
+def asserts_refused_no_bonus_have_card(history_page, order_number, promocode=None):
     with allure.step('Проверки в Loymax'):
         with allure.step('Есть номер заказа'):
             history_page.order_number_is_instance(order_number)
         with allure.step('Заказ отменен'):
             history_page.cancellation_check()
+        with allure.step('Открываем заказ'):
+            history_page.open_loupe()
+        if promocode:
+            with allure.step('Промокод на месте'):
+                history_page.check_used_promocode_is_exist(promocode)
+            with allure.step('Сумма после применения купона совпадает с суммой в лоймаксе'):
+                history_page.check_order_sum_with_promo(promocode)
 
-
-def asserts_refused_pay_bonus_have_card(history_page, order_number):
+def asserts_refused_pay_bonus_have_card(history_page, order_number, promocode=None):
     with allure.step('Проверки в Loymax'):
         with allure.step('Есть номер заказа'):
             history_page.order_number_is_instance(order_number)
         with allure.step('Заказ отменен'):
             history_page.cancellation_check()
+        with allure.step('Открываем заказ'):
+            history_page.open_loupe()
+        if promocode:
+            with allure.step('Промокод на месте'):
+                history_page.check_used_promocode_is_exist(promocode)
+            with allure.step('Сумма после применения купона совпадает с суммой в лоймаксе'):
+                history_page.check_order_sum_with_promo(promocode)
 
 
 def asserts_cancelled_no_bonus_have_card(history_page, order_number):
@@ -163,6 +196,8 @@ def asserts_cancelled_no_bonus_have_card(history_page, order_number):
             history_page.order_number_is_instance(order_number)
         with allure.step('Заказ отменен'):
             history_page.cancellation_check()
+        with allure.step('Открываем заказ'):
+            history_page.open_loupe()
 
 
 def asserts_cancelled_pay_bonus_have_card(history_page, order_number):
@@ -179,6 +214,8 @@ def asserts_processed_pay_bonus_have_card(history_page, order_number):
             history_page.order_number_is_instance(order_number)
         with allure.step('Песочные часы на месте'):
             history_page.creation_check()
+        with allure.step('Открываем заказ'):
+            history_page.open_loupe()
         #проверки на списание?
 
 
@@ -200,7 +237,6 @@ def asserts_partial_cancelled_no_bonus_have_card(history_page, order_number):
             history_page.check_added_bonus_confirm()
         with allure.step('Зачислено больше нуля бонусов'):
             history_page.check_added_bonuses_count_larger_than_null()
-
 
 def asserts_partial_cancelled_pay_bonus_have_card(history_page, order_number):
     with allure.step('Проверки в Loymax'):
@@ -224,3 +260,12 @@ def asserts_partial_cancelled_pay_bonus_have_card(history_page, order_number):
             history_page.check_paid_bonus_confirmed()
         with allure.step('Списано больше нуля бонусов'):
             history_page.check_paid_bonuses_count_less_than_null()
+
+
+def init_promo(promocode=False):
+    if promocode:
+        promo = order.PromoCode()
+    else:
+        promo = None
+    return promo
+

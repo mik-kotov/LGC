@@ -8,11 +8,12 @@ import steps
 @allure.story('Тест: "Доставлен" без бонусной карты, оплата наличными при получении')
 @pytest.mark.no_card
 @pytest.mark.delivered
-#@pytest.mark.parametrize("promocode", [True, False])
-def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver):#, promocode):
+@pytest.mark.parametrize("promocode", [True, False])
+def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver, promocode):
+    promo = steps.init_promo(promocode=promocode)
     steps.choose_item(user_no_card)
-    order_number = steps.submit_and_pay(user_no_card)#, promocode=promocode)
-    steps.buyout_and_status_change(driver, order_number, "NI")
+    order_number = steps.submit_and_pay(user_no_card, promo)
+    steps.buyout_and_status_change(driver, order_number, "NI", promo)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2337", "LGC-T2337")
@@ -22,12 +23,12 @@ def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver):#, prom
 @pytest.mark.delivered
 @pytest.mark.parametrize("promocode", [True, False])
 def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver, promocode):
-
+    promo = steps.init_promo(promocode=promocode)
     steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=False, promocode=promocode)
-    steps.buyout_and_status_change(driver, order_number, "NI")
+    order_number = steps.submit_and_pay(user_with_card, bonuses=False, promocode=promo)
+    steps.buyout_and_status_change(driver, order_number, "NI", promocode=promo)
     history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_delivered_no_bonus_have_card(history_page, order_number)
+    steps.asserts_delivered_no_bonus_have_card(history_page, order_number, promocode=promo)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2348", "LGC-T2348")
@@ -38,12 +39,12 @@ def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver, pro
 @pytest.mark.delivered
 @pytest.mark.parametrize("promocode", [True, False])
 def test_delivered_with_bonus_pay_cash_have_card(user_with_card, driver, promocode):
-
+    promo = steps.init_promo(promocode=promocode)
     steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=True, promocode=promocode)
-    steps.buyout_and_status_change(driver, order_number, "NI")
+    order_number = steps.submit_and_pay(user_with_card, bonuses=True, promocode=promo)
+    steps.buyout_and_status_change(driver, order_number, "NI", promocode=promo)
     history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_delivered_pay_bonus_have_card(history_page, order_number)
+    steps.asserts_delivered_pay_bonus_have_card(history_page, order_number, promocode=promo)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2346", "LGC-T2346")
@@ -51,12 +52,14 @@ def test_delivered_with_bonus_pay_cash_have_card(user_with_card, driver, promoco
 @allure.story('Тест: "Отказ" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.refused
-def test_refused_no_bonus_pay_cash_have_card(user_with_card, driver):
+@pytest.mark.parametrize("promocode", [True, False])
+def test_refused_no_bonus_pay_cash_have_card(user_with_card, driver, promocode):
+    promo = steps.init_promo(promocode=promocode)
     steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=False)
-    steps.buyout_and_status_change(driver, order_number, "QI")
+    order_number = steps.submit_and_pay(user_with_card, bonuses=False, promocode=promo)
+    steps.buyout_and_status_change(driver, order_number, "QI", promocode=promo)
     history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_refused_no_bonus_have_card(history_page, order_number)
+    steps.asserts_refused_no_bonus_have_card(history_page, order_number, promocode=promo)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2345", "LGC-T2345")
@@ -65,12 +68,14 @@ def test_refused_no_bonus_pay_cash_have_card(user_with_card, driver):
 @pytest.mark.with_card
 @pytest.mark.with_bonuses
 @pytest.mark.refused
-def test_refused_with_bonus_pay_cash_have_card(user_with_card, driver):
+@pytest.mark.parametrize("promocode", [True, False])
+def test_refused_with_bonus_pay_cash_have_card(user_with_card, driver, promocode):
+    promo = steps.init_promo(promocode=promocode)
     steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=True)
-    steps.buyout_and_status_change(driver, order_number, "QI")
+    order_number = steps.submit_and_pay(user_with_card, bonuses=True, promocode=promo)
+    steps.buyout_and_status_change(driver, order_number, "QI", promocode=promo)
     history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_refused_no_bonus_have_card(history_page, order_number)
+    steps.asserts_refused_no_bonus_have_card(history_page, order_number, promocode=promo)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2344", "LGC-T2344")

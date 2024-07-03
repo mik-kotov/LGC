@@ -2,6 +2,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from Front_base.locators_front import LoyalLocators
 from Loymax.base_page import LoymaxBasePage
+
 import time
 import allure
 
@@ -45,7 +46,7 @@ class UserPage(LoymaxBasePage):
         self.click(loupe_button)
 
     def check_text_bonus(self):
-        self.browser.execute_script("window.scrollBy(0, 500);")
+        self.browser.execute_script("window.scrollBy(0, 1700);")
         assert self.is_element_present(*LoyalLocators.TEXT_ADDED_BONUS)
 
     def partial_cancel_two_statuses_check(self):
@@ -73,3 +74,14 @@ class UserPage(LoymaxBasePage):
         text = bonus_rec.get_attribute('innerText').strip()
         count = float(text.replace('бнс.', '').strip())
         assert count < 0
+
+    def check_used_promocode_is_exist(self, promocode):
+        promo_text = self.find_element(*LoyalLocators.USED_PROMOCODE)
+        text = promo_text.get_attribute('innerText').strip()
+        assert text == promocode.name.upper()
+
+    def check_order_sum_with_promo(self, promocode):
+        sum_text = self.find_element(*LoyalLocators.LOYMAX_ORDER_SUM)
+        price = float(sum_text.get_attribute('innerText').replace(' ', '')[:-4])
+        assert promocode.order_sum == price
+

@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 import allure
 import pytest
-
+import time
 chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
@@ -24,7 +24,7 @@ def driver():
     driver = webdriver.Chrome(service=service, options=options)
 
     yield driver
-
+    time.sleep(1.5)
     allure.attach(driver.get_screenshot_as_png(), name="Скриншот перед закрытием теста",
                   attachment_type=allure.attachment_type.PNG)
     driver.quit()
