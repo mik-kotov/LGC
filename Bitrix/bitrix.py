@@ -47,7 +47,7 @@ class Bitrix(Browser):
         # self.driver.execute_script("arguments[0].click();", change_item_popup)
         # change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
         # change_item_button.click()
-        if self.is_element_present(*BitrixLocators.GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON):
+        if not self.is_element_present(*BitrixLocators.GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON):
             print("Переоткрываем страницу 'Изменить заказ'")
             self.open(self.order_edit_link())
 
@@ -114,7 +114,7 @@ class Bitrix(Browser):
         assert self.is_element_present(*BitrixLocators.PROMOCODE_NAME)
         promocode_name = self.browser.find_element(*BitrixLocators.PROMOCODE_NAME)
         name = promocode_name.get_attribute('innerText').strip()
-        assert name.upper() == promocode.name.upper()
+        assert name == promocode.name
 
     def check_order_sum_with_promo(self, promocode):
         order_price = self.find_element(*BitrixLocators.ORDER_PRICE)

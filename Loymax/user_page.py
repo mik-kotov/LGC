@@ -44,9 +44,14 @@ class UserPage(LoymaxBasePage):
     def open_loupe(self):
         loupe_button = self.find_element(*LoyalLocators.USER_PURCHASE_LOUPE)
         self.click(loupe_button)
+        self.browser.execute_script("window.scrollBy(0, 1700);")
+
+    def second_purchase_open_loup(self):
+        loupe_button = self.find_element(*LoyalLocators.SECOND_FROM_TOP_PURCHASE_LOUPE)
+        self.click(loupe_button)
+        self.browser.execute_script("window.scrollBy(0, 1700);")
 
     def check_text_bonus(self):
-        self.browser.execute_script("window.scrollBy(0, 1700);")
         assert self.is_element_present(*LoyalLocators.TEXT_ADDED_BONUS)
 
     def partial_cancel_two_statuses_check(self):
@@ -60,8 +65,8 @@ class UserPage(LoymaxBasePage):
     def check_added_bonus_confirm(self):
         assert self.is_element_present(*LoyalLocators.ADDED_BONUS_CONFIRMED)
 
-    def check_paid_bonus_confirmed(self):
-        assert self.is_element_present(*LoyalLocators.PAID_BONUS_CONFIRMED)
+    def check_added_bonus_cancelled(self):
+        assert self.is_element_present(*LoyalLocators.ADDED_BONUS_CANCELLED)
 
     def check_added_bonuses_count_larger_than_null(self):
         bonus_rec = self.find_element(*LoyalLocators.ADDED_BONUSES_COUNT)
@@ -69,11 +74,18 @@ class UserPage(LoymaxBasePage):
         count = float(text.replace('бнс.', '').strip())
         assert count > 0
 
+    def check_paid_bonus_confirmed(self):
+        assert self.is_element_present(*LoyalLocators.PAID_BONUS_CONFIRMED)
+
+    def check_paid_bonus_cancelled(self):
+        assert self.is_element_present(*LoyalLocators.PAID_BONUS_CANCELLED)
+
     def check_paid_bonuses_count_less_than_null(self):
         bonus_rec = self.find_element(*LoyalLocators.PAID_BONUSES_COUNT)
         text = bonus_rec.get_attribute('innerText').strip()
         count = float(text.replace('бнс.', '').strip())
         assert count < 0
+
 
     def check_used_promocode_is_exist(self, promocode):
         promo_text = self.find_element(*LoyalLocators.USED_PROMOCODE)

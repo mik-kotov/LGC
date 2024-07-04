@@ -1,5 +1,6 @@
 from API import data
 from API.authorization import APIClient
+from API.order import Order
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 import allure
@@ -12,6 +13,13 @@ options.add_argument("--headless")
 service = Service(chrome_driver_path)
 browser = webdriver.Chrome(service=service, options=options)
 
+def prepare_user(user):
+    with allure.step("Подготовка пользователя"):
+        start_order = Order(user)
+        with allure.step("Очищаем корзину"):
+            start_order.reset_order()
+        with allure.step("Очищаем заказ"):
+            start_order.reset_cart()
 
 @pytest.fixture(scope='session')
 def driver():
@@ -34,6 +42,7 @@ def user_no_card():
     user = data.get_random_user_with_no_card()
     user_no_card = APIClient(user)
     with allure.step(f"Пользователь {user}"):
+        prepare_user(user_no_card)
         return user_no_card
 
 @pytest.fixture(scope="function")
@@ -43,5 +52,6 @@ def user_with_card():
     user = user_and_card[0]
     user_with_card = APIClient(user, card)
     with allure.step(f"Пользователь: {user}, карта: {card}"):
+        prepare_user(user_with_card)
         return user_with_card
 

@@ -112,8 +112,16 @@
 
 # oo = "boxberry-03116"
 # print(oo[:-])
-a = "12852.00 руб."
-b = "ОСЕНЬ10"
-c = "осень10"
-assert b == c.upper(), ""
-print(a.replace(' ', '')[:-4])
+from faker import Faker
+fake = Faker('ru_RU')
+def n():
+    name = fake.name().split(" ")
+    request_body = {
+        "name": name[0],
+        "patronymic": name[2],
+        "surname": name[1]
+    }
+    print(request_body)
+
+for a in range(50):
+    n()

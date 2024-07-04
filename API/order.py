@@ -79,10 +79,10 @@ class Order:
         name = fake.name().split(" ")
         request_body = {
             "email": fake.free_email(),
-            "name": name[0],
-            "patronymic": name[1],
+            "name": name[1],
+            "patronymic": name[2],
             "phone": self.api_client.phone_number,
-            "surname": name[2]
+            "surname": name[0]
         }
         set_customer = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_CUSTOMER,
                                             data=json.dumps(request_body))

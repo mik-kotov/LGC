@@ -38,7 +38,6 @@ class Browser:
                       name='Скриншот перед кликом', attachment_type=allure.attachment_type.PNG)
         locator.click()
 
-
     def find_element(self, how, what, timeout=10):
 
         element = WebDriverWait(self.browser, timeout).until(
