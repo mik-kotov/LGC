@@ -1,6 +1,6 @@
 from API import data
-from API.authorization import APIClient
-from API.order import Order
+from ..API.authorization import APIClient
+from ..API.order import Order
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 import allure
@@ -10,8 +10,8 @@ chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
 options.add_argument("--headless")
-service = Service(chrome_driver_path)
-browser = webdriver.Chrome(service=service, options=options)
+# service = Service(chrome_driver_path)
+browser = webdriver.Chrome(options=options)
 
 def prepare_user(user):
     with allure.step("Подготовка пользователя"):
