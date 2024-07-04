@@ -6,12 +6,12 @@ from selenium import webdriver
 import allure
 import pytest
 import time
-chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
+#chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
 options.add_argument("--headless")
-service = Service(chrome_driver_path)
-browser = webdriver.Chrome(service=service, options=options)
+#service = Service(chrome_driver_path)
+browser = webdriver.Chrome(options=options)
 
 def prepare_user(user):
     with allure.step("Подготовка пользователя"):
@@ -24,12 +24,10 @@ def prepare_user(user):
 @pytest.fixture(scope='session')
 def driver():
     print("")
-    chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     # options.add_argument("--headless")
-    service = Service(chrome_driver_path)
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(options=options)
 
     yield driver
     time.sleep(1.5)
