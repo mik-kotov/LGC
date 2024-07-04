@@ -1,6 +1,6 @@
 import pytest
 import allure
-import steps
+from Tests import steps
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2332", "LGC-T2332")
