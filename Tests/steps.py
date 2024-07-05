@@ -3,9 +3,15 @@ from API import catalog, order
 from Bitrix.bitrix import Bitrix
 from Loymax import login_page, user_page, call_center
 from Front_base.locators_front import LoyalLocators
+import pytest
 import json
 import time
 
+def promocode_parametrize():
+    return pytest.mark.parametrize("promocode", [
+        pytest.param(False, marks=pytest.mark.no_promocode),
+        pytest.param(True, marks=pytest.mark.with_promocode)
+    ])
 
 def choose_item(user):
     with allure.step("Выбор товара"):
@@ -178,7 +184,7 @@ def asserts_refused_pay_bonus_have_card(history_page, order_number, promocode=No
         with allure.step('Открываем заказ'):
             history_page.open_loupe()
         with allure.step('Списание бонусов отменено'):
-            history_page.check_paid_bonus_cancalled()
+            history_page.check_paid_bonus_cancelled()
         with allure.step('Отменено списание более чем 0 бонусов'):
             history_page.check_paid_bonuses_count_less_than_null()
         if promocode:
@@ -203,8 +209,10 @@ def asserts_cancelled_pay_bonus_have_card(history_page, order_number):
             history_page.order_number_is_instance(order_number)
         with allure.step('Заказ отменен'):
             history_page.cancellation_check()
+        with allure.step('Открываем заказ'):
+            history_page.open_loupe()
         with allure.step('Списание бонусов отменено'):
-            history_page.check_paid_bonus_cancalled()
+            history_page.check_paid_bonus_cancelled()
         with allure.step('Отменено списание более чем 0 бонусов'):
             history_page.check_paid_bonuses_count_less_than_null()
 
@@ -215,8 +223,6 @@ def asserts_processed_pay_bonus_have_card(history_page, order_number):
             history_page.order_number_is_instance(order_number)
         with allure.step('Песочные часы на месте'):
             history_page.creation_check()
-        with allure.step('Открываем заказ'):
-            history_page.open_loupe()
         #проверки на списание?
 
 
@@ -241,8 +247,8 @@ def asserts_partial_cancelled_no_bonus_have_card(history_page, order_number, pro
             history_page.check_added_bonus_confirm()
         with allure.step('Зачислено больше нуля бонусов'):
             history_page.check_added_bonuses_count_larger_than_null()
-        with allure.step('Открываем историю пользователя'):
-            history_page.open_purchase_history()
+        with allure.step('Возвращаемся в историю пользователя'):
+            history_page.from_purchase_back_to_history()
         with allure.step('Открываем второй заказ'):
             history_page.second_purchase_open_loup()
         if promocode:
@@ -276,8 +282,8 @@ def asserts_partial_cancelled_pay_bonus_have_card(history_page, order_number, pr
             history_page.check_paid_bonus_confirmed()
         with allure.step('Списано больше нуля бонусов'):
             history_page.check_paid_bonuses_count_less_than_null()
-        with allure.step('Открываем историю пользователя'):
-            history_page.open_purchase_history()
+        with allure.step('Возвращаемся в историю пользователя'):
+            history_page.from_purchase_back_to_history()
         with allure.step('Открываем второй заказ'):
             history_page.second_purchase_open_loup()
         if promocode:
@@ -286,7 +292,7 @@ def asserts_partial_cancelled_pay_bonus_have_card(history_page, order_number, pr
             with allure.step('Сумма после применения купона совпадает с суммой в лоймаксе'):
                 history_page.check_order_sum_with_promo(promocode)
         with allure.step('Списание бонусов отменено'):
-            history_page.check_paid_bonus_cancalled()
+            history_page.check_paid_bonus_cancelled()
         with allure.step('Отменено списание более чем 0 бонусов'):
             history_page.check_paid_bonuses_count_less_than_null()
 

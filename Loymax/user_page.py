@@ -54,6 +54,12 @@ class UserPage(LoymaxBasePage):
     def check_text_bonus(self):
         assert self.is_element_present(*LoyalLocators.TEXT_ADDED_BONUS)
 
+
+
+    def from_purchase_back_to_history(self):
+        button = self.find_element(*LoyalLocators.BUTTON_BACK_TO_HISTORY)
+        self.click(button)
+
     def partial_cancel_two_statuses_check(self):
         self.browser.execute_script("window.scrollBy(0, 500);")
         assert (self.find_element(*LoyalLocators.FIRST_FROM_TOP_PURCHASE_NUMBER).text ==

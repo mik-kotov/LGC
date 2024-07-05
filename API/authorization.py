@@ -7,6 +7,20 @@ import time
 
 TOKEN_FILE = 'auth_tokens.json'
 
+def retry(max_attempts, delay=1):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            attempts = 0
+            while attempts < max_attempts:
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    attempts += 1
+                    print(f"Attempt {attempts} failed: {e}")
+                    time.sleep(delay)
+            raise RuntimeError(f"Function {func.__name__} failed after {max_attempts} attempts")
+        return wrapper
+    return decorator
 
 def save_token(token_data):
     with open(TOKEN_FILE, 'w') as file:
@@ -37,23 +51,16 @@ class APIClient:
         response.raise_for_status()
         return response.json()['response']['access_token']
 
+    @retry(3, 5)
     def request_confirm_token(self):
         current_phone_request_body = {'phone': self.phone_number}
         print("Запрашиваем код подтверждения")
-        max_tries = 3
-        for _ in range(max_tries):
-            response = requests.post(self.base_url + locators_api.CONFIRM_CODE,
-                                     headers=self.headers,
-                                     data=json.dumps(current_phone_request_body))
-            try:
-                response.raise_for_status()
-                self.confirm_code_response = response.json()
-                break
-
-            except requests.exceptions.HTTPError as e:
-                    print(f"Ошибка: {e}")
-
-            time.sleep(5)
+        response = requests.post(self.base_url + locators_api.CONFIRM_CODE,
+                                 headers=self.headers,
+                                 data=json.dumps(current_phone_request_body))
+        response.raise_for_status()
+        self.confirm_code_response = response.json()
+        time.sleep(5)
 
     def get_user_auth_token(self):
         self.request_confirm_token()

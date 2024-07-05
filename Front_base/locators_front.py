@@ -43,6 +43,7 @@ class BitrixLocators:
     ORDER_PRICE = (By.CSS_SELECTOR, "#sale-order-financeinfo-price-view")
     FIRST_ITEM_FINAL_PRICE = (By.XPATH, '//table[@id="sale_order_basketsale_order_view_product_table"]/tbody[3]/tr[1]//strong[1]')
 
+
     MAIN_PAGE = "https://app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru"
     ORDER_CARD_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_view.php?amp%3Bfilter=Y&%3Bset_filter=Y&lang=ru&ID=" ## + order_id
     ORDER_EDIT_LINK = f"https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=" ## + order_id
@@ -80,6 +81,6 @@ class LoyalLocators:
     PAID_BONUSES_COUNT = (By.XPATH, "//*[.='Оплата']/following-sibling::td[1]/div/span")
     USED_PROMOCODE = (By.CSS_SELECTOR, '[ng-repeat="number in purchase.couponNumbers"]')
     LOYMAX_ORDER_SUM = (By.XPATH, '//td[.="По чеку:"]/following-sibling::td[4]/b')
-
+    BUTTON_BACK_TO_HISTORY = (By.CSS_SELECTOR, '[ng-if="::hasBackCallback"]')
 
 
