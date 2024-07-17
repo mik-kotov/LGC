@@ -49,6 +49,7 @@ class Bitrix(Browser):
         # change_item_button.click()
         if not self.is_element_present(*BitrixLocators.GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON):
             print("Переоткрываем страницу 'Изменить заказ'")
+            self.open(self.order_link())
             self.open(self.order_edit_link())
 
         def click_on_item_popup(locator):
@@ -61,6 +62,7 @@ class Bitrix(Browser):
                 self.click(change_item_button)
             except Exception as e:
                 print(f"Не вышло кликнуть на попап товара. Пробуем снова")
+
 
         change_item_popup_a = BitrixLocators.CHANGE_ITEM_POPUP
         change_item_popup_b = BitrixLocators.CHANGE_ITEM_POPUP_B

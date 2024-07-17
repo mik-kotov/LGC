@@ -113,6 +113,7 @@ class Order:
                                        data=json.dumps(body_for_use_bonuses))
         print("Применены бонусы")
         print(f"Списано баллов: {self.bonuses}")
+        print(post_bonuses.json())
         return post_bonuses
 
     @retry(3, 3)
@@ -139,17 +140,20 @@ class Order:
 
 class WriteOff:
 
-    def __init__(self, submit, bonuses, card):
+    def __init__(self, submit, bonuses, card, promocode=None):
         self.write_off_response = None
         self.card = card
         self.bonuses = str(bonuses)
         self.write_off_request_headers = self.write_off_headers_formation()
         self.get_submit = submit
-        self.write_off_request_body = self.write_off_body_formation()
+        if promocode:
+            self.write_off_request_body = self.write_off_body_formation(promocode.name)
+        else:
+            self.write_off_request_body = self.write_off_body_formation("")
 
-    def write_off_body_formation(self):
+    def write_off_body_formation(self, promocode):
         write_off_request_body = {
-            "coupon": "",
+            "coupon": promocode,
             "paymentAmount": self.bonuses
         }
 
@@ -203,6 +207,7 @@ class WriteOff:
     def send_bonuses(self):
 
         body = self.write_off_request_body
+        print(self.write_off_request_body)
         headers = self.write_off_request_headers
         post_bonuses = requests.post(locators_api.URL_LOYALTY_SERVICE + locators_api.WRITE_OFF,
                                        headers=headers,
@@ -210,6 +215,7 @@ class WriteOff:
         print("Применены бонусы")
         print(f"Списано баллов: {self.bonuses}")
         self.write_off_response = post_bonuses.json()
+        print(post_bonuses.json())
         return post_bonuses
 
 

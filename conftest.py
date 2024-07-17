@@ -6,12 +6,6 @@ from selenium import webdriver
 import allure
 import pytest
 import time
-#chrome_driver_path = r'C:\chromedriver\chromedriver.exe'
-options = webdriver.ChromeOptions()
-options.add_argument("--start-maximized")
-#options.add_argument("--headless")
-#service = Service(chrome_driver_path)
-browser = webdriver.Chrome(options=options)
 
 def prepare_user(user):
     with allure.step("Подготовка пользователя"):

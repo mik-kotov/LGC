@@ -68,7 +68,7 @@ def submit_and_pay(user, bonuses=False, promocode=None):
                               allure.attachment_type.JSON)
         if bonuses:
             with allure.step("Применяем бонусы: Лоялти"):
-                pay_bonuses = order.WriteOff(submit.order_submit_response, submit.bonuses, user.user_card)
+                pay_bonuses = order.WriteOff(submit.order_submit_response, submit.bonuses, user.user_card, promocode)
                 pay_bonuses.send_bonuses()
     submit.get_order_number()
     with allure.step(f"Номер заказа: {submit.order_number}"):
