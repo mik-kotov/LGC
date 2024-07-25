@@ -25,9 +25,9 @@ class UserPage(LoymaxBasePage):
     def order_number_is_instance(self, order_id):
         self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
         order_number = self.find_element(*LoyalLocators.USER_PURCHASES_ORDER_NUMBER)
-        order_number_html = order_number.get_attribute("outerHTML")
-        time.sleep(1)
-        assert f'<span class="b-table--responsive__value">{order_id}</span>' == str(order_number_html)
+        order_number_txt = order_number.get_attribute('innerText')
+        print(str(order_number_txt))
+        assert str(order_id) == str(order_number_txt)
         print("Заказ есть в истории")
 
     def confirmation_check(self):
@@ -53,8 +53,6 @@ class UserPage(LoymaxBasePage):
 
     def check_text_bonus(self):
         assert self.is_element_present(*LoyalLocators.TEXT_ADDED_BONUS)
-
-
 
     def from_purchase_back_to_history(self):
         button = self.find_element(*LoyalLocators.BUTTON_BACK_TO_HISTORY)
@@ -91,7 +89,6 @@ class UserPage(LoymaxBasePage):
         text = bonus_rec.get_attribute('innerText').strip()
         count = float(text.replace('бнс.', '').strip())
         assert count < 0
-
 
     def check_used_promocode_is_exist(self, promocode):
         promo_text = self.find_element(*LoyalLocators.USED_PROMOCODE)

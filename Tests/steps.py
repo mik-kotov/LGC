@@ -52,15 +52,15 @@ def submit_and_pay(user, bonuses=False, promocode=None):
             submit.set_payment_by_cash()
         with allure.step("Просматриваем данные заказа для корзины"):
             submit.cart_order_data()
-        if bonuses:
-            with allure.step("Применяем бонусы: АПИ"):
-                submit.use_bonuses()
         if promocode:
             with allure.step("Применяем промокод"):
                 submit.use_promocode(promocode)
                 with allure.step("Тело ответа"):
                     allure.attach(json.dumps(submit.use_promocode_response, indent=2), "API Response",
                                   allure.attachment_type.JSON)
+        if bonuses:
+            with allure.step("Применяем бонусы: API"):
+                submit.use_bonuses()
         with allure.step("Оформляем заказ"):
             submit.add_item_and_order_submit()
             with allure.step("Тело ответа"):

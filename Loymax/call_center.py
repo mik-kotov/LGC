@@ -15,7 +15,7 @@ class CallCenterPage(LoymaxBasePage):
 
     def search_user(self, user_phone):
         phone_input = self.find_element(*LoyalLocators.SEARCH_USER_PHONE_INPUT)
-        phone_input.send_keys(user_phone)
+        phone_input.send_keys(user_phone[1:])
         search_by_phone_button = self.find_element(*LoyalLocators.SEARCH_USER_BY_PHONE_BUTTON)
         self.click(search_by_phone_button)
         time.sleep(2)

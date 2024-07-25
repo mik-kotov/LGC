@@ -152,9 +152,11 @@ class WriteOff:
             self.write_off_request_body = self.write_off_body_formation("")
 
     def write_off_body_formation(self, promocode):
+        print(promocode)
+        print(int(self.bonuses))
         write_off_request_body = {
             "coupon": promocode,
-            "paymentAmount": self.bonuses
+            "paymentAmount": int(self.bonuses)
         }
 
         response_core = self.get_submit['response']
