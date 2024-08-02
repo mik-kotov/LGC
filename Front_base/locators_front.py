@@ -83,4 +83,23 @@ class LoyalLocators:
     LOYMAX_ORDER_SUM = (By.XPATH, '//td[.="По чеку:"]/following-sibling::td[4]/b')
     BUTTON_BACK_TO_HISTORY = (By.CSS_SELECTOR, '[class="b-link b-text--info"]')
 
+    ACCRUAL_RADIOBUTTON = (By.CSS_SELECTOR, '[title="Начисление"]')
+    SELECT_COMPANY_LIST = (By.CSS_SELECTOR, '._open .b-list__selected')
+    OOO_TRADE_MANAGEMENT = (By.XPATH, '//div[@class="cy-item b-list__item"][6]')
 
+                                 #select_element = self.find_element(*BitrixLocators.STATUS_SELECTOR)
+                                 #select = Select(select_element)
+                                 #select.select_by_value(order_status)
+
+    CURRENCIES_LIST = (By.CSS_SELECTOR, '#currency .b-list__selected')
+    CHOOSE_BONUSES_AS_CURRENCY = (By.XPATH, '//div[@class="cy-item b-list__item"][1]')
+    DESCRIPTION_FIELD = (By.CSS_SELECTOR, '#description')
+    INTERNAL_DESCRIPTION_FIELD = (By.CSS_SELECTOR, '#internalDescription')
+    CHOOSE_ID = (By.CSS_SELECTOR, '[translationtable = "identifierType"]')
+    CHOOSE_CARD_AS_ID = (By.CSS_SELECTOR, '[title="Номер карты"]')
+    ID_INPUT_FIELD = (By.CSS_SELECTOR, '#item_card_0')
+    AMOUNT_BONUS_FIELD = (By.CSS_SELECTOR, "#item_amount_0")
+    OPERATION_DETAILS_FIELD = (By.CSS_SELECTOR, '#item_DetailDescription_0')
+    APPLY_BUTTON = (By.XPATH, '//*[@class="b-btn b-btn--success"]')
+
+    SUCSESS_TEXT = (By.XPATH, '//span[.=" Обработана "]')

@@ -13,6 +13,9 @@ class LoymaxBasePage(Browser):
         link = "https://lgcity-pstg.loymax.tech/#/login"
         self.open(link)
 
+    def go_to_deposit_page(self):
+        link = "https://lgcity-pstg.loymax.tech/#/deposit/create"
+        self.open(link)
 
 
 

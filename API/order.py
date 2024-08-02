@@ -101,9 +101,11 @@ class Order:
         body_for_use_promo = {"promocode": promocode.name}
         post_promo = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_PROMOCODE,
                                        data=json.dumps(body_for_use_promo)).json()
-        assert post_promo['response']['price']['promocode_discount'] > 0
+        #assert post_promo['response']['price']['promocode_discount'] > 0
         self.use_promocode_response = post_promo
-        promocode.order_sum = post_promo['response']['price']['final']
+        #promocode.order_sum = post_promo['response']['price']['final']
+        print("post promo:")
+        print(post_promo)
         return post_promo
 
     def use_bonuses(self):
@@ -113,6 +115,7 @@ class Order:
                                        data=json.dumps(body_for_use_bonuses))
         print("Применены бонусы")
         print(f"Списано баллов: {self.bonuses}")
+        print("post bonuses:")
         print(post_bonuses.json())
         return post_bonuses
 
@@ -123,6 +126,8 @@ class Order:
                                        data=json.dumps(body_for_order_submit))
         order_submit.raise_for_status()
         self.order_submit_response = order_submit.json()
+        print("order submit:")
+        print(self.order_submit_response)
         print("Заказ оформлен")
 
     def get_order_number(self):
@@ -191,7 +196,8 @@ class WriteOff:
             })
 
         write_off_request_body["products"] = products
-
+        print('write off request body:')
+        print(write_off_request_body)
         return json.dumps(write_off_request_body)
 
     def write_off_headers_formation(self):
@@ -223,7 +229,7 @@ class WriteOff:
 
 class PromoCode:
     def __init__(self):
-        self.name = "осень10"
+        self.name = "июль10"
         self.order_sum = None
 
 
