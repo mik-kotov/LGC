@@ -2,12 +2,14 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from Front_base.locators_front import LoyalLocators
 from Loymax.base_page import LoymaxBasePage
+import re
 
 import time
 import allure
 
 
 class UserPage(LoymaxBasePage):
+
 
     def open_purchase_history(self):
         user_info_button = self.find_element(*LoyalLocators.USER_PERSONAL_INFO_BUTTON)
@@ -22,12 +24,12 @@ class UserPage(LoymaxBasePage):
         allure.attach(self.browser.get_screenshot_as_png(), name="Скриншот истории заказов",
                       attachment_type=allure.attachment_type.PNG)
 
-    def order_number_is_instance(self, order_id):
+    def order_number_is_instance(self):
         self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
         order_number = self.find_element(*LoyalLocators.USER_PURCHASES_ORDER_NUMBER)
         order_number_txt = order_number.get_attribute('innerText')
         print(str(order_number_txt))
-        assert str(order_id) == str(order_number_txt)
+        assert str(self.order.order_number) == str(order_number_txt)
         print("Заказ есть в истории")
 
     def confirmation_check(self):
@@ -90,13 +92,18 @@ class UserPage(LoymaxBasePage):
         count = float(text.replace('бнс.', '').strip())
         assert count < 0
 
-    def check_used_promocode_is_exist(self, promocode):
+    def check_used_promocode_is_exist(self):
         promo_text = self.find_element(*LoyalLocators.USED_PROMOCODE)
         text = promo_text.get_attribute('innerText').strip()
-        assert text == promocode.name.upper()
+        assert text == self.order.promocode_name.upper()
 
-    def check_order_sum_with_promo(self, promocode):
+    def check_order_sum_with_promo(self):
         sum_text = self.find_element(*LoyalLocators.LOYMAX_ORDER_SUM)
-        price = float(sum_text.get_attribute('innerText').replace(' ', '')[:-4])
-        assert promocode.order_sum == price
+        price = sum_text.get_attribute('innerText')[:-4]
+        match = re.search(r'(\d[\d\s]*)', price)
+        number_str = match.group(1)
+        number_str = ''.join(number_str.split())
+        print(number_str)
+        print(self.order.price_final)
+        assert str(self.order.price_final) == number_str
 

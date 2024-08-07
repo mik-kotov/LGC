@@ -2,6 +2,9 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from Front_base.locators_front import LoyalLocators
+from selenium.webdriver.support.ui import Select
+
 import allure
 import time
 
@@ -24,9 +27,9 @@ def retry(max_attempts, delay=1):
 
 class Browser:
 
-    def __init__(self, browser, order_number=None):
-        self.order_number = order_number
+    def __init__(self, browser, order=None):
         self.browser = browser
+        self.order = order
         self.browser.implicitly_wait(10)
 
     def open(self, link):
@@ -69,3 +72,8 @@ class Browser:
             return True
 
         return False
+
+    def wait_for_url(self, expected_url, timeout=10):
+        WebDriverWait(self.browser, timeout).until(
+            lambda driver: driver.current_url == expected_url
+        )

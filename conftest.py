@@ -1,7 +1,6 @@
 from API import data
 from API.authorization import APIClient
 from API.order import Order
-from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 import allure
 import pytest

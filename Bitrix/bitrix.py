@@ -8,6 +8,8 @@ from Front_base.browser_works import retry
 
 
 class Bitrix(Browser):
+
+
     def authorization(self):
         self.open(BitrixLocators.AUTHORIZATION_PAGE)
         if self.is_element_present(*BitrixLocators.AUTHORIZATION_WINDOW):
@@ -22,11 +24,11 @@ class Bitrix(Browser):
 
     def order_link(self):
 
-        return BitrixLocators.ORDER_CARD_LINK + str(self.order_number)
+        return BitrixLocators.ORDER_CARD_LINK + str(self.order.order_number)
 
     def order_edit_link(self):
 
-        return BitrixLocators.ORDER_EDIT_LINK + str(self.order_number)
+        return BitrixLocators.ORDER_EDIT_LINK + str(self.order.order_number)
 
     def order_status_change(self, order_status):
 
@@ -111,14 +113,16 @@ class Bitrix(Browser):
         save_button = self.find_element(*BitrixLocators.CHANGE_PAY_SAVE_BUTTON)
         self.click(save_button)
 
-    def check_promocode_exists(self, promocode):
+    def check_promocode_exists(self):
         assert self.is_element_present(*BitrixLocators.PROMOCODE_FIELD)
         assert self.is_element_present(*BitrixLocators.PROMOCODE_NAME)
         promocode_name = self.browser.find_element(*BitrixLocators.PROMOCODE_NAME)
         name = promocode_name.get_attribute('innerText').strip()
-        assert name == promocode.name
+        assert name == self.order.promocode_name
 
-    def check_order_sum_with_promo(self, promocode):
-        order_price = self.find_element(*BitrixLocators.ORDER_PRICE)
-        price = float(order_price.get_attribute('innerText').replace(' ', '')[:-4])
-        assert promocode.order_sum == price
+    def check_order_sum_with_promo(self):
+        order_price = self.find_element(*BitrixLocators.FINAL_PRICE_WITHOUT_BONUSES)
+        price = int(order_price.get_attribute('innerText').replace(" ", ""))
+        print(price)
+        print(self.order.price_final)
+        assert self.order.price_final + self.order.bonuses == price

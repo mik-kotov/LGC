@@ -2,9 +2,28 @@ import time
 
 import pytest
 import allure
+from Loymax.deposit_page import DepositPage
+from Loymax.login_page import LoymaxLoginPage
 from Tests import steps
-from Tests.steps import promocode_parametrize
+from Tests.steps import LoyaltyTestBase, promocode_parametrize
 
+def test_aboba(driver):
+    bb = LoymaxLoginPage(driver)
+    bb.authorization()
+    bb.go_to_deposit_page()
+    aa = DepositPage(driver)
+    aa.choose_accrual_option()
+    aa.select_company()
+    aa.select_currency()
+    aa.fill_description_field()
+    aa.fill_internal_description_field()
+    aa.choose_manual_input_option()
+    aa.select_id_in_list()
+    aa.fill_bonus_card_field()
+    aa.fill_amount_bonus_field()
+    aa.fill_operation_details_field()
+    aa.click_apply_button()
+    aa.go_to_home_page()
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2332", "LGC-T2332")
 @allure.feature("Доставлен")
@@ -13,10 +32,11 @@ from Tests.steps import promocode_parametrize
 @pytest.mark.delivered
 @promocode_parametrize()
 def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver, promocode):
-    promo = steps.init_promo(promocode=promocode)
-    steps.choose_item(user_no_card)
-    order_number = steps.submit_and_pay(user_no_card, promocode=promo)
-    steps.buyout_and_status_change(driver, order_number, "NI", promo)
+    base = LoyaltyTestBase(promocode=promocode)
+    base.choose_item(user_no_card)
+    base.filling_out_order_data(user_no_card)
+    base.order_submit(user_no_card)
+    base.buyout_and_status_change(driver, "NI")
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2337", "LGC-T2337")
@@ -26,12 +46,13 @@ def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver, promoco
 @pytest.mark.delivered
 @promocode_parametrize()
 def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver, promocode):
-    promo = steps.init_promo(promocode=promocode)
-    steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, promocode=promo)
-    steps.buyout_and_status_change(driver, order_number, "NI", promo)
-    history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_delivered_no_bonus_have_card(history_page, order_number, promo)
+    base = LoyaltyTestBase(promocode=promocode)
+    base.choose_item(user_with_card)
+    base.filling_out_order_data(user_with_card)
+    base.order_submit(user_with_card)
+    base.buyout_and_status_change(driver, "NI")
+    history_page = base.loymax_ops(driver, user_with_card)
+    base.asserts_delivered_no_bonus_have_card(history_page)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2348", "LGC-T2348")
@@ -42,12 +63,13 @@ def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver, pro
 @pytest.mark.delivered
 @promocode_parametrize()
 def test_delivered_with_bonus_pay_cash_have_card(user_with_card, driver, promocode):
-    promo = steps.init_promo(promocode=promocode)
-    steps.choose_item(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=True, promocode=promo)
-    steps.buyout_and_status_change(driver, order_number, "NI", promo)
-    history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_delivered_pay_bonus_have_card(history_page, order_number, promo)
+    base = LoyaltyTestBase(bonuses=True, driver=driver, promocode=promocode)
+    base.choose_item(user_with_card)
+    base.filling_out_order_data(user_with_card)
+    base.order_submit(user_with_card)
+    base.buyout_and_status_change("NI")
+    history_page = base.loymax_ops(user_with_card)
+    base.asserts_delivered_pay_bonus_have_card(history_page)
 
 @allure.feature("Отказ")
 @allure.story('Тест: "Отказ" без бонусной карты, оплата наличными при получении')

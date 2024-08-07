@@ -1,5 +1,5 @@
 from API import locators_api, data
-from random import randint, choice
+from random import choice
 import json
 import requests
 import time
@@ -25,6 +25,8 @@ def retry(max_attempts, delay=1):
 class Order:
 
     def __init__(self, api_client):
+        self.promocode_name = "июль5"
+        self.price_final = None
         self.pickup_offers = None
         self.city = None
         self.use_promocode_response = None
@@ -33,7 +35,8 @@ class Order:
         self.get_cart = None
         self.order_submit_response = None
         self.api_client = api_client
-        self.bonuses = randint(1, 4)
+        self.user_card = api_client.user_card
+        self.bonuses = 0
 
 
     def reset_order(self):
@@ -43,7 +46,7 @@ class Order:
 
     def reset_cart(self):
         self.open_cart()
-        products = self.get_cart.json()['response']['products']
+        products = self.get_cart['response']['products']
         for product in products:
             size_id = product['size']['id']
             delete_url = f"{locators_api.URL_API_SERVICE}{locators_api.CART}/{size_id}"
@@ -87,39 +90,53 @@ class Order:
         set_customer = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_CUSTOMER,
                                             data=json.dumps(request_body))
         return set_customer
+
     def open_cart(self):
         print('Открываем корзину')
         get_cart = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART)
-        self.get_cart = get_cart
+        self.get_cart = get_cart.json()
 
     def cart_order_data(self):
         print('Просматриваем данные заказа для корзины')
         cart_data = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART_ORDER)
-        self.cart_data = cart_data
+        self.cart_data = cart_data.json()
 
-    def use_promocode(self, promocode):
-        body_for_use_promo = {"promocode": promocode.name}
+    def use_promocode(self):
+
+        body_for_use_promo = {"promocode": self.promocode_name}
         post_promo = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_PROMOCODE,
                                        data=json.dumps(body_for_use_promo)).json()
-        #assert post_promo['response']['price']['promocode_discount'] > 0
+        assert post_promo['response']['price']['promocode_discount'] > 0
         self.use_promocode_response = post_promo
-        #promocode.order_sum = post_promo['response']['price']['final']
-        print("post promo:")
         print(post_promo)
         return post_promo
 
+    def check_max_bonus_is_null(self):
+        self.open_cart()
+        print(self.get_cart)
+        self.bonuses = self.get_cart['response']['price']['bonus_spend']['max_bonus_spend']
+        self.avaliable_bonuses = self.get_cart['response']['user_card']['available_bonuses']
+        print(self.bonuses)
+        return [(self.bonuses == 0),  (self.avaliable_bonuses < 1000)]
+
+
     def use_bonuses(self):
-        card_number = self.api_client.user_card
-        body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": self.bonuses}
+        card_number = self.user_card
+        check_bonuses = self.check_max_bonus_is_null()
+        count_of_items_in_cart = len(self.get_cart['response']['products'])
+        if check_bonuses[1]:
+            return ["not available bonuses", count_of_items_in_cart]
+        if check_bonuses[0]:
+            count_of_items_in_cart = len(self.get_cart['response']['products'])
+            return ["max bonus is null", count_of_items_in_cart]
+        body_for_use_bonuses = {"user_card": f"{card_number}", "bonuses_spend_count": self.bonuses}
         post_bonuses = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_BONUSES,
                                        data=json.dumps(body_for_use_bonuses))
         print("Применены бонусы")
         print(f"Списано баллов: {self.bonuses}")
-        print("post bonuses:")
-        print(post_bonuses.json())
         return post_bonuses
 
-    @retry(3, 3)
+
     def add_item_and_order_submit(self):
         body_for_order_submit = {'need_bonus_card_issue': True}
         order_submit = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
@@ -128,7 +145,10 @@ class Order:
         self.order_submit_response = order_submit.json()
         print("order submit:")
         print(self.order_submit_response)
+        self.price_final = self.order_submit_response['response']['price']['final']
         print("Заказ оформлен")
+        print(self.api_client.phone_number)
+        return self
 
     def get_order_number(self):
         try:
@@ -143,93 +163,93 @@ class Order:
                 print(f"Ошибка. Тело ответа: {self.order_submit_response}")
 
 
-class WriteOff:
-
-    def __init__(self, submit, bonuses, card, promocode=None):
-        self.write_off_response = None
-        self.card = card
-        self.bonuses = str(bonuses)
-        self.write_off_request_headers = self.write_off_headers_formation()
-        self.get_submit = submit
-        if promocode:
-            self.write_off_request_body = self.write_off_body_formation(promocode.name)
-        else:
-            self.write_off_request_body = self.write_off_body_formation("")
-
-    def write_off_body_formation(self, promocode):
-        print(promocode)
-        print(int(self.bonuses))
-        write_off_request_body = {
-            "coupon": promocode,
-            "paymentAmount": int(self.bonuses)
-        }
-
-        response_core = self.get_submit['response']
-        products_info = response_core["products"]
-        price_info = response_core["price"]
-
-        write_off_request_body.update({
-            "mobilePhone": response_core["customer"]["phone"][1:],
-            "bonusCard": self.card,
-            "purchaseId": response_core["id"],
-            "orderDatetime": response_core["creation_date"]
-        })
-
-        def extract_goods(inp):
-            parts = inp.split('-')
-            if len(parts) > 1:
-                return int(parts[0])
-            else:
-                return int(inp)
-
-        products = []
-        for product_info in products_info:
-            goods_id = extract_goods(product_info["product_code"])
-            products.append({
-                "basketId": product_info["basket_id"],
-                "productId": goods_id,
-                "price": product_info["price"],
-                "count": product_info["count"],
-                "name": product_info["name"],
-                "amount": product_info["price"] * product_info["count"],
-                "discount": product_info["old_price"] - product_info["price"]
-            })
-
-        write_off_request_body["products"] = products
-        print('write off request body:')
-        print(write_off_request_body)
-        return json.dumps(write_off_request_body)
-
-    def write_off_headers_formation(self):
-
-        get_ip = requests.get('http://jsonip.com')
-        ip = get_ip.json()['ip']
-        write_off_request_headers = {
-            **data.headers,
-            "X-Forwarded-For": ip,
-            "X-Auth-Token": "7c9d8f00ea0ddd9e02cab3eb2b3bd0d1"
-
-            }
-        return write_off_request_headers
-
-    def send_bonuses(self):
-
-        body = self.write_off_request_body
-        print(self.write_off_request_body)
-        headers = self.write_off_request_headers
-        post_bonuses = requests.post(locators_api.URL_LOYALTY_SERVICE + locators_api.WRITE_OFF,
-                                       headers=headers,
-                                       data=body)
-        print("Применены бонусы")
-        print(f"Списано баллов: {self.bonuses}")
-        self.write_off_response = post_bonuses.json()
-        print(post_bonuses.json())
-        return post_bonuses
+# class WriteOff:
+#
+#     def __init__(self, submit, bonuses, card, promocode=None):
+#         self.write_off_response = None
+#         self.card = card
+#         self.bonuses = str(bonuses)
+#         self.write_off_request_headers = self.write_off_headers_formation()
+#         self.get_submit = submit
+#         if promocode:
+#             self.write_off_request_body = self.write_off_body_formation(promocode.name)
+#         else:
+#             self.write_off_request_body = self.write_off_body_formation("")
+#
+#     def write_off_body_formation(self, promocode):
+#         print(promocode)
+#         print(int(self.bonuses))
+#         write_off_request_body = {
+#             "coupon": promocode,
+#             "paymentAmount": int(self.bonuses)
+#         }
+#
+#         response_core = self.get_submit['response']
+#         products_info = response_core["products"]
+#         price_info = response_core["price"]
+#
+#         write_off_request_body.update({
+#             "mobilePhone": response_core["customer"]["phone"][1:],
+#             "bonusCard": self.card,
+#             "purchaseId": response_core["id"],
+#             "orderDatetime": response_core["creation_date"]
+#         })
+#
+#         def extract_goods(inp):
+#             parts = inp.split('-')
+#             if len(parts) > 1:
+#                 return int(parts[0])
+#             else:
+#                 return int(inp)
+#
+#         products = []
+#         for product_info in products_info:
+#             goods_id = extract_goods(product_info["product_code"])
+#             products.append({
+#                 "basketId": product_info["basket_id"],
+#                 "productId": goods_id,
+#                 "price": product_info["price"],
+#                 "count": product_info["count"],
+#                 "name": product_info["name"],
+#                 "amount": product_info["price"] * product_info["count"],
+#                 "discount": product_info["old_price"] - product_info["price"]
+#             })
+#
+#         write_off_request_body["products"] = products
+#         print('write off request body:')
+#         print(write_off_request_body)
+#         return json.dumps(write_off_request_body)
+#
+#     def write_off_headers_formation(self):
+#
+#         get_ip = requests.get('http://jsonip.com')
+#         ip = get_ip.json()['ip']
+#         write_off_request_headers = {
+#             **data.headers,
+#             "X-Forwarded-For": ip,
+#             "X-Auth-Token": "7c9d8f00ea0ddd9e02cab3eb2b3bd0d1"
+#
+#             }
+#         return write_off_request_headers
+#
+#     def send_bonuses(self):
+#
+#         body = self.write_off_request_body
+#         print(self.write_off_request_body)
+#         headers = self.write_off_request_headers
+#         post_bonuses = requests.post(locators_api.URL_LOYALTY_SERVICE + locators_api.WRITE_OFF,
+#                                        headers=headers,
+#                                        data=body)
+#         print("Применены бонусы")
+#         print(f"Списано баллов: {self.bonuses}")
+#         self.write_off_response = post_bonuses.json()
+#         print(post_bonuses.json())
+#         return post_bonuses
 
 
 class PromoCode:
     def __init__(self):
-        self.name = "июль10"
+        self.name = "июль5"
         self.order_sum = None
 
 

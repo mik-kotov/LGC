@@ -5,7 +5,7 @@ class BasePageLocators:
 
     LOGIN_LINK_FROM_HEADER = (By.XPATH, "(//a[contains(@class, 'header__login-link')])[1]")
     PROFILE_ICON_LINK_FROM_HEADER = (By.XPATH, "(//html/body/div[@id='barba-wrapper']/div/header[1]/div[2]/div/div[@class='header__right-side']/a])")
-    GO_TO_ADMIN_BITRIX = (By.CSS_SELECTOR,"#bx-panel-admin-tab")
+    GO_TO_ADMIN_BITRIX = (By.CSS_SELECTOR, "#bx-panel-admin-tab")
 
 
 class LoginPageLocators:
@@ -42,6 +42,7 @@ class BitrixLocators:
     PROMOCODE_NAME = (By.XPATH, "//*[.='Купон:']/following-sibling::td/div")
     ORDER_PRICE = (By.CSS_SELECTOR, "#sale-order-financeinfo-price-view")
     FIRST_ITEM_FINAL_PRICE = (By.XPATH, '//table[@id="sale_order_basketsale_order_view_product_table"]/tbody[3]/tr[1]//strong[1]')
+    FINAL_PRICE_WITHOUT_BONUSES = (By.XPATH, '//*[@data-id="custom1"]//td[4]')
 
 
     MAIN_PAGE = "https://app-monolith.mylgc.ru/bitrix/admin/sale_order.php?lang=ru"
@@ -79,12 +80,13 @@ class LoyalLocators:
     PAID_BONUS_CONFIRMED = (By.XPATH, "//*[.=' Оплата ']/following-sibling::td[2]/div[@title='Подтверждена']")
     PAID_BONUS_CANCELLED = (By.XPATH, "//*[.=' Оплата ']/following-sibling::td[2]/div[@title='Отменена']")
     PAID_BONUSES_COUNT = (By.XPATH, "//*[.=' Оплата ']/following-sibling::td[1]/div/span")
-    USED_PROMOCODE = (By.CSS_SELECTOR, '[ng-repeat="number in purchase.couponNumbers"]')
+    USED_PROMOCODE = (By.XPATH, "//div[@class='b-page__content relative loader-container']/form-group-view[11]//div/div/div[2]/div/span/div")
     LOYMAX_ORDER_SUM = (By.XPATH, '//td[.="По чеку:"]/following-sibling::td[4]/b')
     BUTTON_BACK_TO_HISTORY = (By.CSS_SELECTOR, '[class="b-link b-text--info"]')
 
+
     ACCRUAL_RADIOBUTTON = (By.CSS_SELECTOR, '[title="Начисление"]')
-    SELECT_COMPANY_LIST = (By.CSS_SELECTOR, '._open .b-list__selected')
+    SELECT_COMPANY_LIST = (By.CSS_SELECTOR, '#legalId')
     OOO_TRADE_MANAGEMENT = (By.XPATH, '//div[@class="cy-item b-list__item"][6]')
 
                                  #select_element = self.find_element(*BitrixLocators.STATUS_SELECTOR)
@@ -95,6 +97,7 @@ class LoyalLocators:
     CHOOSE_BONUSES_AS_CURRENCY = (By.XPATH, '//div[@class="cy-item b-list__item"][1]')
     DESCRIPTION_FIELD = (By.CSS_SELECTOR, '#description')
     INTERNAL_DESCRIPTION_FIELD = (By.CSS_SELECTOR, '#internalDescription')
+    MANUAL_INPUT_RADIOBUTTON = (By.CSS_SELECTOR, '[title="Ручной ввод"]')
     CHOOSE_ID = (By.CSS_SELECTOR, '[translationtable = "identifierType"]')
     CHOOSE_CARD_AS_ID = (By.CSS_SELECTOR, '[title="Номер карты"]')
     ID_INPUT_FIELD = (By.CSS_SELECTOR, '#item_card_0')
