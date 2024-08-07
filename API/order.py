@@ -115,13 +115,14 @@ class Order:
         self.open_cart()
         print(self.get_cart)
         self.bonuses = self.get_cart['response']['price']['bonus_spend']['max_bonus_spend']
-        self.avaliable_bonuses = self.get_cart['response']['user_card']['available_bonuses']
+        self.avaliable_bonuses = self.get_cart['response']['bonus_card']['available_bonuses']
         print(self.bonuses)
         return [(self.bonuses == 0),  (self.avaliable_bonuses < 1000)]
 
 
     def use_bonuses(self):
         card_number = self.user_card
+        print(self.user_card)
         check_bonuses = self.check_max_bonus_is_null()
         count_of_items_in_cart = len(self.get_cart['response']['products'])
         if check_bonuses[1]:
