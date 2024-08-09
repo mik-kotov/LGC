@@ -34,9 +34,9 @@ class BitrixLocators:
     CHANGE_PAY_POPUP = (By.CSS_SELECTOR, "#BUTTON_PAID_0_SHORT")
     CHANGE_PAY_TO_YES_BUTTON = (By.CSS_SELECTOR, '.bx-core-popup-menu-item')
     CHANGE_PAY_SAVE_BUTTON = (By.CSS_SELECTOR, '[name="undefined"]#undefined') #кринж
-    CHANGE_ITEM_SAVE_BUTTON = (By.CSS_SELECTOR, "#save_custom_product")
+    CHANGE_ITEM_SAVE_BUTTON = (By.CSS_SELECTOR, '[name="save_custom_product"]')
     SAVE_ORDER_CHANGES_BUTTON = (By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
-    PURCHASED_INPUT_A = (By.CSS_SELECTOR, "[id*=_VALUE_10]")
+    PURCHASED_INPUT_A = (By.CSS_SELECTOR, '[size="20"][value="Нет"]')
     PURCHASED_INPUT_B = (By.XPATH, "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']")
     PROMOCODE_FIELD = (By.XPATH, "//*[.='Купон:']")
     PROMOCODE_NAME = (By.XPATH, "//*[.='Купон:']/following-sibling::td/div")
@@ -56,7 +56,7 @@ class LoyalLocators:
     LOGIN_INPUT = (By.CSS_SELECTOR, "#LoginForm_login")
     PASSWORD_INPUT = (By.CSS_SELECTOR, "#LoginForm_password")
     AUTHORIZATION_BUTTON = (By.XPATH, "//button[@tabindex='0']")
-    CONTACT_CENTER_BUTTON = (By.XPATH, "//a[.='Контакт-центр'][@class='menu-link']")
+    CONTACT_CENTER_BUTTON = (By.CSS_SELECTOR, '[title="Контакт-центр"]')
     SEARCH_USER_BUTTON = (By.CSS_SELECTOR, "#searchByAttributesButton")
     SEARCH_USER_FRAME = (By.CSS_SELECTOR, "#armIframe")
     SEARCH_USER_PHONE_INPUT = (By.XPATH, '//input[@placeholder="- Номер телефона -"]')
@@ -105,4 +105,6 @@ class LoyalLocators:
     OPERATION_DETAILS_FIELD = (By.CSS_SELECTOR, '#item_DetailDescription_0')
     APPLY_BUTTON = (By.XPATH, '//*[@class="b-btn b-btn--success"]')
 
-    SUCSESS_TEXT = (By.XPATH, '//span[.=" Обработана "]')
+    SUCCESS_TEXT = (By.XPATH, '//span[.=" Обработана "]')
+    SUCCESS_TRANSACTION = (By.CSS_SELECTOR, '.b-icon-progress.b-icon-progress--confirmed')
+

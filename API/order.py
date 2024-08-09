@@ -4,6 +4,7 @@ import json
 import requests
 import time
 from faker import Faker
+
 fake = Faker('ru_RU')
 
 
@@ -19,12 +20,16 @@ def retry(max_attempts, delay=1):
                     print(f"Attempt {attempts} failed: {e}")
                     time.sleep(delay)
             raise RuntimeError(f"Function {func.__name__} failed after {max_attempts} attempts")
+
         return wrapper
+
     return decorator
+
 
 class Order:
 
     def __init__(self, api_client):
+        self.count_of_items_in_cart = None
         self.promocode_name = "июль5"
         self.price_final = None
         self.pickup_offers = None
@@ -37,7 +42,6 @@ class Order:
         self.api_client = api_client
         self.user_card = api_client.user_card
         self.bonuses = 0
-
 
     def reset_order(self):
         reset = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.RESET_ORDER)
@@ -70,12 +74,12 @@ class Order:
 
     def set_payment_by_cash(self):
         set_payment = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.PAYMENT_TYPE,
-                                                data=json.dumps({"payment_type_id": "cash_upon_receipt"}))
+                                           data=json.dumps({"payment_type_id": "cash_upon_receipt"}))
         return set_payment
 
     def set_delivery_type_as_pickup(self):
         set_delivery = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.DELIVERY_TYPE,
-                                           data=json.dumps({"delivery_type": "pickup"}))
+                                            data=json.dumps({"delivery_type": "pickup"}))
         return set_delivery
 
     def set_order_customer(self):
@@ -105,50 +109,42 @@ class Order:
 
         body_for_use_promo = {"promocode": self.promocode_name}
         post_promo = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_PROMOCODE,
-                                       data=json.dumps(body_for_use_promo)).json()
+                                          data=json.dumps(body_for_use_promo)).json()
         assert post_promo['response']['price']['promocode_discount'] > 0
         self.use_promocode_response = post_promo
-        print(post_promo)
         return post_promo
 
     def check_max_bonus_is_null(self):
-        self.open_cart()
-        print(self.get_cart)
         self.bonuses = self.get_cart['response']['price']['bonus_spend']['max_bonus_spend']
-        self.avaliable_bonuses = self.get_cart['response']['bonus_card']['available_bonuses']
-        print(self.bonuses)
-        return [(self.bonuses == 0),  (self.avaliable_bonuses < 1000)]
+        print(f"Эщкере {self.bonuses}")
+        return self.bonuses == 0
 
+    def check_available_bonuses_is_null(self):
+        available_bonuses = self.get_cart['response']['bonus_card']['available_bonuses']
+        return available_bonuses < 1000
+
+    def count_of_items_in_the_cart(self):
+        self.count_of_items_in_cart = len(self.get_cart['response']['products'])
+        return self.count_of_items_in_cart
 
     def use_bonuses(self):
-        card_number = self.user_card
-        print(self.user_card)
-        check_bonuses = self.check_max_bonus_is_null()
-        count_of_items_in_cart = len(self.get_cart['response']['products'])
-        if check_bonuses[1]:
-            return ["not available bonuses", count_of_items_in_cart]
-        if check_bonuses[0]:
-            count_of_items_in_cart = len(self.get_cart['response']['products'])
-            return ["max bonus is null", count_of_items_in_cart]
-        body_for_use_bonuses = {"user_card": f"{card_number}", "bonuses_spend_count": self.bonuses}
+
+        card_number = self.get_cart['response']['bonus_card']['number']
+        body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": self.bonuses}
         post_bonuses = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_BONUSES,
-                                       data=json.dumps(body_for_use_bonuses))
-        print("Применены бонусы")
+                                            data=json.dumps(body_for_use_bonuses)).json()
+        print("Применены бонусыы")
         print(f"Списано баллов: {self.bonuses}")
         return post_bonuses
 
-
-    def add_item_and_order_submit(self):
+    def submit_an_order(self):
         body_for_order_submit = {'need_bonus_card_issue': True}
         order_submit = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.ORDER_SUBMIT,
-                                       data=json.dumps(body_for_order_submit))
+                                            data=json.dumps(body_for_order_submit))
         order_submit.raise_for_status()
         self.order_submit_response = order_submit.json()
-        print("order submit:")
-        print(self.order_submit_response)
         self.price_final = self.order_submit_response['response']['price']['final']
         print("Заказ оформлен")
-        print(self.api_client.phone_number)
         return self
 
     def get_order_number(self):
@@ -252,7 +248,3 @@ class PromoCode:
     def __init__(self):
         self.name = "июль5"
         self.order_sum = None
-
-
-
-

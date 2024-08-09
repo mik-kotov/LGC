@@ -59,9 +59,9 @@ class Bitrix(Browser):
                 element = self.find_element(*locator)
                 self.scroll_into_view(element)
                 WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable(element))
-                self.click(element)
+                self.browser.execute_script("arguments[0].click();", element)
                 change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
-                self.click(change_item_button)
+                self.browser.execute_script("arguments[0].click();", change_item_button)
             except Exception as e:
                 print(f"Не вышло кликнуть на попап товара. Пробуем снова")
 
@@ -83,6 +83,7 @@ class Bitrix(Browser):
                 self.scroll_into_view(element)
                 element.clear()
                 element.send_keys("Да")
+                time.sleep(10)
             except Exception as e:
                 print(f"Не вышло. Ошибка: {e}")
 
@@ -98,7 +99,7 @@ class Bitrix(Browser):
                 print(f"Ошибка: {e}.")
 
         change_item_save_button = self.find_element(*BitrixLocators.CHANGE_ITEM_SAVE_BUTTON)
-        self.click(change_item_save_button)
+        self.browser.execute_script("arguments[0].click();", change_item_save_button)
         self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
         save_order_changes_button = self.find_element(*BitrixLocators.SAVE_ORDER_CHANGES_BUTTON)
         self.browser.execute_script("arguments[0].click();", save_order_changes_button)
@@ -111,6 +112,8 @@ class Bitrix(Browser):
         change_pay_to_yes_button = self.find_element(*BitrixLocators.CHANGE_PAY_TO_YES_BUTTON)
         self.browser.execute_script("arguments[0].click();", change_pay_to_yes_button)
         save_button = self.find_element(*BitrixLocators.CHANGE_PAY_SAVE_BUTTON)
+        self.click(save_button)
+
         self.click(save_button)
 
     def check_promocode_exists(self):

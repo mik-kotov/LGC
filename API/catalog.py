@@ -65,7 +65,7 @@ class ChooseItem:
     def get_item_card_from_product_list(self):
         def get_expensive_products():
             return [product['id'] for product in self.clothes_list if
-                    product['price'] > 2500 and (product['old_price'] is not None
+                    product['price'] > 3000 and (product['old_price'] is not None
                                                  and product['old_price']/product['price'] < 1.7)]
 
         expensive_products = get_expensive_products()
@@ -115,17 +115,3 @@ class ChooseItem:
         assert add.status_code == 200
         print("Товар добавлен")
 
-    def catalog_works(self):
-        with allure.step("Выбор товара"):
-            with allure.step("Открываем каталог"):
-                self.get_catalog()
-            with allure.step("Выбираем категорию"):
-                self.get_category()
-            with allure.step("Открываем список товаров"):
-                self.get_list()
-            with allure.step("Открываем карточку товара"):
-                self.get_item_card_from_product_list()
-            with allure.step("Проверяем доступные размеры товара"):
-                self.check_available_item_sizes()
-            with allure.step("Добавляем товар в корзину"):
-                self.add_item_in_cart()

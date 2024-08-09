@@ -61,6 +61,9 @@ class DepositPage(LoymaxBasePage):
         apply_button = self.find_element(*LoyalLocators.APPLY_BUTTON)
         self.click(apply_button)
 
+    def check_transaction_is_complete(self):
+        self.is_element_present(*LoyalLocators.SUCCESS_TRANSACTION, 25)
+
     def deposit_ops(self):
         with allure.step('Начисляем бонусы'):
             self.go_to_deposit_page()
@@ -75,6 +78,6 @@ class DepositPage(LoymaxBasePage):
             self.fill_amount_bonus_field()
             self.fill_operation_details_field()
             self.click_apply_button()
-            time.sleep(30)
-            self.go_to_call_center_page_from_main_page()
+            self.check_transaction_is_complete()
+
 

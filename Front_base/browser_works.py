@@ -58,10 +58,10 @@ class Browser:
         return self.browser.execute_script('arguments[0].scrollIntoView({block: "center"});',
                                            element)
 
-    def is_element_present(self, how, what):
+    def is_element_present(self, how, what, timeout=4):
         try:
-            self.browser.find_element(how, what)
-        except NoSuchElementException:
+            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
             return False
         return True
 
