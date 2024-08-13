@@ -89,7 +89,7 @@ def test_refused_with_bonus_pay_cash_have_card(user_with_card, driver, promocode
     base = LoyaltyTestBase(driver, promocode, bonuses=True)
     base.choose_item(user_with_card)
     base.order_submit(user_with_card)
-    base.buyout_and_status_change("NI")
+    base.buyout_and_status_change("QI")
     history_page = base.loymax_ops(user_with_card)
     base.asserts_refused_no_bonus_have_card(history_page)
 
@@ -174,10 +174,10 @@ def test_processed_with_bonus_pay_cash(user_with_card, driver):
 @pytest.mark.partial_cancelled
 @promocode_parametrize()
 def test_partial_cancelled_pay_cash_no_bonus_card(user_no_card, driver, promocode):
-    promo = steps.init_promo(promocode=promocode)
-    steps.choose_two_items(user_no_card)
-    order_number = steps.submit_and_pay(user_no_card, promocode=promo)
-    steps.buyout_and_status_change(driver, order_number, "OI", promo)
+    base = LoyaltyTestBase(driver, promocode)
+    base.choose_two_items(user_no_card)
+    base.order_submit(user_no_card)
+    base.buyout_and_status_change("OI")
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2339", "LGC-T2339")
@@ -187,12 +187,12 @@ def test_partial_cancelled_pay_cash_no_bonus_card(user_no_card, driver, promocod
 @pytest.mark.partial_cancelled
 @promocode_parametrize()
 def test_partial_cancelled_no_bonus_pay_cash_with_bonus_card(user_with_card, driver, promocode):
-    promo = steps.init_promo(promocode=promocode)
-    steps.choose_two_items(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, promocode=promo)
-    steps.buyout_and_status_change(driver, order_number, "OI", promocode=promo)
-    history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_partial_cancelled_no_bonus_have_card(history_page, order_number, promo)
+    base = LoyaltyTestBase(driver, promocode)
+    base.choose_two_items(user_with_card)
+    base.order_submit(user_with_card)
+    base.buyout_and_status_change("OI")
+    history_page = base.loymax_ops(user_with_card)
+    base.asserts_partial_cancelled_no_bonus_have_card(history_page)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2340", "LGC-T2340")
@@ -202,10 +202,10 @@ def test_partial_cancelled_no_bonus_pay_cash_with_bonus_card(user_with_card, dri
 @pytest.mark.partial_cancelled
 @promocode_parametrize()
 def test_partial_cancelled_with_bonus_pay_cash(user_with_card, driver, promocode):
-    promo = steps.init_promo(promocode=promocode)
-    steps.choose_two_items(user_with_card)
-    order_number = steps.submit_and_pay(user_with_card, bonuses=True, promocode=promo)
-    steps.buyout_and_status_change(driver, order_number, "OI")
-    history_page = steps.loymax_ops(driver, user_with_card)
-    steps.asserts_partial_cancelled_pay_bonus_have_card(history_page, order_number, promo)
+    base = LoyaltyTestBase(driver, promocode, bonuses=True)
+    base.choose_two_items(user_with_card)
+    base.order_submit(user_with_card)
+    base.buyout_and_status_change("OI")
+    history_page = base.loymax_ops(user_with_card)
+    base.asserts_partial_cancelled_pay_bonus_have_card(history_page)
 

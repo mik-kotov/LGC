@@ -28,9 +28,9 @@ class BitrixLocators:
     GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON = (By.CSS_SELECTOR, '[title="Перейти к просмотру заказа"]')
     STATUS_SELECTOR = (By.CSS_SELECTOR, "#STATUS_ID")
     SAVE_STATUS_BUTTON = (By.CSS_SELECTOR, "#save_status_button")
-    CHANGE_ITEM_POPUP_B = (By.CSS_SELECTOR, ".adm-s-order-item-title-icon")
-    CHANGE_ITEM_POPUP = (By.XPATH, '//table//tbody[3]//span[@class="adm-s-order-item-title-icon"]')
-    CHANGE_ITEM_BUTTON = (By.CSS_SELECTOR, ".bx-core-popup-menu-item-text")
+    CHANGE_ITEM_POPUP_B = (By.CSS_SELECTOR, "td[id='sale_order_basketsale-order-basket-product-17381988-menu'] span[class='adm-s-order-item-title-icon']")
+    CHANGE_ITEM_POPUP = (By.XPATH, "//div[@class='adm-bus-component-title' and text()='Заказ']/ancestor::div[@class='adm-bus-statusorder']//span[@class='adm-s-order-item-title-icon']")
+    CHANGE_ITEM_BUTTON = (By.CSS_SELECTOR, ".bx-core-popup-menu-item-default .bx-core-popup-menu-item-text")
     CHANGE_PAY_POPUP = (By.CSS_SELECTOR, "#BUTTON_PAID_0_SHORT")
     CHANGE_PAY_TO_YES_BUTTON = (By.CSS_SELECTOR, '.bx-core-popup-menu-item')
     CHANGE_PAY_SAVE_BUTTON = (By.CSS_SELECTOR, '[name="undefined"]#undefined') #кринж
@@ -72,7 +72,7 @@ class LoyalLocators:
     SECOND_FROM_TOP_PURCHASE_LOUPE = (By.XPATH, '//purchases//tbody/tr[2]//button')
     SECOND_FROM_TOP_PURCHASE_NUMBER = (By.XPATH, "//purchases//tbody/tr[2]/td[3]")
     SECOND_FROM_TOP_PURCHASE_CANCELLED = (By.XPATH, "//purchases//tbody/tr[2]//div[@title='Отменена']")
-    USER_PURCHASE_LOUPE = (By.XPATH, "//purchases//tbody/tr[1]//button")
+    USER_PURCHASE_LOUPE = (By.XPATH, '//purchases//tbody/tr[1]//div[@class="b-table__actions-wrapper"]//button') #"//purchases//tbody/tr[1]
     TEXT_ADDED_BONUS = (By.XPATH, "//*[.=' Бонус ']")
     ADDED_BONUSES_COUNT = (By.XPATH, "//*[.=' Бонус ']/following-sibling::td[1]/div/span")
     ADDED_BONUS_CONFIRMED = (By.XPATH, "//*[.=' Бонус ']/following-sibling::td[2]/div[@title='Подтверждена']")

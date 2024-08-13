@@ -1,5 +1,6 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from Front_base.locators_front import BitrixLocators
 from Front_base.browser_works import Browser
 import time
@@ -40,63 +41,26 @@ class Bitrix(Browser):
         self.click(save_status_button)
         print(f"Статус товара изменен на {order_status}")
 
-    @retry(3, 5)
     def change_buyout_status_to_yes(self):
 
-        # self.scroll_into_view(*BitrixLocators.CHANGE_ITEM_POPUP_B)
-        # change_item_popup = WebDriverWait(self.driver, 10).until(
-        #     EC.element_to_be_clickable(BitrixLocators.CHANGE_ITEM_POPUP_B))
-        # self.driver.execute_script("arguments[0].click();", change_item_popup)
-        # change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
-        # change_item_button.click()
+
         if not self.is_element_present(*BitrixLocators.GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON):
             print("Переоткрываем страницу 'Изменить заказ'")
             self.open(self.order_link())
             self.open(self.order_edit_link())
+        button = self.find_element(By.XPATH,
+                                         '//div[@class=\"adm-bus-component-title\" and text()=\"Заказ\"]/ancestor::div[@id="tab_order"]/div/table/tbody/tr/td/div/div[7]//div[@class="adm-bus-statusorder"]//table/tbody[3]//span[@class="adm-s-order-item-title-icon"]')
+        self.scroll_into_view(button)
+        WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable(button))
+        self.browser.execute_script("arguments[0].click();", button)
+        CHANGE_ITEM_BUTTON = self.find_element(By.CSS_SELECTOR,
+                                                     ".bx-core-popup-menu-item-default .bx-core-popup-menu-item-text")
+        self.browser.execute_script("arguments[0].click();", CHANGE_ITEM_BUTTON)
 
-        def click_on_item_popup(locator):
-            try:
-                element = self.find_element(*locator)
-                self.scroll_into_view(element)
-                WebDriverWait(self.browser, 10).until(EC.element_to_be_clickable(element))
-                self.browser.execute_script("arguments[0].click();", element)
-                change_item_button = self.find_element(*BitrixLocators.CHANGE_ITEM_BUTTON)
-                self.browser.execute_script("arguments[0].click();", change_item_button)
-            except Exception as e:
-                print(f"Не вышло кликнуть на попап товара. Пробуем снова")
-
-
-        change_item_popup_a = BitrixLocators.CHANGE_ITEM_POPUP
-        change_item_popup_b = BitrixLocators.CHANGE_ITEM_POPUP_B
-
-        try:
-            click_on_item_popup(change_item_popup_a)
-        except Exception:
-            try:
-                click_on_item_popup(change_item_popup_b)
-            except Exception as e:
-                print(f"Ошибка: {e}.")
-
-        def enter_text_in_element(locator):
-            try:
-                element = self.find_element(*locator)
-                self.scroll_into_view(element)
-                element.clear()
-                element.send_keys("Да")
-                time.sleep(10)
-            except Exception as e:
-                print(f"Не вышло. Ошибка: {e}")
-
-        purchased_inp_a = BitrixLocators.PURCHASED_INPUT_A
-        purchased_inp_b = BitrixLocators.PURCHASED_INPUT_B
-
-        try:
-            enter_text_in_element(purchased_inp_a)
-        except Exception as e:
-            try:
-                enter_text_in_element(purchased_inp_b)
-            except Exception as e:
-                print(f"Ошибка: {e}.")
+        element = self.find_element(*BitrixLocators.PURCHASED_INPUT_A)
+        self.scroll_into_view(element)
+        element.clear()
+        element.send_keys("Да")
 
         change_item_save_button = self.find_element(*BitrixLocators.CHANGE_ITEM_SAVE_BUTTON)
         self.browser.execute_script("arguments[0].click();", change_item_save_button)

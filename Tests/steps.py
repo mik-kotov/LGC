@@ -16,6 +16,24 @@ def promocode_parametrize():
     ])
 
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+def test_bitr_ops(driver):
+
+    bitrix_ops = Bitrix(driver)
+    bitrix_ops.authorization()
+    bitrix_ops.open('https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=1302484&lang=ru')
+    button = bitrix_ops.find_element(By.XPATH, "//div[@class='adm-bus-component-title' and text()='Заказ']/ancestor::div[@class='adm-bus-statusorder']//span[@class='adm-s-order-item-title-icon']")
+    bitrix_ops.scroll_into_view(button)
+    WebDriverWait(bitrix_ops.browser, 10).until(EC.element_to_be_clickable(button))
+    bitrix_ops.click(button)
+    CHANGE_ITEM_BUTTON = bitrix_ops.find_element(By.CSS_SELECTOR, ".bx-core-popup-menu-item-default .bx-core-popup-menu-item-text")
+    bitrix_ops.click(CHANGE_ITEM_BUTTON)
+    time.sleep(10)
+
+
+
 class LoyaltyTestBase:
 
     def __init__(self, driver, promocode=False, bonuses=False):
@@ -26,7 +44,6 @@ class LoyaltyTestBase:
 
 
     def choose_item(self, user):
-        print('оппа')
         search_item = catalog.ChooseItem(user)
         with allure.step("Выбор товара"):
             with allure.step("Открываем каталог"):

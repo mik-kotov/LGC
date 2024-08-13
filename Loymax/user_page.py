@@ -45,13 +45,12 @@ class UserPage(LoymaxBasePage):
 
     def open_loupe(self):
         loupe_button = self.find_element(*LoyalLocators.USER_PURCHASE_LOUPE)
-        self.click(loupe_button)
-        time.sleep(10)
+        self.browser.execute_script("arguments[0].click();", loupe_button)
         self.browser.execute_script("window.scrollBy(0, 1700);")
 
     def second_purchase_open_loup(self):
         loupe_button = self.find_element(*LoyalLocators.SECOND_FROM_TOP_PURCHASE_LOUPE)
-        self.click(loupe_button)
+        self.browser.execute_script("arguments[0].click();", loupe_button)
         self.browser.execute_script("window.scrollBy(0, 1700);")
 
     def check_text_bonus(self):
