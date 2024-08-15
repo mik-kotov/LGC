@@ -123,7 +123,7 @@ def test_refused_with_bonus_pay_cash_have_card(user_with_card, driver, promocode
 @allure.feature("Отмена")
 @allure.story('Тест: "Отмена" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
-@pytest.mark.cancelled
+#@pytest.mark.cancelled
 @pytest.mark.no_promocode
 def test_cancelled_no_bonus_pay_cash_have_card(user_with_card, driver):
     base = LoyaltyTestBase(driver)
@@ -139,7 +139,7 @@ def test_cancelled_no_bonus_pay_cash_have_card(user_with_card, driver):
 @allure.story('Тест: "Отмена" со списанием бонусов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.with_bonuses
-@pytest.mark.cancelled
+#@pytest.mark.cancelled
 @pytest.mark.no_promocode
 def test_cancelled_with_bonus_pay_cash_have_card(user_with_card, driver):
     base = LoyaltyTestBase(driver, bonuses=True)
