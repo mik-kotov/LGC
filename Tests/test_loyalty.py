@@ -14,13 +14,22 @@ def test_bitr_ops(driver):
     bitrix_ops = Bitrix(driver)
     bitrix_ops.authorization()
     bitrix_ops.open('https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=1302484&lang=ru')
-    time.sleep(5)
+    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
+                  attachment_type=allure.attachment_type.PNG)
     element = driver.find_element(By.CSS_SELECTOR, '.adm-s-gray-title')
     driver.execute_script("arguments[0].scrollIntoView(true);", element)
+    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
+                  attachment_type=allure.attachment_type.PNG)
     time.sleep(5)
-    bitrix_ops.browser.execute_script("document.querySelector('.adm-s-order-item-title-icon').click()")
+    element_a = driver.find_element(By.CSS_SELECTOR, '.adm-s-order-item-title-icon')
+    bitrix_ops.click(element_a)
     time.sleep(1)
-    bitrix_ops.browser.execute_script("document.querySelector('.bx-core-popup-menu-item-text').click()")
+    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
+                  attachment_type=allure.attachment_type.PNG)
+    element_b = driver.find_element(By.CSS_SELECTOR, '.bx-core-popup-menu-item-text')
+    bitrix_ops.click(element_b)
+    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
+                  attachment_type=allure.attachment_type.PNG)
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2332", "LGC-T2332")
 @allure.feature("Доставлен")
