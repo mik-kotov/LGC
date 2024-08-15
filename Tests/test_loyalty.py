@@ -4,7 +4,23 @@ import allure
 from Loymax.deposit_page import DepositPage
 from Loymax.login_page import LoymaxLoginPage
 from Tests import steps
+from selenium.webdriver.common.by import By
 from Tests.steps import LoyaltyTestBase, promocode_parametrize
+from Bitrix.bitrix import Bitrix
+
+@pytest.mark.cancelled
+def test_bitr_ops(driver):
+
+    bitrix_ops = Bitrix(driver)
+    bitrix_ops.authorization()
+    bitrix_ops.open('https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=1302484&lang=ru')
+    time.sleep(5)
+    element = driver.find_element(By.CSS_SELECTOR, '.adm-s-gray-title')
+    driver.execute_script("arguments[0].scrollIntoView(true);", element)
+    time.sleep(5)
+    bitrix_ops.browser.execute_script("document.querySelector('.adm-s-order-item-title-icon').click()")
+    time.sleep(1)
+    bitrix_ops.browser.execute_script("document.querySelector('.bx-core-popup-menu-item-text').click()")
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2332", "LGC-T2332")
 @allure.feature("Доставлен")
