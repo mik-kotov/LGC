@@ -1,8 +1,5 @@
-from Front_base.browser_works import Browser
-from Front_base.locators_front import LoyalLocators
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
+from front_base.browser_works import Browser
+from front_base.locators_front import LoyalLocators
 
 
 class LoymaxBasePage(Browser):

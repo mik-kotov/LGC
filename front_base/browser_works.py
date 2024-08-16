@@ -1,10 +1,6 @@
-from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from Front_base.locators_front import LoyalLocators
-from selenium.webdriver.support.ui import Select
-
 import allure
 import time
 
@@ -36,13 +32,24 @@ class Browser:
 
         self.browser.get(link)
 
-    def click(self, locator):
+    def get_screenshot(self, name='Скриншот'):
         allure.attach(self.browser.get_screenshot_as_png(),
-                      name='Скриншот перед кликом', attachment_type=allure.attachment_type.PNG)
+                      name, attachment_type=allure.attachment_type.PNG)
+    def click(self, locator):
+        self.get_screenshot('Скриншот перед кликом')
         locator.click()
 
-    def find_element(self, how, what, timeout=10):
+    def click_js(self, element):
+        self.get_screenshot('Скриншот перед кликом')
+        self.browser.execute_script("arguments[0].click();", element)
 
+    def scroll_to_element_centered(self, element):
+        self.browser.execute_script(
+            'arguments[0].scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"})', element)
+
+    def scroll_to_bottom(self):
+        self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+    def find_element(self, how, what, timeout=10):
         element = WebDriverWait(self.browser, timeout).until(
             EC.presence_of_element_located((how, what))
         )

@@ -1,7 +1,6 @@
 from API import locators_api, data
 from random import choice
 import json
-import requests
 import time
 from faker import Faker
 
@@ -42,6 +41,7 @@ class Order:
         self.api_client = api_client
         self.user_card = api_client.user_card
         self.bonuses = 0
+        self.bonuses_balance = 0
 
     def reset_order(self):
         reset = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.RESET_ORDER)
@@ -99,7 +99,6 @@ class Order:
         print('Открываем корзину')
         get_cart = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART)
         self.get_cart = get_cart.json()
-
     def cart_order_data(self):
         print('Просматриваем данные заказа для корзины')
         cart_data = self.api_client.get(locators_api.URL_API_SERVICE + locators_api.CART_ORDER)
@@ -116,7 +115,6 @@ class Order:
 
     def check_max_bonus_is_null(self):
         self.bonuses = self.get_cart['response']['price']['bonus_spend']['max_bonus_spend']
-        print(f"Эщкере {self.bonuses}")
         return self.bonuses == 0
 
     def check_available_bonuses_is_null(self):
@@ -128,7 +126,7 @@ class Order:
         return self.count_of_items_in_cart
 
     def use_bonuses(self):
-
+        self.api_client.bonuses_balance = (self.get_cart['response']['bonus_card']['total_bonuses'] - self.bonuses)
         card_number = self.get_cart['response']['bonus_card']['number']
         body_for_use_bonuses = {"bonus_card": f"{card_number}", "bonuses_spend_count": self.bonuses}
         post_bonuses = self.api_client.post(locators_api.URL_API_SERVICE + locators_api.POST_BONUSES,

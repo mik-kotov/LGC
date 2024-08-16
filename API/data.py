@@ -52,6 +52,7 @@ users_no_card_cycle = cycle(users_who_have_not_bonuses)
 def get_random_city():
     return choice(cities)
 
+
 def get_random_user_with_card():
     return choice(users_who_have_bonuses)
 

@@ -25,19 +25,19 @@ class BitrixLocators:
     CONFIRM_BUTTON = (By.CSS_SELECTOR, '.login-btn-green[tabindex = "4"]')
     LOGIN = "lgcity\\Mikhail.Kotov"
     PASSWORD = "QLEp38z5_6)7"
+    GO_TO_CHANGE_ORDER_PAGE_FROM_ORDER_BUTTON = (By.CSS_SELECTOR, '[title="Перейти к изменению заказа"]')
     GO_TO_ORDER_FROM_CHANGE_ORDER_PAGE_BUTTON = (By.CSS_SELECTOR, '[title="Перейти к просмотру заказа"]')
     STATUS_SELECTOR = (By.CSS_SELECTOR, "#STATUS_ID")
     SAVE_STATUS_BUTTON = (By.CSS_SELECTOR, "#save_status_button")
-    CHANGE_ITEM_POPUP_B = (By.CSS_SELECTOR, "td[id='sale_order_basketsale-order-basket-product-17381988-menu'] span[class='adm-s-order-item-title-icon']")
-    CHANGE_ITEM_POPUP = (By.XPATH, "//div[@class='adm-bus-component-title' and text()='Заказ']/ancestor::div[@class='adm-bus-statusorder']//span[@class='adm-s-order-item-title-icon']")
+    CHANGE_ITEM_POPUP = (By.XPATH, '//div[@data-id="basket"]//tbody[3]//span[@class="adm-s-order-item-title-icon"]')
     CHANGE_ITEM_BUTTON = (By.CSS_SELECTOR, ".bx-core-popup-menu-item-default .bx-core-popup-menu-item-text")
     CHANGE_PAY_POPUP = (By.CSS_SELECTOR, "#BUTTON_PAID_0_SHORT")
     CHANGE_PAY_TO_YES_BUTTON = (By.CSS_SELECTOR, '.bx-core-popup-menu-item')
     CHANGE_PAY_SAVE_BUTTON = (By.CSS_SELECTOR, '[name="undefined"]#undefined') #кринж
     CHANGE_ITEM_SAVE_BUTTON = (By.CSS_SELECTOR, '[name="save_custom_product"]')
     SAVE_ORDER_CHANGES_BUTTON = (By.CSS_SELECTOR, '.adm-detail-content-btns .adm-btn-save')
-    PURCHASED_INPUT_A = (By.CSS_SELECTOR, '[size="20"][value="Нет"]')
-    PURCHASED_INPUT_B = (By.XPATH, "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']")
+    PURCHASED_INPUT = (By.CSS_SELECTOR, '[size="20"][value="Нет"]')
+    # PURCHASED_INPUT_B = (By.XPATH, "//div[@id='bx-admin-prefix']//input[@value='Выкуплен']/../self::td/following-sibling::td/input[@value='Нет']")
     PROMOCODE_FIELD = (By.XPATH, "//*[.='Купон:']")
     PROMOCODE_NAME = (By.XPATH, "//*[.='Купон:']/following-sibling::td/div")
     ORDER_PRICE = (By.CSS_SELECTOR, "#sale-order-financeinfo-price-view")

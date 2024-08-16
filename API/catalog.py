@@ -1,6 +1,5 @@
 import random
 from API import locators_api
-import allure
 
 class ChooseItem:
 

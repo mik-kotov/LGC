@@ -1,12 +1,6 @@
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from Front_base.locators_front import LoyalLocators
-from Loymax.base_page import LoymaxBasePage
-from selenium.webdriver.support.ui import Select
-import pytest
-
+from front_base.locators_front import LoyalLocators
+from loymax.lmx_base_page import LoymaxBasePage
 import allure
-import time
 
 
 class DepositPage(LoymaxBasePage):
@@ -51,7 +45,7 @@ class DepositPage(LoymaxBasePage):
 
     def fill_amount_bonus_field(self):
         field = self.find_element(*LoyalLocators.AMOUNT_BONUS_FIELD)
-        field.send_keys('5000')
+        field.send_keys('100000')
 
     def fill_operation_details_field(self):
         field = self.find_element(*LoyalLocators.OPERATION_DETAILS_FIELD)
@@ -65,19 +59,20 @@ class DepositPage(LoymaxBasePage):
         self.is_element_present(*LoyalLocators.SUCCESS_TRANSACTION, 25)
 
     def deposit_ops(self):
-        with allure.step('Начисляем бонусы'):
-            self.go_to_deposit_page()
-            self.choose_accrual_option()
-            self.select_company()
-            self.select_currency()
-            self.fill_description_field()
-            self.fill_internal_description_field()
-            self.choose_manual_input_option()
-            self.select_id_in_list()
-            self.fill_bonus_card_field()
-            self.fill_amount_bonus_field()
-            self.fill_operation_details_field()
-            self.click_apply_button()
-            self.check_transaction_is_complete()
+        if int(self.order.bonuses_balance) < 10000:
+            with allure.step('Начисляем бонусы'):
+                self.go_to_deposit_page()
+                self.choose_accrual_option()
+                self.select_company()
+                self.select_currency()
+                self.fill_description_field()
+                self.fill_internal_description_field()
+                self.choose_manual_input_option()
+                self.select_id_in_list()
+                self.fill_bonus_card_field()
+                self.fill_amount_bonus_field()
+                self.fill_operation_details_field()
+                self.click_apply_button()
+                self.check_transaction_is_complete()
 
 

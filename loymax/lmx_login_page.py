@@ -1,6 +1,6 @@
 from API.data import loymax_password, loymax_login
-from Front_base.locators_front import LoyalLocators
-from Loymax.base_page import LoymaxBasePage
+from front_base.locators_front import LoyalLocators
+from loymax.lmx_base_page import LoymaxBasePage
 
 
 class LoymaxLoginPage(LoymaxBasePage):

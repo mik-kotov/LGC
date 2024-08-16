@@ -1,7 +1,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from Front_base.locators_front import LoyalLocators
-from Loymax.base_page import LoymaxBasePage
+from front_base.locators_front import LoyalLocators
+from loymax.lmx_base_page import LoymaxBasePage
 import re
 
 import time
@@ -9,7 +9,6 @@ import allure
 
 
 class UserPage(LoymaxBasePage):
-
 
     def open_purchase_history(self):
         user_info_button = self.find_element(*LoyalLocators.USER_PERSONAL_INFO_BUTTON)

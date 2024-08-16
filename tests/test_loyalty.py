@@ -1,58 +1,28 @@
-import time
 import pytest
 import allure
-from Loymax.deposit_page import DepositPage
-from Loymax.login_page import LoymaxLoginPage
-from Tests import steps
-from selenium.webdriver.common.by import By
-from Tests.steps import LoyaltyTestBase, promocode_parametrize
-from Bitrix.bitrix import Bitrix
+from tests.steps import LoyaltyTestBase, promocode_parametrize
 
-@pytest.mark.cancelled
-def test_bitr_ops(driver):
 
-    bitrix_ops = Bitrix(driver)
-    bitrix_ops.authorization()
-    bitrix_ops.open('https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=1302484&lang=ru')
-    # allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-    #               attachment_type=allure.attachment_type.PNG)
-    # element = driver.find_element(By.CSS_SELECTOR, '.adm-s-gray-title')
-    # driver.execute_script("arguments[0].scrollIntoView(true);", element)
-    # allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-    #               attachment_type=allure.attachment_type.PNG)
-    # time.sleep(5)
-    # element_a = driver.find_element(By.CSS_SELECTOR, '.adm-s-order-item-title-icon')
-    # bitrix_ops.click(element_a)
-    # time.sleep(1)
-    # allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-    #               attachment_type=allure.attachment_type.PNG)
-    # element_b = driver.find_element(By.CSS_SELECTOR, '.bx-core-popup-menu-item-text')
-    # bitrix_ops.click(element_b)
-    # allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-    #               attachment_type=allure.attachment_type.PNG)
-    # bitrix_ops.open('https://app-monolith.mylgc.ru/bitrix/admin/sale_order_edit.php?ID=1302484&lang=ru')
-    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-                  attachment_type=allure.attachment_type.PNG)
-    time.sleep(2)
-    element = driver.find_element(By.CSS_SELECTOR, '.adm-s-gray-title')
-    driver.execute_script("arguments[0].scrollIntoView(true);", element)
-    time.sleep(2)
-    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-                  attachment_type=allure.attachment_type.PNG)
-    bitrix_ops.browser.execute_script("document.querySelector('.adm-s-order-item-title-icon').click()")
-    time.sleep(1)
-    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-                  attachment_type=allure.attachment_type.PNG)
-    bitrix_ops.browser.execute_script("document.querySelector('.bx-core-popup-menu-item-text').click()")
-    allure.attach(driver.get_screenshot_as_png(), name="Скрин",
-                  attachment_type=allure.attachment_type.PNG)
 
 
 @allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2332", "LGC-T2332")
 @allure.feature("Доставлен")
 @allure.story('Тест: "Доставлен" без бонусной карты, оплата наличными при получении')
 @pytest.mark.no_card
-@pytest.mark.delivered
+@pytest.mark.bitrix
+#@promocode_parametrize()
+def test_de(user_no_card, driver, promocode=False):
+    base = LoyaltyTestBase(driver, promocode)
+    base.choose_item(user_no_card)
+    base.order_submit(user_no_card)
+    base.buyout_and_status_change("NI")
+
+
+@allure.issue("https://jira.pochtavip.com/secure/Tests.jspa#/testCase/LGC-T2332", "LGC-T2332")
+@allure.feature("Доставлен")
+@allure.story('Тест: "Доставлен" без бонусной карты, оплата наличными при получении')
+@pytest.mark.no_card
+#@pytest.mark.delivered
 @promocode_parametrize()
 def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver, promocode):
     base = LoyaltyTestBase(driver, promocode)
@@ -66,7 +36,7 @@ def test_delivered_no_bonus_pay_cash_no_bonus_card(user_no_card, driver, promoco
 @allure.story('Тест: "Доставлен" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
 @pytest.mark.no_bonuses
-@pytest.mark.delivered
+#@pytest.mark.delivered
 @promocode_parametrize()
 def test_delivered_no_bonus_pay_cash_have_bonus_card(user_with_card, driver, promocode):
     base = LoyaltyTestBase(driver, promocode)
@@ -226,6 +196,7 @@ def test_partial_cancelled_pay_cash_no_bonus_card(user_no_card, driver, promocod
 @allure.feature("Частичный отказ")
 @allure.story('Тест: "Частичный отказ" без баллов, с картой, оплата наличными при получении')
 @pytest.mark.with_card
+@pytest.mark.with_bonuses
 @pytest.mark.partial_cancelled
 @promocode_parametrize()
 def test_partial_cancelled_no_bonus_pay_cash_with_bonus_card(user_with_card, driver, promocode):

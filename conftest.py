@@ -19,7 +19,7 @@ def driver():
     print("")
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
 
     yield driver
@@ -28,6 +28,7 @@ def driver():
                   attachment_type=allure.attachment_type.PNG)
     driver.quit()
 
+
 @pytest.fixture(scope="function")
 def user_no_card():
     user = data.get_random_user_with_no_card()
@@ -35,6 +36,7 @@ def user_no_card():
     with allure.step(f"Пользователь {user}"):
         prepare_user(user_no_card)
         return user_no_card
+
 
 @pytest.fixture(scope="function")
 def user_with_card():
